@@ -12,7 +12,7 @@ Before using the plugin, you'll need to setup each platforms you target.
 
 ### Android
 
-- App Links: [Documentation](https://developer.android.com/training/app-links/deep-linking)
+- App Links: [Documentation](https://developer.android.com/training/app-links/verify-site-associations)
 - Deep Links: [Documentation](https://developer.android.com/training/app-links/deep-linking)
 
 ### iOs

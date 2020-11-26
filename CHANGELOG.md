@@ -1,3 +1,6 @@
+## 0.1.0+2
+* Update README.md.
+
 ## 0.1.0+1
 * Add documentation.
 * Format dart source code.
