@@ -1,3 +1,7 @@
+## 0.1.0+1
+* Add documentation.
+* Format dart source code.
+
 ## 0.1.0
 
 * Initial release.
