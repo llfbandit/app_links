@@ -22,35 +22,42 @@ Before using the plugin, you'll need to setup each platforms you target.
 
 ### AppLinks
 ```dart
-    final _appLinks = AppLinks(
-        // Called when a new uri has been redirected to the app
-        onAppLink: (Uri uri) {
-            // Do something (navigation, ...)
-        },
-    );
+final _appLinks = AppLinks(
+    // Called when a new uri has been redirected to the app
+    onAppLink: (Uri uri) {
+        // Do something (navigation, ...)
+    },
+);
 
-    // Get the initial/first link.
-    // This is also useful when app was terminated (i.e. not started)
-    final uri = await _appLinks.getInitialAppLink();
+// Get the initial/first link.
+// This is also useful when app was terminated (i.e. not started)
+final uri = await _appLinks.getInitialAppLink();
 
-    ...
+...
 
-    // Maybe later. Get the latest link.
-    final uri = await _appLinks.getLatestAppLink();
+// Maybe later. Get the latest link.
+final uri = await _appLinks.getLatestAppLink();
 ```
 
+Android notes:
+- Intent action is filtered by `Intent.ACTION_VIEW` (for now).
+
+- By default, flutter Activity is set with `android:launchMode="singleTop"`.
+This is perfectly fine and expected, but this launches another instance of your app, specifically for the requested view.
+If you don't want this behaviour, you can set `android:launchMode="singleInstance"` in your `AndroidManifest.xml` and avoid another flutter warmup.
+
 ## Tests
-The following commands will let you simply test the links
+The following commands will help you to test links.
 
 ### Android
 ```sh
-    adb shell am start
-        -W -a android.intent.action.VIEW
-        -d "<URI>" <PACKAGE>
+adb shell am start
+    -W -a android.intent.action.VIEW
+    -d "<URI>" <PACKAGE>
 ```
 For App Links, you can also test it from Android Studio: [Documentation](https://developer.android.com/studio/write/app-link-indexing#testindent).
 
 ### iOs
 ```sh
-    /usr/bin/xcrun simctl openurl booted "<URI>"
+/usr/bin/xcrun simctl openurl booted "<URI>"
 ```
