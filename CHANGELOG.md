@@ -1,3 +1,4 @@
-## 0.0.1
+## 0.1.0
 
-* TODO: Describe initial release.
+* Initial release.
+* Android App Links, Deep Links, iOs Universal Links and Custom URL schemes.
