@@ -1,0 +1,39 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+
+typedef void OnAppLinkFunction(Uri uri);
+
+class AppLinks {
+  static const String _messagesChannel = 'com.llfbandit.app_links/messages';
+  static const MethodChannel _channel = const MethodChannel(_messagesChannel);
+
+  static const String _onAppLinkMethod = 'onAppLink';
+  static const String _getInitialUriMethod = 'getInitialUri';
+  static const String _getLatestUriMethod = 'getLatestUri';
+
+  AppLinks({@required OnAppLinkFunction onAppLink})
+      : assert(onAppLink != null) {
+    _channel.setMethodCallHandler(
+      (call) {
+        switch (call.method) {
+          case _onAppLinkMethod:
+            if (call.arguments != null) {
+              onAppLink(Uri.tryParse(call.arguments.toString()));
+            }
+        }
+
+        return Future.value();
+      },
+    );
+  }
+
+  Future<Uri> getInitialUri() async {
+    return Uri.tryParse(await _channel.invokeMethod(_getInitialUriMethod));
+  }
+
+  Future<Uri> getLatestUri() async {
+    return Uri.tryParse(await _channel.invokeMethod(_getLatestUriMethod));
+  }
+}
