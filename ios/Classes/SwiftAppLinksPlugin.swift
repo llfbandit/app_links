@@ -2,24 +2,24 @@ import Flutter
 import UIKit
 
 public class SwiftAppLinksPlugin: NSObject, FlutterPlugin {
-  fileprivate FlutterMethodChannel methodChannel;
-  fileprivate String initialLink;
-  fileprivate String latestLink;
+  fileprivate FlutterMethodChannel methodChannel
+  fileprivate String initialLink
+  fileprivate String latestLink
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let methodChannel = FlutterMethodChannel(name: "com.llfbandit.app_links/messages", binaryMessenger: registrar.messenger())
     let instance = SwiftAppLinksPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
+    registrar.addMethodCallDelegate(instance, channel: methodChannel)
     registrar.addApplicationDelegate(instance)
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
       case "getLatestAppLink":
-        result(initialLink)
+        result(self.initialLink)
         break
       case "getInitialAppLink":
-        result(latestLink)
+        result(self.latestLink)
         break
       default:
         result(FlutterMethodNotImplemented)
@@ -37,7 +37,7 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin {
         guard let url = userActivity.webpageURL else {
           return false
         }
-        handleLink(url: url)
+        self.handleLink(url: url)
         return true
       default: return false
     }
@@ -48,16 +48,16 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin {
           open url: URL,
           options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
     
-    handleLink(url: url)
+    self.handleLink(url: url)
   }
 
-  fileprivate handleLink(url: URL) -> Bool {
-    if (initialLink == null) {
-      initialLink = url.absoluteString
+  fileprivate handleLink(url: URL) -> Void {
+    if (self.initialLink == null) {
+        self.initialLink = url.absoluteString
     }
 
-    latestLink = url.absoluteString
+    self.latestLink = url.absoluteString
 
-    methodChannel.invokeMethod("onAppLink", arguments: latestLink)
+    methodChannel.invokeMethod("onAppLink", arguments: self.latestLink)
   }
 }
