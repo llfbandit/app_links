@@ -10,11 +10,10 @@ class AppLinks {
   static const MethodChannel _channel = const MethodChannel(_messagesChannel);
 
   static const String _onAppLinkMethod = 'onAppLink';
-  static const String _getInitialUriMethod = 'getInitialUri';
-  static const String _getLatestUriMethod = 'getLatestUri';
+  static const String _getInitialAppLinkMethod = 'getInitialAppLink';
+  static const String _getLatestAppLinkMethod = 'getLatestAppLink';
 
-  AppLinks({@required OnAppLinkFunction onAppLink})
-      : assert(onAppLink != null) {
+  AppLinks({@required OnAppLinkFunction onAppLink}) : assert(onAppLink != null) {
     _channel.setMethodCallHandler(
       (call) {
         switch (call.method) {
@@ -30,10 +29,10 @@ class AppLinks {
   }
 
   Future<Uri> getInitialUri() async {
-    return Uri.tryParse(await _channel.invokeMethod(_getInitialUriMethod));
+    return Uri.tryParse(await _channel.invokeMethod(_getInitialAppLinkMethod));
   }
 
   Future<Uri> getLatestUri() async {
-    return Uri.tryParse(await _channel.invokeMethod(_getLatestUriMethod));
+    return Uri.tryParse(await _channel.invokeMethod(_getLatestAppLinkMethod));
   }
 }
