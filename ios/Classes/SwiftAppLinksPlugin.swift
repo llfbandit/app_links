@@ -2,25 +2,31 @@ import Flutter
 import UIKit
 
 public class SwiftAppLinksPlugin: NSObject, FlutterPlugin {
-  fileprivate FlutterMethodChannel methodChannel
-  fileprivate String initialLink
-  fileprivate String latestLink
+  fileprivate var methodChannel: FlutterMethodChannel
+  fileprivate var initialLink: String?
+  fileprivate var latestLink: String?
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let methodChannel = FlutterMethodChannel(name: "com.llfbandit.app_links/messages", binaryMessenger: registrar.messenger())
-    let instance = SwiftAppLinksPlugin()
+
+    let instance = SwiftAppLinksPlugin(methodChannel: methodChannel)
+
     registrar.addMethodCallDelegate(instance, channel: methodChannel)
     registrar.addApplicationDelegate(instance)
   }
 
+  init(methodChannel: FlutterMethodChannel) {
+    self.methodChannel = methodChannel
+  }
+
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
-      case "getLatestAppLink":
-        result(self.initialLink)
-        break
       case "getInitialAppLink":
-        result(self.latestLink)
+        result(initialLink)
         break
+      case "getLatestAppLink":
+        result(latestLink)
+        break      
       default:
         result(FlutterMethodNotImplemented)
         break
@@ -28,36 +34,41 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin {
   }
 
   // Universal Links
-  func application(_ application: UIApplication,
-					continue userActivity: NSUserActivity,
-					restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+  public func application(
+    _ application: UIApplication,
+    continue userActivity: NSUserActivity,
+    restorationHandler: @escaping ([Any]) -> Void) -> Bool {
 
     switch userActivity.activityType {
       case NSUserActivityTypeBrowsingWeb:
         guard let url = userActivity.webpageURL else {
           return false
         }
-        self.handleLink(url: url)
+        handleLink(url: url)
         return true
       default: return false
     }
   }
 
   // Custom URL schemes
-  func application(_ application: UIApplication,
-          open url: URL,
-          options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+  public func application(
+    _ application: UIApplication,
+    open url: URL,
+    options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
     
-    self.handleLink(url: url)
+    handleLink(url: url)
+    return true
   }
 
-  fileprivate handleLink(url: URL) -> Void {
-    if (self.initialLink == null) {
-        self.initialLink = url.absoluteString
+  fileprivate func handleLink(url: URL) -> Void {
+    debugPrint("iOS handleLink: \(url.absoluteString)")
+
+    if (initialLink == nil) {
+      initialLink = url.absoluteString
     }
 
-    self.latestLink = url.absoluteString
+    latestLink = url.absoluteString
 
-    methodChannel.invokeMethod("onAppLink", arguments: self.latestLink)
+    methodChannel.invokeMethod("onAppLink", arguments: latestLink)
   }
 }
