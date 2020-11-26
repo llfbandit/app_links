@@ -31,12 +31,12 @@ Before using the plugin, you'll need to setup each platforms you target.
 
     // Get the initial/first link.
     // This is also useful when app was terminated (i.e. not started)
-    final uri = await _appLinks.getInitialUri();
+    final uri = await _appLinks.getInitialAppLink();
 
     ...
 
     // Maybe later. Get the latest link.
-    final uri = await _appLinks.getLatestLink();
+    final uri = await _appLinks.getLatestAppLink();
 ```
 
 ## Tests

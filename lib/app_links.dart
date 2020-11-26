@@ -28,11 +28,11 @@ class AppLinks {
     );
   }
 
-  Future<Uri> getInitialUri() async {
+  Future<Uri> getInitialAppLink() async {
     return Uri.tryParse(await _channel.invokeMethod(_getInitialAppLinkMethod));
   }
 
-  Future<Uri> getLatestUri() async {
+  Future<Uri> getLatestAppLink() async {
     return Uri.tryParse(await _channel.invokeMethod(_getLatestAppLinkMethod));
   }
 }
