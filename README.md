@@ -3,8 +3,8 @@
 Android App Links, Deep Links, iOs Universal Links and Custom URL schemes handler.
 
 This plugin allows you to:
-- catch HTTPS URLs to open your app instead of the browser (App Links / Universal Links).
-- catch custom schemes to open your app (Deep Links / Custom URL schemes).
+- catch HTTPS URLs to open your app instead of the browser (App Link / Universal Link).
+- catch custom schemes to open your app (Deep Link / Custom URL scheme).
 
 ## Getting Started
 
@@ -43,7 +43,7 @@ Android notes:
 - Intent action is filtered by `Intent.ACTION_VIEW` (for now).
 
 - By default, flutter Activity is set with `android:launchMode="singleTop"`.
-This is perfectly fine and expected, but this launches another instance of your app, specifically for the requested view.
+This is perfectly fine and expected, but this launches another instance of your app, specifically for the requested view.  
 If you don't want this behaviour, you can set `android:launchMode="singleInstance"` in your `AndroidManifest.xml` and avoid another flutter warmup.
 
 ## Tests

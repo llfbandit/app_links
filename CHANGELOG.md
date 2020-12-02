@@ -1,3 +1,6 @@
+## 0.2.0
+* Add configurations in example.
+
 ## 0.1.0+2
 * Update README.md.
 
