@@ -40,7 +40,7 @@ final uri = await _appLinks.getLatestAppLink();
 ```
 
 Android notes:
-- Intent action is filtered by `Intent.ACTION_VIEW` (for now).
+- Intent action is filtered by `Intent.ACTION_VIEW`.
 
 - By default, flutter Activity is set with `android:launchMode="singleTop"`.
 This is perfectly fine and expected, but this launches another instance of your app, specifically for the requested view.  
