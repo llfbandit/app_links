@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 /// Callback when your app is woke up by an incoming link
@@ -29,14 +28,13 @@ class AppLinks {
 
   /// Constructor
   /// You must provide a non-null [onAppLink] callback.
-  AppLinks({@required OnAppLinkFunction onAppLink})
-      : assert(onAppLink != null) {
+  AppLinks({required OnAppLinkFunction onAppLink}) {
     _channel.setMethodCallHandler(
       (call) {
         switch (call.method) {
           case _onAppLinkMethod:
             if (call.arguments != null) {
-              onAppLink(Uri.tryParse(call.arguments.toString()));
+              onAppLink(Uri.parse(call.arguments.toString()));
             }
         }
 
@@ -47,7 +45,7 @@ class AppLinks {
 
   /// Gets the initial / first link
   /// returns [Uri] or [null]
-  Future<Uri> getInitialAppLink() async {
+  Future<Uri?> getInitialAppLink() async {
     final result = await _channel.invokeMethod(_getInitialAppLinkMethod);
     if (result == null) return null;
 
@@ -56,7 +54,7 @@ class AppLinks {
 
   /// Gets the latest link
   /// returns [Uri] or [null]
-  Future<Uri> getLatestAppLink() async {
+  Future<Uri?> getLatestAppLink() async {
     final result = await _channel.invokeMethod(_getLatestAppLinkMethod);
     if (result == null) return null;
 

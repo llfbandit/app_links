@@ -1,3 +1,6 @@
+## 2.0.0
+* Add null safety support.
+
 ## 1.0.0
 * Same as 0.2.0.
 * No known issue. Bumping to 1.0 to be prepared for null safety version.
@@ -13,6 +16,5 @@
 * Format dart source code.
 
 ## 0.1.0
-
 * Initial release.
 * Android App Links, Deep Links, iOs Universal Links and Custom URL schemes.
