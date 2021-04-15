@@ -1,3 +1,6 @@
+## 2.0.0+1
+* Minimal sample added (Thanks to @JamesCullum).
+
 ## 2.0.0
 * Add null safety support.
 
