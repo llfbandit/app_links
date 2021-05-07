@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
 
   void initDeepLinks() async {
     final _appLinks = AppLinks(
-      onAppLink: (Uri uri) {
+      onAppLink: (Uri uri, String stringUri) {
         openAppLink(uri);
       },
     );
@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
         var uri = Uri.parse(settings.name);
         var firstLevel =
             uri.pathSegments.length > 0 ? uri.pathSegments.first : "";
-        switch(firstLevel) {
+        switch (firstLevel) {
           case "book":
             if (uri.pathSegments.length > 1) {
               // Navigated to /book/:id
@@ -88,7 +88,8 @@ class _MyAppState extends State<MyApp> {
   Widget defaultScreen() {
     return Scaffold(
       appBar: AppBar(title: const Text('Default Screen')),
-      body: Center(child: const Text('Launch an intent to get to the second screen')),
+      body: Center(
+          child: const Text('Launch an intent to get to the second screen')),
     );
   }
 

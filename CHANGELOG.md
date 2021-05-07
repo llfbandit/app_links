@@ -1,3 +1,7 @@
+## 2.1.0
+* Breaking: String uri added on `onAppLink` for custom handling like uppercased uri.
+* Feat: `getInitialAppLinkString` and `getLatestAppLinkString` added to reflect the above change.
+
 ## 2.0.0+1
 * Minimal sample added (Thanks to @JamesCullum).
 
