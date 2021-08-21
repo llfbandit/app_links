@@ -45,7 +45,7 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin {
           return false
         }
         handleLink(url: url)
-        return true
+        return false
       default: return false
     }
   }
@@ -57,7 +57,7 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin {
     options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
     
     handleLink(url: url)
-    return true
+    return false
   }
 
   fileprivate func handleLink(url: URL) -> Void {
