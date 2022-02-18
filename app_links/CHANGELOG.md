@@ -1,3 +1,9 @@
+## 2.2.1
+* fix: Duplicated iOS call when app is on terminated status.
+* fix: iOS `application` callback does not return `true` anymore.
+* fix: Get rid of Android LocalBroadcastReceiver deprecation.
+* core: Updated dependencies.
+
 ## 2.2.0
 * Add web support. (getInitialAppLink() only).
 

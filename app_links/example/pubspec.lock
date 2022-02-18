@@ -7,7 +7,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.3.0"
+    version: "2.2.1"
   app_links_platform_interface:
     dependency: transitive
     description:
