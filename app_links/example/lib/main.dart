@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 /// You can launch an intent on an Android Emulator like this:
 ///    adb shell am start -a android.intent.action.VIEW \
 //     -c android.intent.category.BROWSABLE \
-//     -d "http://example.com/#/book/hello-world"
+//     -d "https://www.example.com/#/book/hello-world"
 ///////////////////////////////////////////////////////////////////////////////
 
 void main() {
