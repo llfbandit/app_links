@@ -45,7 +45,7 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin {
           return false
         }
         handleLink(url: url)
-        return true
+        return false
       default: return false
     }
   }
@@ -61,14 +61,16 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin {
   }
 
   fileprivate func handleLink(url: URL) -> Void {
-    debugPrint("iOS handleLink: \(url.absoluteString)")
+    let link = url.absoluteString
+
+    debugPrint("iOS handleLink: \(link)")
+
+    latestLink = link
 
     if (initialLink == nil) {
-      initialLink = url.absoluteString
+      initialLink = link
+    } else {
+      methodChannel.invokeMethod("onAppLink", arguments: latestLink)
     }
-
-    latestLink = url.absoluteString
-
-    methodChannel.invokeMethod("onAppLink", arguments: latestLink)
   }
 }
