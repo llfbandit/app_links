@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -14,6 +13,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -25,9 +25,10 @@ import io.flutter.plugin.common.PluginRegistry.NewIntentListener;
  */
 public class AppLinksPlugin
         extends BroadcastReceiver
-        implements FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
+        implements EventChannel.StreamHandler, FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
 
   private static final String MESSAGES_CHANNEL = "com.llfbandit.app_links/messages";
+  private static final String EVENTS_CHANNEL = "com.llfbandit.app_links/events";
   private static final String TAG = "com.llfbandit.app_links";
 
   // The MethodChannel that will the communication between Flutter and native
@@ -37,6 +38,8 @@ public class AppLinksPlugin
   // and unregister it
   // when the Flutter Engine is detached from the Activity
   private MethodChannel methodChannel;
+
+  private BroadcastReceiver broadcastReceiver;
 
   private Activity mainActivity;
 
@@ -54,17 +57,13 @@ public class AppLinksPlugin
     methodChannel = new MethodChannel(binding.getBinaryMessenger(), MESSAGES_CHANNEL);
     methodChannel.setMethodCallHandler(this);
 
-    IntentFilter intentFilter = new IntentFilter();
-    intentFilter.addAction(Intent.ACTION_VIEW);
-
-    LocalBroadcastManager manager = LocalBroadcastManager.getInstance(binding.getApplicationContext());
-    manager.registerReceiver(this, intentFilter);
+    final EventChannel channel = new EventChannel(binding.getBinaryMessenger(), EVENTS_CHANNEL);
+    channel.setStreamHandler(this);
   }
 
   @Override
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     methodChannel.setMethodCallHandler(null);
-    LocalBroadcastManager.getInstance(binding.getApplicationContext()).unregisterReceiver(this);
     initialLink = null;
     latestLink = null;
   }
@@ -130,6 +129,32 @@ public class AppLinksPlugin
   /// BroadcastReceiver
   ///
   @Override
+  public void onListen(Object o, EventChannel.EventSink eventSink) {
+    broadcastReceiver = createReceiver(eventSink);
+  }
+
+  @Override
+  public void onCancel(Object o) {
+    broadcastReceiver = null;
+  }
+
+  @NonNull
+  private BroadcastReceiver createReceiver(final EventChannel.EventSink events) {
+    return new BroadcastReceiver() {
+      @Override
+      public void onReceive(Context context, Intent intent) {
+        String dataString = intent.getDataString();
+
+        if (dataString == null) {
+          events.error("UNAVAILABLE", "Link unavailable", null);
+        } else {
+          events.success(dataString);
+        }
+      }
+    };
+  }
+
+  @Override
   public void onReceive(Context context, Intent intent) {
     handleIntent(intent);
   }
@@ -161,8 +186,11 @@ public class AppLinksPlugin
       return false;
     }
 
-    Log.d(TAG, "handleIntent: (Action) " + intent.getAction());
-    Log.d(TAG, "handleIntent: (Data) " + intent.getDataString());
+    String action = intent.getAction();
+    String dataString = intent.getDataString();
+
+    Log.d(TAG, "handleIntent: (Action) " + action);
+    Log.d(TAG, "handleIntent: (Data) " + dataString);
 
     String appLinkData = intent.getDataString();
     if (appLinkData != null) {
