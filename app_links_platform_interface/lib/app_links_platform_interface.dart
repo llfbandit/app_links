@@ -5,7 +5,7 @@ import 'package:app_links_platform_interface/src/method_channel_app_links.dart';
 /// [uri] and [stringUri] are same value.
 /// [stringUri] is available for custom handling like uppercased uri.
 ///
-typedef void OnAppLinkFunction(Uri uri, String stringUri);
+typedef OnAppLinkFunction = void Function(Uri uri, String stringUri);
 
 /// The interface that implementations of app_links must implement.
 ///

@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  app_links_platform_interface: ^0.1.0
+  app_links_platform_interface: ^0.2.0
   app_links_web: ^0.1.0
 
 dev_dependencies:
@@ -19,7 +19,6 @@ dev_dependencies:
 
   # https://pub.dev/packages/lints
   lints: ^1.0.1
-
 
 # The following section is specific to Flutter.
 flutter:

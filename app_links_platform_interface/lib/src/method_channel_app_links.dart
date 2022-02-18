@@ -6,7 +6,7 @@ class MethodChannelAppLinks extends AppLinksPlatform {
   static const String _messagesChannel = 'com.llfbandit.app_links/messages';
 
   /// Channel handler
-  static const MethodChannel _channel = const MethodChannel(_messagesChannel);
+  static const MethodChannel _channel = MethodChannel(_messagesChannel);
 
   /// List of methods called by [MethodChannel]
   ///
@@ -19,6 +19,7 @@ class MethodChannelAppLinks extends AppLinksPlatform {
   /// [getLatestAppLink] method call name
   static const String _getLatestAppLinkMethod = 'getLatestAppLink';
 
+  @override
   void onAppLink({required OnAppLinkFunction onAppLink}) {
     _channel.setMethodCallHandler(
       (call) {
@@ -35,6 +36,7 @@ class MethodChannelAppLinks extends AppLinksPlatform {
     );
   }
 
+  @override
   Future<Uri?> getInitialAppLink() async {
     final result = await getInitialAppLinkString();
     if (result == null) return null;
@@ -42,10 +44,12 @@ class MethodChannelAppLinks extends AppLinksPlatform {
     return Uri.tryParse(result);
   }
 
+  @override
   Future<String?> getInitialAppLinkString() {
     return _channel.invokeMethod(_getInitialAppLinkMethod);
   }
 
+  @override
   Future<Uri?> getLatestAppLink() async {
     final result = await getLatestAppLinkString();
     if (result == null) return null;
@@ -53,6 +57,7 @@ class MethodChannelAppLinks extends AppLinksPlatform {
     return Uri.tryParse(result);
   }
 
+  @override
   Future<String?> getLatestAppLinkString() {
     return _channel.invokeMethod(_getLatestAppLinkMethod);
   }
