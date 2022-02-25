@@ -7,14 +7,14 @@ packages:
       name: app_links_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0"
+    version: "0.2.0"
   app_links_web:
     dependency: "direct main"
     description:
       name: app_links_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0"
+    version: "0.2.0"
   async:
     dependency: transitive
     description:
@@ -127,7 +127,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.2"
   sky_engine:
     dependency: transitive
     description: flutter

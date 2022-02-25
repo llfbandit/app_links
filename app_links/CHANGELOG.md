@@ -1,3 +1,7 @@
+## 2.2.2
+* core: Add linter.
+* fix: Get rid of Android LocalBroadcastReceiver deprecation (removed dependency & import...).
+
 ## 2.2.1
 * fix: Duplicated iOS call when app is on terminated status.
 * fix: iOS `application` callback does not return `true` anymore.
