@@ -26,7 +26,6 @@ public class AppLinksPlugin
         implements EventChannel.StreamHandler, FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
 
   private static final String MESSAGES_CHANNEL = "com.llfbandit.app_links/messages";
-  private static final String EVENTS_CHANNEL = "com.llfbandit.app_links/events";
   private static final String TAG = "com.llfbandit.app_links";
 
   // The MethodChannel that will the communication between Flutter and native
@@ -54,9 +53,6 @@ public class AppLinksPlugin
   public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
     methodChannel = new MethodChannel(binding.getBinaryMessenger(), MESSAGES_CHANNEL);
     methodChannel.setMethodCallHandler(this);
-
-    final EventChannel channel = new EventChannel(binding.getBinaryMessenger(), EVENTS_CHANNEL);
-    channel.setStreamHandler(this);
   }
 
   @Override

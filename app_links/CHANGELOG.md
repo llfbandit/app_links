@@ -1,3 +1,6 @@
+## 2.2.3
+* core: (Android) Remove useless created EventChannel.
+
 ## 2.2.2
 * core: Add linter.
 * fix: Get rid of Android LocalBroadcastReceiver deprecation (removed dependency & import...).
