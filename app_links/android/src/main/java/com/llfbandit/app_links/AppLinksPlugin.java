@@ -1,8 +1,6 @@
 package com.llfbandit.app_links;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -21,7 +19,6 @@ import io.flutter.plugin.common.PluginRegistry.NewIntentListener;
  * AppLinksPlugin
  */
 public class AppLinksPlugin
-        extends BroadcastReceiver
         implements FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
 
   private static final String MESSAGES_CHANNEL = "com.llfbandit.app_links/messages";
@@ -34,8 +31,6 @@ public class AppLinksPlugin
   // and unregister it
   // when the Flutter Engine is detached from the Activity
   private MethodChannel methodChannel;
-
-  private BroadcastReceiver broadcastReceiver;
 
   private Activity mainActivity;
 
@@ -116,43 +111,6 @@ public class AppLinksPlugin
   }
   ///
   /// END ActivityAware
-  /////////////////////////////////////////////////////////////////////////////
-
-  /////////////////////////////////////////////////////////////////////////////
-  /// BroadcastReceiver
-  ///
-  @Override
-  public void onListen(Object o, EventChannel.EventSink eventSink) {
-    broadcastReceiver = createReceiver(eventSink);
-  }
-
-  @Override
-  public void onCancel(Object o) {
-    broadcastReceiver = null;
-  }
-
-  @NonNull
-  private BroadcastReceiver createReceiver(final EventChannel.EventSink events) {
-    return new BroadcastReceiver() {
-      @Override
-      public void onReceive(Context context, Intent intent) {
-        String dataString = intent.getDataString();
-
-        if (dataString == null) {
-          events.error("UNAVAILABLE", "Link unavailable", null);
-        } else {
-          events.success(dataString);
-        }
-      }
-    };
-  }
-
-  @Override
-  public void onReceive(Context context, Intent intent) {
-    handleIntent(intent);
-  }
-  ///
-  /// END BroadcastReceiver
   /////////////////////////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////////////////////////
