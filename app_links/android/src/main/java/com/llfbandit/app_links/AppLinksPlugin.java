@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
-import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -23,7 +22,7 @@ import io.flutter.plugin.common.PluginRegistry.NewIntentListener;
  */
 public class AppLinksPlugin
         extends BroadcastReceiver
-        implements EventChannel.StreamHandler, FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
+        implements FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
 
   private static final String MESSAGES_CHANNEL = "com.llfbandit.app_links/messages";
   private static final String TAG = "com.llfbandit.app_links";
