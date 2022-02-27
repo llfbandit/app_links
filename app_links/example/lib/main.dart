@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 
@@ -28,26 +30,37 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _navigatorKey = GlobalKey<NavigatorState>();
   late AppLinks _appLinks;
+  StreamSubscription<Uri>? _linkSubscription;
 
   @override
   void initState() {
-    initDeepLinks();
     super.initState();
+
+    initDeepLinks();
   }
 
-  void initDeepLinks() async {
-    _appLinks = AppLinks(
-      onAppLink: (Uri uri, String stringUri) {
-        print('onAppLink: $stringUri');
-        openAppLink(uri);
-      },
-    );
+  @override
+  void dispose() {
+    _linkSubscription?.cancel();
 
+    super.dispose();
+  }
+
+  Future<void> initDeepLinks() async {
+    _appLinks = AppLinks();
+
+    // Check initial link if app was in cold state (terminated)
     final appLink = await _appLinks.getInitialAppLink();
-    if (appLink != null && appLink.hasFragment && appLink.fragment != '/') {
-      print('getInitialAppLink: ${appLink.toString()}');
+    if (appLink != null) {
+      print('getInitialAppLink: $appLink');
       openAppLink(appLink);
     }
+
+    // Handle link when app is in warm state (front or background)
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+      print('onAppLink: $uri');
+      openAppLink(uri);
+    });
   }
 
   void openAppLink(Uri uri) {

@@ -1,3 +1,6 @@
+## 1.0.0
+- core: Improve API to get Android & iOS consistent behaviours.
+
 ## 0.2.0
 - core: Add linter.
 

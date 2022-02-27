@@ -5,10 +5,7 @@ import 'package:app_links_platform_interface/app_links_platform_interface.dart';
 /// iOs Universal Links and Custom URL schemes handler
 class AppLinks extends AppLinksPlatform {
   /// Constructor
-  /// You must provide a non-null [onAppLink] callback.
-  AppLinks({required OnAppLinkFunction onAppLink}) {
-    AppLinksPlatform.instance.onAppLink(onAppLink: onAppLink);
-  }
+  AppLinks();
 
   @override
   Future<Uri?> getInitialAppLink() {
@@ -31,7 +28,10 @@ class AppLinks extends AppLinksPlatform {
   }
 
   @override
-  void onAppLink({required onAppLink}) {
-    AppLinksPlatform.instance.onAppLink(onAppLink: onAppLink);
+  Stream<String> get stringLinkStream {
+    return AppLinksPlatform.instance.stringLinkStream;
   }
+
+  @override
+  Stream<Uri> get uriLinkStream => AppLinksPlatform.instance.uriLinkStream;
 }

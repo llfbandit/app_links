@@ -1,22 +1,21 @@
 import Flutter
 import UIKit
 
-public class SwiftAppLinksPlugin: NSObject, FlutterPlugin {
-  fileprivate var methodChannel: FlutterMethodChannel
+public class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
+  fileprivate var eventSink: FlutterEventSink?
+
   fileprivate var initialLink: String?
   fileprivate var latestLink: String?
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let methodChannel = FlutterMethodChannel(name: "com.llfbandit.app_links/messages", binaryMessenger: registrar.messenger())
+    let eventChannel = FlutterEventChannel(name: "com.llfbandit.app_links/events", binaryMessenger: registrar.messenger())
 
-    let instance = SwiftAppLinksPlugin(methodChannel: methodChannel)
+    let instance = SwiftAppLinksPlugin()
 
     registrar.addMethodCallDelegate(instance, channel: methodChannel)
+    eventChannel.setStreamHandler(instance)
     registrar.addApplicationDelegate(instance)
-  }
-
-  init(methodChannel: FlutterMethodChannel) {
-    self.methodChannel = methodChannel
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -59,6 +58,19 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin {
     handleLink(url: url)
     return true
   }
+    
+  public func onListen(
+    withArguments arguments: Any?,
+    eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+
+    self.eventSink = events
+    return nil
+  }
+    
+  public func onCancel(withArguments arguments: Any?) -> FlutterError? {
+    self.eventSink = nil
+    return nil
+  }
 
   fileprivate func handleLink(url: URL) -> Void {
     let link = url.absoluteString
@@ -69,8 +81,12 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin {
 
     if (initialLink == nil) {
       initialLink = link
-    } else {
-      methodChannel.invokeMethod("onAppLink", arguments: latestLink)
     }
+    
+    guard let _eventSink = eventSink, latestLink != nil else {
+      return
+    }
+
+    _eventSink(latestLink)
   }
 }

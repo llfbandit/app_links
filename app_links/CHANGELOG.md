@@ -1,5 +1,7 @@
-## 2.2.3
-* core: (Android) Remove useless created EventChannel.
+## 3.0.0
+* core: __Breaking__ API changed to use stream instead of callback.
+* fix: Consistent behaviour between iOS & Android with (deffered) stream usage (for onAppLink vs. getInitialLink "duplicated" links).
+* fix: remove example splashscreen deprecation.
 
 ## 2.2.2
 * core: Add linter.

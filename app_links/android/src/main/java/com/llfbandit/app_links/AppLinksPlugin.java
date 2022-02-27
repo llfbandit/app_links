@@ -1,6 +1,8 @@
 package com.llfbandit.app_links;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -9,6 +11,7 @@ import androidx.annotation.NonNull;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -18,10 +21,16 @@ import io.flutter.plugin.common.PluginRegistry.NewIntentListener;
 /**
  * AppLinksPlugin
  */
-public class AppLinksPlugin
-        implements FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
+public class AppLinksPlugin implements
+        FlutterPlugin,
+        MethodCallHandler,
+        EventChannel.StreamHandler,
+        ActivityAware,
+        NewIntentListener {
 
   private static final String MESSAGES_CHANNEL = "com.llfbandit.app_links/messages";
+  private static final String EVENTS_CHANNEL = "com.llfbandit.app_links/events";
+
   private static final String TAG = "com.llfbandit.app_links";
 
   // The MethodChannel that will the communication between Flutter and native
@@ -31,7 +40,12 @@ public class AppLinksPlugin
   // and unregister it
   // when the Flutter Engine is detached from the Activity
   private MethodChannel methodChannel;
+  // Channel for communicating with flutter using async stream
+  private EventChannel eventChannel;
+  // Broadcast receiver to handle new intents when app is opened
+  private BroadcastReceiver broadcastReceiver;
 
+  // Current context
   private Activity mainActivity;
 
   // Initial link
@@ -47,11 +61,16 @@ public class AppLinksPlugin
   public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
     methodChannel = new MethodChannel(binding.getBinaryMessenger(), MESSAGES_CHANNEL);
     methodChannel.setMethodCallHandler(this);
+
+    eventChannel = new EventChannel(binding.getBinaryMessenger(), EVENTS_CHANNEL);
+    eventChannel.setStreamHandler(this);
   }
 
   @Override
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     methodChannel.setMethodCallHandler(null);
+    eventChannel.setStreamHandler(null);
+
     initialLink = null;
     latestLink = null;
   }
@@ -114,6 +133,38 @@ public class AppLinksPlugin
   /////////////////////////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////////////////////////
+  /// EventChannel.StreamHandler
+  ///
+  @Override
+  public void onListen(Object o, EventChannel.EventSink eventSink) {
+    broadcastReceiver = createReceiver(eventSink);
+  }
+
+  @Override
+  public void onCancel(Object o) {
+    broadcastReceiver = null;
+  }
+
+  @NonNull
+  private BroadcastReceiver createReceiver(final EventChannel.EventSink events) {
+    return new BroadcastReceiver() {
+      @Override
+      public void onReceive(Context context, Intent intent) {
+        String dataString = intent.getDataString();
+
+        if (dataString == null) {
+          events.error("UNAVAILABLE", "Link is unavailable", "intent.getDataString() was null");
+        } else {
+          events.success(dataString);
+        }
+      }
+    };
+  }
+  ///
+  /// END EventChannel.StreamHandler
+  /////////////////////////////////////////////////////////////////////////////
+
+  /////////////////////////////////////////////////////////////////////////////
   /// NewIntentListener
   ///
   @Override
@@ -143,14 +194,14 @@ public class AppLinksPlugin
     Log.d(TAG, "handleIntent: (Action) " + action);
     Log.d(TAG, "handleIntent: (Data) " + dataString);
 
-    String appLinkData = intent.getDataString();
-    if (appLinkData != null) {
+    if (dataString != null) {
       if (initialLink == null) {
-        initialLink = appLinkData;
+        initialLink = dataString;
       }
 
-      latestLink = appLinkData;
-      methodChannel.invokeMethod("onAppLink", latestLink);
+      latestLink = dataString;
+
+      if (broadcastReceiver != null) broadcastReceiver.onReceive(mainActivity, intent);
       return true;
     }
 

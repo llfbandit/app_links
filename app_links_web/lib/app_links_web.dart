@@ -31,7 +31,8 @@ class AppLinksPluginWeb extends AppLinksPlatform {
   }
 
   @override
-  void onAppLink({required OnAppLinkFunction onAppLink}) {
-    // callback is noop on web platform
-  }
+  Stream<String> get stringLinkStream => Stream.empty();
+
+  @override
+  Stream<Uri> get uriLinkStream => Stream.empty();
 }

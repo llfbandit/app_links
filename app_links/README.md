@@ -22,16 +22,18 @@ Before using the plugin, you'll need to setup each platforms you target.
 
 ### AppLinks
 ```dart
-final _appLinks = AppLinks(
-    // Called when a new uri has been redirected to the app
-    onAppLink: (Uri uri) {
-        // Do something (navigation, ...)
-    },
-);
+final _appLinks = AppLinks();
 
 // Get the initial/first link.
 // This is also useful when app was terminated (i.e. not started)
 final uri = await _appLinks.getInitialAppLink();
+// Do something (navigation, ...)
+
+// Subscribe to further events when app is started.
+// (Use stringLinkStream to get it as [String])
+_linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+    // Do something (navigation, ...)
+});
 
 ...
 

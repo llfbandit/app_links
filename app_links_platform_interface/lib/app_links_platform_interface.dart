@@ -37,14 +37,6 @@ abstract class AppLinksPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  /// Callback when your app is woke up by an incoming link
-  /// [uri] and [stringUri] are same value.
-  /// [stringUri] is available for custom handling like uppercased uri.
-  void onAppLink({required OnAppLinkFunction onAppLink}) =>
-      throw UnimplementedError(
-        'onAppLink not implemented on the current platform.',
-      );
-
   /// Gets the initial / first link
   /// returns [Uri] or [null]
   Future<Uri?> getInitialAppLink() => throw UnimplementedError(
@@ -70,4 +62,16 @@ abstract class AppLinksPlatform extends PlatformInterface {
       'getLatestAppLinkString not implemented on the current platform.',
     );
   }
+
+  /// Stream for receiving incoming URI events as [String].
+  ///
+  /// The [Stream] emits opened URI as [String]s.
+  Stream<String> get stringLinkStream => throw UnimplementedError(
+      'stringUriStream not implemented on the current platform.');
+
+  /// Stream for receiving incoming URI events as [Uri].
+  ///
+  /// The [Stream] emits opened URI as [Uri]s.
+  Stream<Uri> get uriLinkStream => throw UnimplementedError(
+      'uriStream not implemented on the current platform.');
 }

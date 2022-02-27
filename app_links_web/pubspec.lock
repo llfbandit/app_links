@@ -4,10 +4,10 @@ packages:
   app_links_platform_interface:
     dependency: "direct main"
     description:
-      name: app_links_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0"
+      path: "../app_links_platform_interface"
+      relative: true
+    source: path
+    version: "1.0.0"
   async:
     dependency: transitive
     description:
