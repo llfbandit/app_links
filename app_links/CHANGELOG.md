@@ -1,3 +1,6 @@
+## 3.0.1
+* core: Improve Android code.
+
 ## 3.0.0
 * core: __Breaking__ API changed to use stream instead of callback.
 * fix: Consistent behaviour between iOS & Android with (deffered) stream usage (for onAppLink vs. getInitialLink "duplicated" links).

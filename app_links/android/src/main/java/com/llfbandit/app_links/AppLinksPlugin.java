@@ -1,8 +1,6 @@
 package com.llfbandit.app_links;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -42,8 +40,8 @@ public class AppLinksPlugin implements
   private MethodChannel methodChannel;
   // Channel for communicating with flutter using async stream
   private EventChannel eventChannel;
-  // Broadcast receiver to handle new intents when app is opened
-  private BroadcastReceiver broadcastReceiver;
+  // Event producer to handle new intents when app is opened
+  private EventChannel.EventSink eventSink;
 
   // Current context
   private Activity mainActivity;
@@ -137,28 +135,12 @@ public class AppLinksPlugin implements
   ///
   @Override
   public void onListen(Object o, EventChannel.EventSink eventSink) {
-    broadcastReceiver = createReceiver(eventSink);
+    this.eventSink = eventSink;
   }
 
   @Override
   public void onCancel(Object o) {
-    broadcastReceiver = null;
-  }
-
-  @NonNull
-  private BroadcastReceiver createReceiver(final EventChannel.EventSink events) {
-    return new BroadcastReceiver() {
-      @Override
-      public void onReceive(Context context, Intent intent) {
-        String dataString = intent.getDataString();
-
-        if (dataString == null) {
-          events.error("UNAVAILABLE", "Link is unavailable", "intent.getDataString() was null");
-        } else {
-          events.success(dataString);
-        }
-      }
-    };
+    eventSink = null;
   }
   ///
   /// END EventChannel.StreamHandler
@@ -201,7 +183,7 @@ public class AppLinksPlugin implements
 
       latestLink = dataString;
 
-      if (broadcastReceiver != null) broadcastReceiver.onReceive(mainActivity, intent);
+      if (eventSink != null) eventSink.success(dataString);
       return true;
     }
 

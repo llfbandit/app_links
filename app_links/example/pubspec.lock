@@ -7,20 +7,20 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.0.0"
+    version: "3.0.1"
   app_links_platform_interface:
     dependency: transitive
     description:
-      path: "../../app_links_platform_interface"
-      relative: true
-    source: path
+      name: app_links_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "1.0.0"
   app_links_web:
     dependency: transitive
     description:
-      path: "../../app_links_web"
-      relative: true
-    source: path
+      name: app_links_web
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "1.0.0"
   async:
     dependency: transitive
