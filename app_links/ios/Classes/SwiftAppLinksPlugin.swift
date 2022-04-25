@@ -56,7 +56,7 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHandler 
     options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
     
     handleLink(url: url)
-    return true
+    return false
   }
     
   public func onListen(

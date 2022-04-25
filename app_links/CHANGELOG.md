@@ -1,3 +1,6 @@
+## 3.0.2
+* fix: iOS `application` callbacks do not return `true` anymore.
+
 ## 3.0.1
 * core: Improve Android code.
 
