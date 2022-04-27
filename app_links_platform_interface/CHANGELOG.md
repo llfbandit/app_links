@@ -1,3 +1,6 @@
+## 1.0.1
+- core: Tune to handle empty strings.
+
 ## 1.0.0
 - core: Improve API to get Android & iOS consistent behaviours.
 

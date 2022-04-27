@@ -4,24 +4,10 @@ packages:
   app_links_platform_interface:
     dependency: "direct main"
     description:
-      path: "../app_links_platform_interface"
-      relative: true
-    source: path
+      name: app_links_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "1.0.1"
-  app_links_web:
-    dependency: "direct main"
-    description:
-      path: "../app_links_web"
-      relative: true
-    source: path
-    version: "1.0.0"
-  app_links_windows:
-    dependency: "direct main"
-    description:
-      path: "../app_links_windows"
-      relative: true
-    source: path
-    version: "0.2.0-dev"
   async:
     dependency: transitive
     description:
@@ -81,18 +67,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_web_plugins:
-    dependency: transitive
-    description: flutter
-    source: sdk
-    version: "0.0.0"
-  js:
-    dependency: transitive
-    description:
-      name: js
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.3"
   lints:
     dependency: "direct dev"
     description:
@@ -134,7 +108,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.2"
+    version: "2.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

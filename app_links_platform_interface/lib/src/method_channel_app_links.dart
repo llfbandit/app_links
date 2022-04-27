@@ -21,32 +21,31 @@ class MethodChannelAppLinks extends AppLinksPlatform {
   @override
   Future<Uri?> getInitialAppLink() async {
     final result = await getInitialAppLinkString();
-    if (result == null) return null;
-
-    return Uri.tryParse(result);
+    return (result != null) ? Uri.tryParse(result) : null;
   }
 
   @override
-  Future<String?> getInitialAppLinkString() {
-    return _method.invokeMethod(_getInitialAppLinkMethod);
+  Future<String?> getInitialAppLinkString() async {
+    final link = await _method.invokeMethod(_getInitialAppLinkMethod);
+    return link.isNotEmpty ? link : null;
   }
 
   @override
   Future<Uri?> getLatestAppLink() async {
     final result = await getLatestAppLinkString();
-    if (result == null) return null;
-
-    return Uri.tryParse(result);
+    return (result != null) ? Uri.tryParse(result) : null;
   }
 
   @override
-  Future<String?> getLatestAppLinkString() {
-    return _method.invokeMethod(_getLatestAppLinkMethod);
+  Future<String?> getLatestAppLinkString() async {
+    final link = await _method.invokeMethod(_getLatestAppLinkMethod);
+    return link.isNotEmpty ? link : null;
   }
 
   @override
   Stream<String> get stringLinkStream => _event
       .receiveBroadcastStream()
+      .where((link) => link != null && link.isNotEmpty)
       .map<String>((dynamic link) => link as String);
 
   @override

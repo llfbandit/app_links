@@ -1,3 +1,6 @@
+## 3.1.0
+* feat: Add Windows support.
+
 ## 3.0.2
 * fix: iOS `application` callbacks do not return `true` anymore.
 

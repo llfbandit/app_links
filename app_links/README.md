@@ -20,7 +20,83 @@ Before using the plugin, you'll need to setup each platforms you target.
 - Universal Links: [Documentation](https://developer.apple.com/documentation/safariservices/supporting_associated_domains)
 - Custom URL schemes: [Documentation](https://developer.apple.com/documentation/xcode/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app)
 
-### AppLinks
+### Windows
+
+<details>
+  <summary>Setup</summary>
+
+Declare this method in <PROJECT_DIR>\windows\runner\win32_window.h
+```cpp
+  // Dispatches link if any.
+  // This method enables our app to be with a single instance too.
+  // This is optional but mandatory if you want to catch further links in same app.
+  bool SendAppLinkToInstance(const std::wstring& title);
+```
+
+Add this inclusion at the top of <PROJECT_DIR>\windows\runner\win32_window.cpp
+```cpp
+#include <app_links_windows/app_links_windows_plugin.h>
+```
+
+Add this method in <PROJECT_DIR>\windows\runner\win32_window.cpp
+```cpp
+bool Win32Window::SendAppLinkToInstance(const std::wstring& title) {
+  // Find our exact window
+  HWND hwnd = ::FindWindow(kWindowClassName, title.c_str());
+  
+  if (hwnd) {
+    // Dispatch new link to current window
+    SendAppLink(hwnd);
+
+    // (Optional) Restore our window to front in same state
+    WINDOWPLACEMENT place = { sizeof(WINDOWPLACEMENT) };
+    GetWindowPlacement(hwnd, &place);
+    switch(place.showCmd) {
+      case SW_SHOWMAXIMIZED:
+          ShowWindow(hwnd, SW_SHOWMAXIMIZED);
+          break;
+      case SW_SHOWMINIMIZED:
+          ShowWindow(hwnd, SW_RESTORE);
+          break;
+      default:
+          ShowWindow(hwnd, SW_NORMAL);
+          break;
+    }
+    SetWindowPos(0, HWND_TOP, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE | SWP_NOMOVE);
+    SetForegroundWindow(hwnd);
+    // END Restore
+
+    // Window has been found, don't create another one.
+    return true;
+  }
+
+  return false;
+}
+```
+
+Add the call to the previous method in `CreateAndShow`
+```cpp
+bool Win32Window::CreateAndShow(const std::wstring& title,
+                                const Point& origin,
+                                const Size& size) {
+if (SendAppLinkToInstance(title)) {
+    return false;
+}
+
+...
+```
+
+Great!
+
+Now you can register your own scheme.  
+This package can not do it for you.  
+You can make it with [url_protocol](https://pub.dev/packages/url_protocol) inside you app.  
+But... The most relevant is to include those registry modifications into your installer to allow the unregistration.
+</details>
+
+---
+  
+### AppLinks usage
 ```dart
 final _appLinks = AppLinks();
 
