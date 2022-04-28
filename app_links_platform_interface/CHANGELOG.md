@@ -1,3 +1,6 @@
+## 1.0.2
+- fix: Null pointer.
+
 ## 1.0.1
 - core: Tune to handle empty strings.
 
