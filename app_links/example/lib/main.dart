@@ -22,7 +22,7 @@ import 'package:url_protocol/url_protocol.dart';
 //     -c android.intent.category.BROWSABLE \
 //     -d "https://www.example.com/#/book/hello-world"
 ///
-/// On windows:
+/// On windows & macOS:
 ///   The simpliest way to test it is by
 ///   opening your browser and type: sample://foo/#/book/hello-world2
 ///////////////////////////////////////////////////////////////////////////////
