@@ -7,7 +7,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.1.0"
+    version: "3.2.0"
+  app_links_macos:
+    dependency: transitive
+    description:
+      path: "../../app_links_macos"
+      relative: true
+    source: path
+    version: "1.0.0"
   app_links_platform_interface:
     dependency: transitive
     description:

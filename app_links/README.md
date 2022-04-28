@@ -94,6 +94,25 @@ You can make it with [url_protocol](https://pub.dev/packages/url_protocol) insid
 But... The most relevant is to include those registry modifications into your installer to allow the unregistration.
 </details>
 
+### macOS
+<details>
+  <summary>Setup</summary>
+
+Add this XML chapter in your `macos/Runner/Info.plist`:
+```xml
+<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+        <key>CFBundleURLName</key>
+        <string>*</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>sample</string>
+        </array>
+    </dict>
+</array>
+```
+</details>
 ---
   
 ### AppLinks usage
