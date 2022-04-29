@@ -25,7 +25,7 @@ Before using the plugin, you'll need to setup each platforms you target.
 <details>
   <summary>How to setup</summary>
 
-Don't be afraid, this is just copy/paste commands to follow.
+Don't be afraid, this is just copy/paste commands to follow.  
 But yes, it we will be a bit painful...
 
 Declare this method in <PROJECT_DIR>\windows\runner\win32_window.h
@@ -92,9 +92,13 @@ if (SendAppLinkToInstance(title)) {
 Great!
 
 Now you can register your own scheme.  
-This package can not do it for you.  
-You can make it with [url_protocol](https://pub.dev/packages/url_protocol) inside you app.  
-But... The most relevant is to include those registry modifications into your installer to allow the unregistration.
+On Windows, URL protocols are setup in the Windows registry.
+
+This package won't do it for you (and will never sorry).  
+
+You can achieve it with [url_protocol](https://pub.dev/packages/url_protocol) inside you app.  
+
+But... The most relevant solution is to include those registry modifications into your installer to allow the unregistration.
 </details>
 
 <br/>
@@ -150,7 +154,6 @@ final uri = await _appLinks.getLatestAppLink();
 ```
 
 Android notes:
-- Intent action is filtered by `Intent.ACTION_VIEW`.
 
 - By default, flutter Activity is set with `android:launchMode="singleTop"`.
 This is perfectly fine and expected, but this launches another instance of your app, specifically for the requested view.  
