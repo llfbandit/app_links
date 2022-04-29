@@ -1,6 +1,6 @@
 # app_links
 
-Android App Links, Deep Links, iOs Universal Links and Custom URL schemes handler.
+Android App Links, Deep Links, iOs Universal Links and Custom URL schemes handler (desktop included).
 
 This plugin allows you to:
 - catch HTTPS URLs to open your app instead of the browser (App Link / Universal Link).
@@ -23,7 +23,10 @@ Before using the plugin, you'll need to setup each platforms you target.
 ### Windows
 
 <details>
-  <summary>Setup</summary>
+  <summary>How to setup</summary>
+
+Don't be afraid, this is just copy/paste commands to follow.  
+But yes, it we will be a bit painful...
 
 Declare this method in <PROJECT_DIR>\windows\runner\win32_window.h
 ```cpp
@@ -35,7 +38,7 @@ Declare this method in <PROJECT_DIR>\windows\runner\win32_window.h
 
 Add this inclusion at the top of <PROJECT_DIR>\windows\runner\win32_window.cpp
 ```cpp
-#include <app_links_windows/app_links_windows_plugin.h>
+#include "app_links_windows/app_links_windows_plugin.h"
 ```
 
 Add this method in <PROJECT_DIR>\windows\runner\win32_window.cpp
@@ -89,10 +92,43 @@ if (SendAppLinkToInstance(title)) {
 Great!
 
 Now you can register your own scheme.  
-This package can not do it for you.  
-You can make it with [url_protocol](https://pub.dev/packages/url_protocol) inside you app.  
-But... The most relevant is to include those registry modifications into your installer to allow the unregistration.
+On Windows, URL protocols are setup in the Windows registry.
+
+This package won't do it for you (and will never sorry).  
+
+You can achieve it with [url_protocol](https://pub.dev/packages/url_protocol) inside you app.  
+
+But... The most relevant solution is to include those registry modifications into your installer to allow the unregistration.
 </details>
+
+<br/>
+
+### Mac OS
+<details>
+  <summary>How to setup</summary>
+
+Add this XML chapter in your `macos/Runner/Info.plist` inside `<plist version="1.0"><dict>` chapter:
+```xml
+<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+        <key>CFBundleURLName</key>
+        <!-- abstract name for this URL type (you can leave it blank) -->
+        <string>sample_name</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <!-- your schemes -->
+            <string>sample</string>
+        </array>
+    </dict>
+</array>
+```
+
+Done!
+</details>
+
+<br/>
+All those configurations above are available in the example project.
 
 ---
   
@@ -101,7 +137,7 @@ But... The most relevant is to include those registry modifications into your in
 final _appLinks = AppLinks();
 
 // Get the initial/first link.
-// This is also useful when app was terminated (i.e. not started)
+// This is useful when app was terminated (i.e. not started)
 final uri = await _appLinks.getInitialAppLink();
 // Do something (navigation, ...)
 
@@ -118,7 +154,6 @@ final uri = await _appLinks.getLatestAppLink();
 ```
 
 Android notes:
-- Intent action is filtered by `Intent.ACTION_VIEW`.
 
 - By default, flutter Activity is set with `android:launchMode="singleTop"`.
 This is perfectly fine and expected, but this launches another instance of your app, specifically for the requested view.  

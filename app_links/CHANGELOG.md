@@ -1,3 +1,6 @@
+## 3.2.0
+* feat: Add macOS support.
+
 ## 3.1.0
 * feat: Add Windows support.
 

@@ -1,6 +1,6 @@
 name: app_links
-description: Android App Links, Deep Links, iOs Universal Links and Custom URL schemes handler for Flutter.
-version: 3.1.0
+description: Android App Links, Deep Links, iOs Universal Links and Custom URL schemes handler for Flutter (desktop included).
+version: 3.2.0
 homepage: https://github.com/llfbandit/app_links
 
 environment:
@@ -13,6 +13,7 @@ dependencies:
   app_links_platform_interface: ^1.0.1
   app_links_web: ^1.0.0
   app_links_windows: ^1.0.0
+  app_links_macos: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -21,12 +22,7 @@ dev_dependencies:
   # https://pub.dev/packages/lints
   lints: ^1.0.1
 
-# The following section is specific to Flutter.
 flutter:
-  # This section identifies this Flutter project as a plugin project.
-  # The 'pluginClass' and Android 'package' identifiers should not ordinarily
-  # be modified. They are used by the tooling to maintain consistency when
-  # adding or updating assets for this project.
   plugin:
     platforms:
       android:
@@ -38,3 +34,5 @@ flutter:
         default_package: app_links_web
       windows:
         default_package: app_links_windows
+      macos:
+        default_package: app_links_macos
