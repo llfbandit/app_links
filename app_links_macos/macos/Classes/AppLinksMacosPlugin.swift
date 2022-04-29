@@ -16,7 +16,10 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler 
     eventChannel.setStreamHandler(instance)
   }
 
-  func applicationDidFinishLaunching(_ aNotification: NSNotification) {
+  @objc
+  override init() {
+    super.init();
+
     NSAppleEventManager.shared().setEventHandler(
       self,
       andSelector: #selector(handleEvent(_:with:)),
@@ -52,12 +55,13 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler 
     return nil
   }
 
+  @objc
   private func handleEvent(
     _ event: NSAppleEventDescriptor,
     with replyEvent: NSAppleEventDescriptor) {
 
     if let urlString = event.paramDescriptor(forKeyword: AEKeyword(keyDirectObject))?.stringValue,
-       let url = URL(string: urlString) {
+       let _ = URL(string: urlString) {
       handleLink(link: urlString)
     }
   }

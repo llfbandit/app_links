@@ -1,0 +1,22 @@
+PODS:
+  - app_links_macos (0.0.1):
+    - FlutterMacOS
+  - FlutterMacOS (1.0.0)
+
+DEPENDENCIES:
+  - app_links_macos (from `Flutter/ephemeral/.symlinks/plugins/app_links_macos/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+
+EXTERNAL SOURCES:
+  app_links_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/app_links_macos/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+
+SPEC CHECKSUMS:
+  app_links_macos: 1f5a4e04df8198b1ef15cd266c84a751de0b5d9c
+  FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
+
+PODFILE CHECKSUM: 6eac6b3292e5142cfc23bdeb71848a40ec51c14c
+
+COCOAPODS: 1.11.2
