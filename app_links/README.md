@@ -23,7 +23,7 @@ Before using the plugin, you'll need to setup each platforms you target.
 ### Windows
 
 <details>
-  <summary>Setup</summary>
+  <summary>How to setup</summary>
 
 Declare this method in <PROJECT_DIR>\windows\runner\win32_window.h
 ```cpp
@@ -35,7 +35,7 @@ Declare this method in <PROJECT_DIR>\windows\runner\win32_window.h
 
 Add this inclusion at the top of <PROJECT_DIR>\windows\runner\win32_window.cpp
 ```cpp
-#include <app_links_windows/app_links_windows_plugin.h>
+#include "app_links_windows/app_links_windows_plugin.h"
 ```
 
 Add this method in <PROJECT_DIR>\windows\runner\win32_window.cpp
@@ -94,25 +94,35 @@ You can make it with [url_protocol](https://pub.dev/packages/url_protocol) insid
 But... The most relevant is to include those registry modifications into your installer to allow the unregistration.
 </details>
 
-### macOS
-<details>
-  <summary>Setup</summary>
+<br/>
 
-Add this XML chapter in your `macos/Runner/Info.plist`:
+### Mac OS
+<details>
+  <summary>How to setup</summary>
+
+Add this XML chapter in your `macos/Runner/Info.plist` inside `<plist version="1.0"><dict>` chapter:
 ```xml
 <key>CFBundleURLTypes</key>
 <array>
     <dict>
         <key>CFBundleURLName</key>
-        <string>*</string>
+        <!-- abstract name for this URL type (you can leave it blank) -->
+        <string>sample_name</string>
         <key>CFBundleURLSchemes</key>
         <array>
+            <!-- your schemes -->
             <string>sample</string>
         </array>
     </dict>
 </array>
 ```
+
+Done!
 </details>
+
+<br/>
+All those configurations above are available in the example project.
+
 ---
   
 ### AppLinks usage
@@ -120,7 +130,7 @@ Add this XML chapter in your `macos/Runner/Info.plist`:
 final _appLinks = AppLinks();
 
 // Get the initial/first link.
-// This is also useful when app was terminated (i.e. not started)
+// This is useful when app was terminated (i.e. not started)
 final uri = await _appLinks.getInitialAppLink();
 // Do something (navigation, ...)
 

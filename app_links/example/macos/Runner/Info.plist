@@ -32,9 +32,11 @@
 	<array>
 			<dict>
 					<key>CFBundleURLName</key>
-					<string>*</string>
+					<!-- abstract name for this URL type (you can leave it blank) -->
+        	<string>sample_name</string>
 					<key>CFBundleURLSchemes</key>
 					<array>
+							<!-- your schemes -->
 							<string>sample</string>
 					</array>
 			</dict>
