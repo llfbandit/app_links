@@ -1,6 +1,6 @@
 # app_links
 
-Android App Links, Deep Links, iOs Universal Links and Custom URL schemes handler.
+Android App Links, Deep Links, iOs Universal Links and Custom URL schemes handler (desktop included).
 
 This plugin allows you to:
 - catch HTTPS URLs to open your app instead of the browser (App Link / Universal Link).
@@ -24,6 +24,9 @@ Before using the plugin, you'll need to setup each platforms you target.
 
 <details>
   <summary>How to setup</summary>
+
+Don't be afraid, this is just copy/paste commands to follow.
+But yes, it we will be a bit painful...
 
 Declare this method in <PROJECT_DIR>\windows\runner\win32_window.h
 ```cpp

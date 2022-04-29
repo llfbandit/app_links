@@ -6,7 +6,8 @@ import 'dart:io';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:url_protocol/url_protocol.dart';
+import 'web_url_protocol.dart'
+    if (dart.library.io) 'package:url_protocol/url_protocol.dart';
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Please make sure to follow the setup instructions below
@@ -27,13 +28,11 @@ import 'package:url_protocol/url_protocol.dart';
 ///   opening your browser and type: sample://foo/#/book/hello-world2
 ///////////////////////////////////////////////////////////////////////////////
 
+const kWindowsScheme = 'sample';
+
 void main() {
   // Register our protocol only on Windows platform
-  if (!kIsWeb) {
-    if (Platform.isWindows) {
-      registerProtocolHandler('sample');
-    }
-  }
+  _registerWindowsProtocol();
 
   runApp(const MyApp());
 }
@@ -119,10 +118,26 @@ class _MyAppState extends State<MyApp> {
   Widget defaultScreen() {
     return Scaffold(
       appBar: AppBar(title: const Text('Default Screen')),
-      body: const Center(child: Text('''
-              Launch an intent to get to the second screen.
-              On web you can http://localhost:<port>/#/book/1 for example.
-              ''')),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SelectableText('''
+            Launch an intent to get to the second screen.
+
+            On web:
+            http://localhost:<port>/#/book/1 for example.
+
+            On windows & macOS, open your browser:
+            sample://foo/#/book/hello-deep-linking
+
+            This example code triggers new page from URL fragment.
+            '''),
+            const SizedBox(height: 20),
+            buildWindowsUnregisterBtn(),
+          ],
+        ),
+      ),
     );
   }
 
@@ -131,5 +146,26 @@ class _MyAppState extends State<MyApp> {
       appBar: AppBar(title: const Text('Second Screen')),
       body: Center(child: Text('Opened with parameter: ' + bookId)),
     );
+  }
+
+  Widget buildWindowsUnregisterBtn() {
+    if (!kIsWeb) {
+      if (Platform.isWindows) {
+        return TextButton(
+            onPressed: () => unregisterProtocolHandler(kWindowsScheme),
+            child: const Text('Remove Windows protocol registration'));
+      }
+    }
+
+    return const SizedBox.shrink();
+  }
+}
+
+void _registerWindowsProtocol() {
+  // Register our protocol only on Windows platform
+  if (!kIsWeb) {
+    if (Platform.isWindows) {
+      registerProtocolHandler(kWindowsScheme);
+    }
   }
 }
