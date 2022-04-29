@@ -4,12 +4,12 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'app_links_macos'
-  s.version          = '0.0.1'
-  s.summary          = 'A new flutter plugin project.'
+  s.version          = '1.0.0'
+  s.summary          = 'App Links MacOS implementation for app_links package.'
   s.description      = <<-DESC
-A new flutter plugin project.
+  App Links MacOS implementation for app_links package.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/llfbandit/app_links'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }

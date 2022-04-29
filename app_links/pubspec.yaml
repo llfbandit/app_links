@@ -13,8 +13,7 @@ dependencies:
   app_links_platform_interface: ^1.0.1
   app_links_web: ^1.0.0
   app_links_windows: ^1.0.0
-  app_links_macos: #^1.0.0
-    path: ../app_links_macos
+  app_links_macos: ^1.0.0
 
 dev_dependencies:
   flutter_test:

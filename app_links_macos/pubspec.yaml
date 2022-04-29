@@ -1,5 +1,5 @@
 name: app_links_macos
-description: App Links MacOS implementation.
+description: App Links MacOS implementation for app_links package.
 version: 1.0.0
 homepage: https://github.com/llfbandit/app_links/app_links_macos
 
