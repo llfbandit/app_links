@@ -15,7 +15,7 @@ Before using the plugin, you'll need to setup each platforms you target.
 - App Links: [Documentation](https://developer.android.com/training/app-links/verify-site-associations)
 - Deep Links: [Documentation](https://developer.android.com/training/app-links/deep-linking)
 
-### iOs
+### iOS
 
 - Universal Links: [Documentation](https://developer.apple.com/documentation/safariservices/supporting_associated_domains)
 - Custom URL schemes: [Documentation](https://developer.apple.com/documentation/xcode/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app)
@@ -28,7 +28,7 @@ Before using the plugin, you'll need to setup each platforms you target.
 Don't be afraid, this is just copy/paste commands to follow.  
 But yes, it we will be a bit painful...
 
-Declare this method in <PROJECT_DIR>\windows\runner\win32_window.h
+Declare this method in `<PROJECT_DIR>\windows\runner\win32_window.h`
 ```cpp
   // Dispatches link if any.
   // This method enables our app to be with a single instance too.
@@ -36,12 +36,12 @@ Declare this method in <PROJECT_DIR>\windows\runner\win32_window.h
   bool SendAppLinkToInstance(const std::wstring& title);
 ```
 
-Add this inclusion at the top of <PROJECT_DIR>\windows\runner\win32_window.cpp
+Add this inclusion at the top of `<PROJECT_DIR>\windows\runner\win32_window.cpp`
 ```cpp
 #include "app_links_windows/app_links_windows_plugin.h"
 ```
 
-Add this method in <PROJECT_DIR>\windows\runner\win32_window.cpp
+Add this method in `<PROJECT_DIR>\windows\runner\win32_window.cpp`
 ```cpp
 bool Win32Window::SendAppLinkToInstance(const std::wstring& title) {
   // Find our exact window
@@ -101,9 +101,8 @@ You can achieve it with [url_protocol](https://pub.dev/packages/url_protocol) in
 But... The most relevant solution is to include those registry modifications into your installer to allow the unregistration.
 </details>
 
-<br/>
 
-### Mac OS
+### macOS
 <details>
   <summary>How to setup</summary>
 
@@ -127,7 +126,7 @@ Add this XML chapter in your `macos/Runner/Info.plist` inside `<plist version="1
 Done!
 </details>
 
-<br/>
+
 All those configurations above are available in the example project.
 
 ---
@@ -170,7 +169,7 @@ adb shell am start
 ```
 For App Links, you can also test it from Android Studio: [Documentation](https://developer.android.com/studio/write/app-link-indexing#testindent).
 
-### iOs
+### iOS
 ```sh
 /usr/bin/xcrun simctl openurl booted "<URI>"
 ```
