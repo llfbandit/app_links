@@ -13,8 +13,6 @@ public class AppLinksHelper {
 
     public static String getDeepLinkFromIntent(Intent intent) {
         String shortLink = getShortDeepLink(intent);
-        Log.d(TAG, "handleIntent: (Action) " + intent.getExtras().toString());
-        Log.d(TAG, "handleIntent: (Action) " + intent.getData().toString());
 
         if (shortLink != null) {
             Log.d(TAG, "handleIntent: (Data) (short deep link)" + shortLink);
@@ -30,32 +28,24 @@ public class AppLinksHelper {
     // deeplink extra data: https://developer.android.com/training/app-links/deep-linking#handling-intents
     private static String getShortDeepLink(Intent intent) {
         byte[] bytes = intent.getByteArrayExtra(FIREBASE_DYNAMIC_LINKS_DATA);
+
+        if (bytes == null || bytes.length == 0) {
+            return null;
+        }
+
         Parcel parcel = Parcel.obtain();
         parcel.unmarshall(bytes, 0, bytes.length);
         parcel.setDataPosition(0);
 
-        int end = SafeParcelReader.readObjectHeader(parcel);
-
-        while (parcel.dataPosition() < end) {
-            int header = parcel.readInt();
-            switch (SafeParcelReader.getFieldId(header)) {
-                case 1:
-                case 2:
-                    return SafeParcelReader.readString(parcel, header);
-                default:
-                    Log.d(TAG, "Nothing to show");
-                    break;
-            }
-        }
-
-        return null;
+        int header = parcel.readInt();
+        return SafeParcelReader.readString(parcel, header);
     }
 
     private static String getUrl(Intent intent) {
         String action = intent.getAction();
         String dataString = intent.getDataString();
 
-        Log.d(TAG, "handleIntent: (Action) " + intent.getExtras().toString());
+        Log.d(TAG, "handleIntent: (Action) " + action);
         Log.d(TAG, "handleIntent: (Data) " + dataString);
 
         return dataString;

@@ -2,8 +2,6 @@ package com.llfbandit.app_links;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Parcel;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
