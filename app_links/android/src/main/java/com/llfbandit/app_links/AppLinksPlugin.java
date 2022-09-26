@@ -29,8 +29,6 @@ public class AppLinksPlugin implements
 
   private static final String MESSAGES_CHANNEL = "com.llfbandit.app_links/messages";
   private static final String EVENTS_CHANNEL = "com.llfbandit.app_links/events";
-  private static final String TAG = "com.llfbandit.app_links";
-  private static final String EXTRA_DATA_NAME = "com.google.firebase.dynamiclinks.DYNAMIC_LINK_DATA";
 
   // The MethodChannel that will the communication between Flutter and native
   // Android
@@ -171,9 +169,7 @@ public class AppLinksPlugin implements
       return false;
     }
 
-    AppLinksHelper helper = new AppLinksHelper();
-
-    String dataString = helper.getDeepLinkFromIntent(intent);
+    String dataString = AppLinksHelper.getDeepLinkFromIntent(intent);
 
     if (dataString != null) {
       if (initialLink == null) {
