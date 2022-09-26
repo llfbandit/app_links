@@ -2,6 +2,7 @@ package com.llfbandit.app_links;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Parcel;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -28,8 +29,8 @@ public class AppLinksPlugin implements
 
   private static final String MESSAGES_CHANNEL = "com.llfbandit.app_links/messages";
   private static final String EVENTS_CHANNEL = "com.llfbandit.app_links/events";
-
   private static final String TAG = "com.llfbandit.app_links";
+  private static final String EXTRA_DATA_NAME = "com.google.firebase.dynamiclinks.DYNAMIC_LINK_DATA";
 
   // The MethodChannel that will the communication between Flutter and native
   // Android
@@ -170,11 +171,9 @@ public class AppLinksPlugin implements
       return false;
     }
 
-    String action = intent.getAction();
-    String dataString = intent.getDataString();
+    AppLinksHelper helper = new AppLinksHelper();
 
-    Log.d(TAG, "handleIntent: (Action) " + action);
-    Log.d(TAG, "handleIntent: (Data) " + dataString);
+    String dataString = helper.getDeepLinkFromIntent(intent);
 
     if (dataString != null) {
       if (initialLink == null) {
@@ -189,6 +188,7 @@ public class AppLinksPlugin implements
 
     return false;
   }
+
   ///
   /// END AppLinksPlugin
   /////////////////////////////////////////////////////////////////////////////
