@@ -1,3 +1,6 @@
+## 3.3.0
+* feat: Triggering Firebase dynamic links for Android >= 12 (behaviour changes). (thanks to [AdrienAudouard](https://github.com/AdrienAudouard))
+
 ## 3.2.0
 * feat: Add macOS support.
 
