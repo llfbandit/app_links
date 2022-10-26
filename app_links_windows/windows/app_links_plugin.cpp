@@ -81,6 +81,7 @@ namespace applinks_plugin
 	{
 		if (method_call.method_name().compare("getInitialAppLink") == 0)
 		{
+			auto link = GetLink();
 			result->Success(flutter::EncodableValue(link.c_str()));
 		}
 		else if (method_call.method_name().compare("getLatestAppLink") == 0)
