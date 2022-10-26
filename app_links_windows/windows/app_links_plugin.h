@@ -14,18 +14,20 @@
 #include <memory>
 #include <sstream>
 
-namespace applinks_plugin {
-    class AppLinksWindowsPlugin : public flutter::Plugin {
+namespace applinks_plugin
+{
+    class AppLinksWindowsPlugin : public flutter::Plugin
+    {
     public:
-        static void RegisterWithRegistrar(flutter::PluginRegistrarWindows* registrar);
+        static void RegisterWithRegistrar(flutter::PluginRegistrarWindows *registrar);
 
-        AppLinksWindowsPlugin(flutter::PluginRegistrarWindows* registrar);
+        AppLinksWindowsPlugin(flutter::PluginRegistrarWindows *registrar);
         virtual ~AppLinksWindowsPlugin();
 
     private:
         // Called when a method is called on this plugin's channel from Dart.
         void HandleMethodCall(
-            const flutter::MethodCall<flutter::EncodableValue>& method_call,
+            const flutter::MethodCall<flutter::EncodableValue> &method_call,
             std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 
         // Called from app when launching first
@@ -35,16 +37,15 @@ namespace applinks_plugin {
             WPARAM wparam,
             LPARAM lparam);
 
-        std::unique_ptr<flutter::StreamHandlerError<flutter::EncodableValue>> OnListen(const flutter::EncodableValue* arguments, std::unique_ptr<flutter::EventSink<flutter::EncodableValue>>&& events);
-        std::unique_ptr<flutter::StreamHandlerError<flutter::EncodableValue>> OnCancel(const flutter::EncodableValue* arguments);
+        std::unique_ptr<flutter::StreamHandlerError<flutter::EncodableValue>> OnListen(const flutter::EncodableValue *arguments, std::unique_ptr<flutter::EventSink<flutter::EncodableValue>> &&events);
+        std::unique_ptr<flutter::StreamHandlerError<flutter::EncodableValue>> OnCancel(const flutter::EncodableValue *arguments);
 
         // Our app instance ID
         int32_t window_proc_id_ = -1;
-
-        std::optional<std::string> initialLink_;
+        std::string AppLinksWindowsPlugin::GetLink();
         std::optional<std::string> latestLink_;
         std::unique_ptr<flutter::EventSink<flutter::EncodableValue>> eventSink_;
-        flutter::PluginRegistrarWindows* registrar_;
+        flutter::PluginRegistrarWindows *registrar_;
     };
 
     typedef flutter::EventChannel<flutter::EncodableValue> FlEventChannel;
