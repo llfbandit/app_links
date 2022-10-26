@@ -1,3 +1,6 @@
+## 1.0.1
+- fix: getInitialAppLink returning null 
+
 ## 1.0.0
 - core: Initial release
 
