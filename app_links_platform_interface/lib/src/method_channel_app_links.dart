@@ -58,4 +58,18 @@ class MethodChannelAppLinks extends AppLinksPlatform {
       ),
     );
   }
+
+  @override
+  Stream<Uri> get allUriLinkStream async* {
+    final initial = await getInitialAppLink();
+    if (initial != null) yield initial;
+    yield* uriLinkStream;
+  }
+
+  @override
+  Stream<String> get allStringLinkStream async* {
+    final initial = await getInitialAppLinkString();
+    if (initial != null) yield initial;
+    yield* stringLinkStream;
+  }
 }

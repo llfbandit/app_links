@@ -74,4 +74,22 @@ abstract class AppLinksPlatform extends PlatformInterface {
   /// The [Stream] emits opened URI as [Uri]s.
   Stream<Uri> get uriLinkStream => throw UnimplementedError(
       'uriStream not implemented on the current platform.');
+
+  /// Stream for receiving incoming URI events as [Uri].
+  ///
+  /// The [Stream] emits opened URI as [Uri]s.
+  ///
+  /// This method merges [getInitialAppLink] and [uriLinkStream]
+  /// to simplify implementations.
+  Stream<Uri> get allUriLinkStream => throw UnimplementedError(
+      'allUriLinkStream not implemented on the current platform.');
+
+  /// Stream for receiving incoming URI events as [String].
+  ///
+  /// The [Stream] emits opened URI as [String]s.
+  ///
+  /// This method merges [getInitialAppLinkString] and [stringLinkStream]
+  /// to simplify implementations.
+  Stream<String> get allStringLinkStream => throw UnimplementedError(
+      'allStringLinkStream not implemented on the current platform.');
 }
