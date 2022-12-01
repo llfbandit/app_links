@@ -1,6 +1,8 @@
 package com.llfbandit.app_links;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.util.Log;
 
@@ -44,6 +46,15 @@ public class AppLinksHelper {
     private static String getUrl(Intent intent) {
         String action = intent.getAction();
         String dataString = intent.getDataString();
+        if (dataString == null || dataString.isEmpty()) {
+            Bundle extras = intent.getExtras();
+            if (extras != null && extras.containsKey(Intent.EXTRA_STREAM)) {
+                Uri uri = (Uri) extras.getParcelable(Intent.EXTRA_STREAM);
+                if (uri != null) {
+                    dataString = uri.toString();
+                }
+            }
+        }
 
         Log.d(TAG, "handleIntent: (Action) " + action);
         Log.d(TAG, "handleIntent: (Data) " + dataString);
