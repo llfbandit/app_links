@@ -1,3 +1,9 @@
+## 3.4.0
+* feat(Android): Allow ACTION_SEND with Intent.EXTRA_STREAM, Intent.EXTRA_TEXT. (thanks to [espresso3389](https://github.com/espresso3389))
+* feat: Add single stream for all links.
+* chore: Unify platform packages in app_links main package (__Windows include must be updated!__).
+* chore: Remove duplicated code in windows implementation.
+
 ## 3.3.0
 * feat: Triggering Firebase dynamic links for Android >= 12 (behaviour changes). (thanks to [AdrienAudouard](https://github.com/AdrienAudouard))
 

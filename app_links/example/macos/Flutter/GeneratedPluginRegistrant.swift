@@ -5,7 +5,7 @@
 import FlutterMacOS
 import Foundation
 
-import app_links_macos
+import app_links
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   AppLinksMacosPlugin.register(with: registry.registrar(forPlugin: "AppLinksMacosPlugin"))

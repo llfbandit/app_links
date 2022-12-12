@@ -20,8 +20,8 @@ import 'web_url_protocol.dart'
 ///
 /// You can launch an intent on an Android Emulator like this:
 ///    adb shell am start -a android.intent.action.VIEW \
-//     -c android.intent.category.BROWSABLE \
-//     -d "https://www.example.com/#/book/hello-world"
+///     -d "sample://open.my.app/#/book/hello-world"
+///
 ///
 /// On windows & macOS:
 ///   The simpliest way to test it is by

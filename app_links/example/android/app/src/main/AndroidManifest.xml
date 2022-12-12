@@ -21,20 +21,22 @@
             <!-- App Link sample -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="www.example.com" />
-                <data android:scheme="https" />
+                <data android:scheme="http" android:host="www.example.com" android:pathPrefix="/foo" />
+                <data android:scheme="https" android:host="www.example.com" android:pathPrefix="/foo" />
             </intent-filter>
 
             <!-- Deep Link sample -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Add optional android:host to distinguish your app
                      from others in case of conflicting scheme name -->
-                <data android:scheme="sample" android:host="sample.open.my.app" />
+                <data android:scheme="sample" android:host="open.my.app" />
+                <!-- <data android:scheme="sample" /> -->
             </intent-filter>
-
 
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user

@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'package:app_links_platform_interface/app_links_platform_interface.dart';
 
-/// Android App Links, Deep Links,
-/// iOs Universal Links and Custom URL schemes handler
 class AppLinks extends AppLinksPlatform {
-  /// Constructor
+  /// Android App Links, Deep Links,
+  /// iOs Universal Links and Custom URL schemes handler.
   AppLinks();
 
   @override
@@ -33,5 +32,17 @@ class AppLinks extends AppLinksPlatform {
   }
 
   @override
-  Stream<Uri> get uriLinkStream => AppLinksPlatform.instance.uriLinkStream;
+  Stream<Uri> get uriLinkStream {
+    return AppLinksPlatform.instance.uriLinkStream;
+  }
+
+  @override
+  Stream<String> get allStringLinkStream {
+    return AppLinksPlatform.instance.allStringLinkStream;
+  }
+
+  @override
+  Stream<Uri> get allUriLinkStream {
+    return AppLinksPlatform.instance.allUriLinkStream;
+  }
 }

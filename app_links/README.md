@@ -28,17 +28,17 @@ Before using the plugin, you'll need to setup each platforms you target.
 Don't be afraid, this is just copy/paste commands to follow.  
 But yes, it we will be a bit painful...
 
-Declare this method in <PROJECT_DIR>\windows\runner\win32_window.h
+Declare this method in <PROJECT_DIR>\windows\runner\win32_window.h as private method.
 ```cpp
   // Dispatches link if any.
   // This method enables our app to be with a single instance too.
-  // This is optional but mandatory if you want to catch further links in same app.
+  // This is mandatory if you want to catch further links in same app.
   bool SendAppLinkToInstance(const std::wstring& title);
 ```
 
-Add this inclusion at the top of <PROJECT_DIR>\windows\runner\win32_window.cpp
+Add this inclusion in <PROJECT_DIR>\windows\runner\win32_window.cpp
 ```cpp
-#include "app_links_windows/app_links_windows_plugin.h"
+#include "app_links/app_links_plugin_c_api.h"
 ```
 
 Add this method in <PROJECT_DIR>\windows\runner\win32_window.cpp
@@ -54,6 +54,7 @@ bool Win32Window::SendAppLinkToInstance(const std::wstring& title) {
     // (Optional) Restore our window to front in same state
     WINDOWPLACEMENT place = { sizeof(WINDOWPLACEMENT) };
     GetWindowPlacement(hwnd, &place);
+
     switch(place.showCmd) {
       case SW_SHOWMAXIMIZED:
           ShowWindow(hwnd, SW_SHOWMAXIMIZED);
@@ -65,6 +66,7 @@ bool Win32Window::SendAppLinkToInstance(const std::wstring& title) {
           ShowWindow(hwnd, SW_NORMAL);
           break;
     }
+
     SetWindowPos(0, HWND_TOP, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE | SWP_NOMOVE);
     SetForegroundWindow(hwnd);
     // END Restore
@@ -85,6 +87,8 @@ bool Win32Window::CreateAndShow(const std::wstring& title,
 if (SendAppLinkToInstance(title)) {
     return false;
 }
+
+Destroy();
 
 ...
 ```
@@ -133,6 +137,18 @@ All those configurations above are available in the example project.
 ---
   
 ### AppLinks usage
+Simpliest usage with a single stream
+```dart
+final _appLinks = AppLinks();
+
+// Subscribe to all events when app is started.
+// (Use allStringLinkStream to get it as [String])
+_appLinks.allUriLinkStream.listen((uri) {
+    // Do something (navigation, ...)
+});
+```
+
+Decomposed usage
 ```dart
 final _appLinks = AppLinks();
 
@@ -162,15 +178,23 @@ If you don't want this behaviour, you can set `android:launchMode="singleInstanc
 ## Tests
 The following commands will help you to test links.
 
-### Android
+### Test on Android
+
 ```sh
-adb shell am start
-    -W -a android.intent.action.VIEW
-    -d "<URI>" <PACKAGE>
+adb shell am start -a android.intent.action.VIEW \
+  -d "sample://open.my.app/#/book/hello-world"
 ```
+
 For App Links, you can also test it from Android Studio: [Documentation](https://developer.android.com/studio/write/app-link-indexing#testindent).
 
-### iOs
+### Test on iOS
+
 ```sh
-/usr/bin/xcrun simctl openurl booted "<URI>"
+/usr/bin/xcrun simctl openurl booted "app://www.example.com/#/book/hello-world"
+```
+
+### Test on windows & macOS
+Open your browser and type in your address bar:
+```
+sample://foo/#/book/hello-world2
 ```

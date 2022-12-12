@@ -147,7 +147,7 @@ public class AppLinksPlugin implements
   /// NewIntentListener
   ///
   @Override
-  public boolean onNewIntent(Intent intent) {
+  public boolean onNewIntent(@NonNull Intent intent) {
     if (handleIntent(intent)) {
       mainActivity.setIntent(intent);
       return true;
