@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  app_links_platform_interface: ^1.0.3
+  app_links_platform_interface: ^1.1.0
 
   flutter_web_plugins:
     sdk: flutter

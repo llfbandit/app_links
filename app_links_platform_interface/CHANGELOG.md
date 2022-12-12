@@ -1,3 +1,6 @@
+## 1.1.0
+* feat: Add single stream for all links.
+
 ## 1.0.2
 - fix: Null pointer.
 
