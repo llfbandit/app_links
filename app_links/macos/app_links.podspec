@@ -3,7 +3,7 @@
 # Run `pod lib lint app_links_macos.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'app_links_macos'
+  s.name             = 'app_links'
   s.version          = '1.0.0'
   s.summary          = 'App Links MacOS implementation for app_links package.'
   s.description      = <<-DESC
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.source_files     = 'Classes/**/*'
   s.dependency 'FlutterMacOS'
 
-  s.platform = :osx, '10.11'
+  s.platform = :osx, '10.13'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.swift_version = '5.0'
 end
