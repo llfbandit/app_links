@@ -10,6 +10,8 @@ This plugin allows you to:
 
 Before using the plugin, you'll need to setup each platforms you target.
 
+All those configurations below are accessible in the example project.
+
 ### Android
 
 - App Links: [Documentation](https://developer.android.com/training/app-links/verify-site-associations)
@@ -105,7 +107,6 @@ You can achieve it with [url_protocol](https://pub.dev/packages/url_protocol) in
 But... The most relevant solution is to include those registry modifications into your installer to allow the unregistration.
 </details>
 
-<br/>
 
 ### Mac OS
 <details>
@@ -131,8 +132,6 @@ Add this XML chapter in your `macos/Runner/Info.plist` inside `<plist version="1
 Done!
 </details>
 
-<br/>
-All those configurations above are available in the example project.
 
 ---
   
