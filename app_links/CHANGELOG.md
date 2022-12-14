@@ -1,3 +1,6 @@
+## 3.4.1
+* fix(macOS): wrong plugin definition resulting in build errors.
+
 ## 3.4.0
 * feat(Android): Allow ACTION_SEND with Intent.EXTRA_STREAM, Intent.EXTRA_TEXT. (thanks to [espresso3389](https://github.com/espresso3389))
 * feat: Add single stream for all links (See README for updated usage).
