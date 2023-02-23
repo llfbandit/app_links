@@ -1,7 +1,7 @@
 import 'dart:html';
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:app_links_platform_interface/app_links_platform_interface.dart';
+import 'package:app_links/src/app_links_platform_interface.dart';
 
 class AppLinksPluginWeb extends AppLinksPlatform {
   static void registerWith(Registrar registrar) {

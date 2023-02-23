@@ -8,12 +8,18 @@
 .buildlog/
 .history
 .svn/
+.gradle/
+.vscode/
 
 # IntelliJ related
 *.iml
 *.ipr
 *.iws
 .idea/
+
+# Omit commiting pubspec.lock for library packages:
+# https://dart.dev/guides/libraries/private-files#pubspeclock
+/pubspec.lock
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line

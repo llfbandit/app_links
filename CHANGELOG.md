@@ -1,3 +1,6 @@
+## 3.4.2
+* chore: Merge platform interface in main project.
+
 ## 3.4.1
 * fix(macOS): wrong plugin definition resulting in build errors.
 

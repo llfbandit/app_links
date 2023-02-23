@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:app_links_platform_interface/app_links_platform_interface.dart';
+import 'package:app_links/src/app_links_platform_interface.dart';
 
 class AppLinks extends AppLinksPlatform {
   /// Android App Links, Deep Links,

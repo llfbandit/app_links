@@ -1,5 +1,5 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:app_links_platform_interface/src/method_channel_app_links.dart';
+import 'package:app_links/src/app_links_method_channel.dart';
 
 /// Callback when your app is woke up by an incoming link
 /// [uri] and [stringUri] are same value.
@@ -22,11 +22,11 @@ abstract class AppLinksPlatform extends PlatformInterface {
   /// Constructs a [AppLinksPlatform].
   AppLinksPlatform() : super(token: _token);
 
-  static AppLinksPlatform _instance = MethodChannelAppLinks();
+  static AppLinksPlatform _instance = AppLinksMethodChannel();
 
   /// The default instance of [AppLinksPlatform] to use.
   ///
-  /// Defaults to [MethodChannelAppLinks].
+  /// Defaults to [AppLinksMethodChannel].
   static AppLinksPlatform get instance => _instance;
 
   /// Platform-specific plugins should set this to an instance of their own

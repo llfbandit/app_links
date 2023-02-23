@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:app_links_platform_interface/app_links_platform_interface.dart';
+import 'app_links_platform_interface.dart';
 
-class MethodChannelAppLinks extends AppLinksPlatform {
+class AppLinksMethodChannel extends AppLinksPlatform {
   /// Channel names
   static const String _messagesChannel = 'com.llfbandit.app_links/messages';
   static const String _eventsChannel = 'com.llfbandit.app_links/events';
