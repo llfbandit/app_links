@@ -7,6 +7,12 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHandler 
   fileprivate var initialLink: String?
   fileprivate var latestLink: String?
 
+  // Set the initial link manually
+  // c.f #47
+  public static func setInitialLink(url: URL) -> Void {
+    SwiftAppLinksCustom.shared.initialLink = url.absoluteString
+  }
+
   public static func register(with registrar: FlutterPluginRegistrar) {
     let methodChannel = FlutterMethodChannel(name: "com.llfbandit.app_links/messages", binaryMessenger: registrar.messenger())
     let eventChannel = FlutterEventChannel(name: "com.llfbandit.app_links/events", binaryMessenger: registrar.messenger())
@@ -21,7 +27,8 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHandler 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
       case "getInitialAppLink":
-        result(initialLink)
+        // return initialLink or manually stored value if null
+        result(initialLink ?? SwiftAppLinksCustom.shared.initialLink)
         break
       case "getLatestAppLink":
         result(latestLink)
@@ -89,4 +96,14 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHandler 
 
     _eventSink(latestLink)
   }
+}
+
+// Store the values set manually in a Singleton
+// c.f #47
+class SwiftAppLinksCustom {
+  static let shared = SwiftAppLinksCustom()
+
+  var initialLink: String?
+
+  private init() {}
 }
