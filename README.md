@@ -1,6 +1,6 @@
 # app_links
 
-Android App Links, Deep Links, iOs Universal Links and Custom URL schemes handler (desktop included).
+Android App Links, Deep Links, iOS Universal Links and Custom URL schemes handler (desktop included).
 
 This plugin allows you to:
 - catch HTTPS URLs to open your app instead of the browser (App Link / Universal Link).
@@ -17,7 +17,7 @@ All those configurations below are accessible in the example project.
 - App Links: [Documentation](https://developer.android.com/training/app-links/verify-site-associations)
 - Deep Links: [Documentation](https://developer.android.com/training/app-links/deep-linking)
 
-### iOs
+### iOS
 
 - Universal Links: [Documentation](https://developer.apple.com/documentation/safariservices/supporting_associated_domains)
 - Custom URL schemes: [Documentation](https://developer.apple.com/documentation/xcode/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app)
