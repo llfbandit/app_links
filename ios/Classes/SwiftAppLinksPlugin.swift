@@ -22,13 +22,10 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHandler 
     switch call.method {
       case "getInitialAppLink":
         result(initialLink)
-        break
       case "getLatestAppLink":
         result(latestLink)
-        break      
       default:
         result(FlutterMethodNotImplemented)
-        break
     }
   }
 
