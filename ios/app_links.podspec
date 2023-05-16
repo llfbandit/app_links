@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.version          = '0.0.1'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
-  iOs Universal Links and Custom URL schemes.
+  iOS Universal Links and Custom URL schemes.
                        DESC
   s.homepage         = 'https://github.com/llfbandit/app_links'
   s.license          = { :file => '../LICENSE' }
