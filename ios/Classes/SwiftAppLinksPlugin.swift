@@ -1,11 +1,11 @@
 import Flutter
 import UIKit
 
-public class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
-  fileprivate var eventSink: FlutterEventSink?
+public final class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
+  private var eventSink: FlutterEventSink?
 
-  fileprivate var initialLink: String?
-  fileprivate var latestLink: String?
+  private var initialLink: String?
+  private var latestLink: String?
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let methodChannel = FlutterMethodChannel(name: "com.llfbandit.app_links/messages", binaryMessenger: registrar.messenger())
@@ -72,7 +72,7 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHandler 
     return nil
   }
 
-  fileprivate func handleLink(url: URL) -> Void {
+  private func handleLink(url: URL) -> Void {
     let link = url.absoluteString
 
     debugPrint("iOS handleLink: \(link)")
@@ -82,7 +82,7 @@ public class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHandler 
     if (initialLink == nil) {
       initialLink = link
     }
-    
+
     guard let _eventSink = eventSink, latestLink != nil else {
       return
     }
