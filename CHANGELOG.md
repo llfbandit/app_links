@@ -1,3 +1,8 @@
+## 3.4.3
+* chore: Add support for Flutter 3.10.
+* chore(Android): Add support for AGP 8.0.
+* fix(iOS): Code improvements (Thanks to [michalsrutek](https://github.com/michalsrutek))
+
 ## 3.4.2
 * chore: Merge platform interface in main project.
 
