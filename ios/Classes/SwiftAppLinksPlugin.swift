@@ -72,8 +72,6 @@ public final class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   private func handleLink(url: URL) -> Void {
     let link = url.absoluteString
 
-    debugPrint("iOS handleLink: \(link)")
-
     latestLink = link
 
     if (initialLink == nil) {
