@@ -14,7 +14,7 @@ All those configurations below are accessible in the example project.
 
 ### Android
 
-- App Links: [Documentation](https://developer.android.com/training/app-links/verify-site-associations)
+- App Links: [Documentation](https://developer.android.com/training/app-links/verify-android-applinks)
 - Deep Links: [Documentation](https://developer.android.com/training/app-links/deep-linking)
 
 ### iOS
