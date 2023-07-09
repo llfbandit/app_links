@@ -81,9 +81,9 @@ bool Win32Window::SendAppLinkToInstance(const std::wstring& title) {
 }
 ```
 
-Add the call to the previous method in `CreateAndShow`
+Add the call to the previous method in `Create`
 ```cpp
-bool Win32Window::CreateAndShow(const std::wstring& title,
+bool Win32Window::Create(const std::wstring& title,
                                 const Point& origin,
                                 const Size& size) {
 if (SendAppLinkToInstance(title)) {
@@ -102,9 +102,33 @@ On Windows, URL protocols are setup in the Windows registry.
 
 This package won't do it for you (and will never sorry).  
 
-You can achieve it with [url_protocol](https://pub.dev/packages/url_protocol) inside you app.  
+You may achieve it with using the win32_registry package with the following code to register the URL protocol:
 
-But... The most relevant solution is to include those registry modifications into your installer to allow the unregistration.
+
+```dart
+Future<void> register(String scheme) async {
+  String appPath = Platform.resolvedExecutable;
+
+  String protocolRegKey = 'Software\\Classes\\$scheme';
+  RegistryValue protocolRegValue = const RegistryValue(
+    'URL Protocol',
+    RegistryValueType.string,
+    '',
+  );
+  String protocolCmdRegKey = 'shell\\open\\command';
+  RegistryValue protocolCmdRegValue = RegistryValue(
+    '',
+    RegistryValueType.string,
+    '"$appPath" "%1"',
+  );
+
+  final regKey = Registry.currentUser.createKey(protocolRegKey);
+  regKey.createValue(protocolRegValue);
+  regKey.createKey(protocolCmdRegKey).createValue(protocolCmdRegValue);
+}
+
+```
+
 </details>
 
 
