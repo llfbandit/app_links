@@ -35,4 +35,10 @@ class AppLinksPluginWeb extends AppLinksPlatform {
 
   @override
   Stream<Uri> get uriLinkStream => Stream.empty();
+
+  @override
+  Stream<Uri> get allUriLinkStream => Stream.value(Uri.parse(_initialLink));
+
+  @override
+  Stream<String> get allStringLinkStream => Stream.value(_initialLink);
 }

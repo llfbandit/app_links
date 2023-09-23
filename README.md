@@ -210,6 +210,10 @@ adb shell am start -a android.intent.action.VIEW \
 
 For App Links, you can also test it from Android Studio: [Documentation](https://developer.android.com/studio/write/app-link-indexing#testindent).
 
+Android 13:
+- While in development, you may need to manually activate your links.
+- Go to your app info/settings: Open by default > Add link > (your links should be already filled).
+
 ### Test on iOS
 
 ```sh
