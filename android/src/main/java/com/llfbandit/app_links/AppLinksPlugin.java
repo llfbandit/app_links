@@ -1,7 +1,7 @@
 package com.llfbandit.app_links;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -19,11 +19,13 @@ import io.flutter.plugin.common.PluginRegistry.NewIntentListener;
  * AppLinksPlugin
  */
 public class AppLinksPlugin implements
-        FlutterPlugin,
-        MethodCallHandler,
-        EventChannel.StreamHandler,
-        ActivityAware,
-        NewIntentListener {
+    FlutterPlugin,
+    MethodCallHandler,
+    EventChannel.StreamHandler,
+    ActivityAware,
+    NewIntentListener {
+
+  private static final String TAG = "com.llfbandit.app_links";
 
   private static final String MESSAGES_CHANNEL = "com.llfbandit.app_links/messages";
   private static final String EVENTS_CHANNEL = "com.llfbandit.app_links/events";
@@ -40,8 +42,7 @@ public class AppLinksPlugin implements
   // Event producer to handle new intents when app is opened
   private EventChannel.EventSink eventSink;
 
-  // Current context
-  private Activity mainActivity;
+  ActivityPluginBinding binding;
 
   // Initial link
   private String initialLink;
@@ -94,34 +95,31 @@ public class AppLinksPlugin implements
   /// ActivityAware
   ///
   @Override
-  public void onAttachedToActivity(ActivityPluginBinding binding) {
+  public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+    this.binding = binding;
     binding.addOnNewIntentListener(this);
-    this.mainActivity = binding.getActivity();
 
-    if (mainActivity.getIntent() == null) {
-      return;
-    }
-
-    final int flag = Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY;
-    if ((mainActivity.getIntent().getFlags() & flag) != flag) {
-      onNewIntent(mainActivity.getIntent());
-    }
+    // Handle intent when app is launched from cold state.
+    handleIntent(binding.getActivity().getIntent());
   }
 
   @Override
-  public void onReattachedToActivityForConfigChanges(ActivityPluginBinding binding) {
+  public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+    this.binding = binding;
     binding.addOnNewIntentListener(this);
-    this.mainActivity = binding.getActivity();
   }
 
   @Override
   public void onDetachedFromActivity() {
-    this.mainActivity = null;
+    if (binding != null) {
+      binding.removeOnNewIntentListener(this);
+    }
+    binding = null;
   }
 
   @Override
   public void onDetachedFromActivityForConfigChanges() {
-    this.mainActivity = null;
+    onDetachedFromActivity();
   }
   ///
   /// END ActivityAware
@@ -148,12 +146,7 @@ public class AppLinksPlugin implements
   ///
   @Override
   public boolean onNewIntent(@NonNull Intent intent) {
-    if (handleIntent(intent)) {
-      mainActivity.setIntent(intent);
-      return true;
-    }
-
-    return false;
+    return handleIntent(intent);
   }
   ///
   /// END NewIntentListener
@@ -163,24 +156,27 @@ public class AppLinksPlugin implements
   /// AppLinksPlugin
   ///
   private boolean handleIntent(Intent intent) {
-    if (intent == null) {
+    if (intent == null) return false;
+
+    Log.d(TAG, intent.toString());
+
+    final int flag = Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY;
+    if ((intent.getFlags() & flag) == flag) {
       return false;
     }
 
     String dataString = AppLinksHelper.getDeepLinkFromIntent(intent);
+    if (dataString == null) return false;
 
-    if (dataString != null) {
-      if (initialLink == null) {
-        initialLink = dataString;
-      }
-
-      latestLink = dataString;
-
-      if (eventSink != null) eventSink.success(dataString);
-      return true;
+    if (initialLink == null) {
+      initialLink = dataString;
     }
 
-    return false;
+    latestLink = dataString;
+
+    if (eventSink != null) eventSink.success(dataString);
+
+    return true;
   }
 
   ///
