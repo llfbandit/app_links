@@ -162,7 +162,7 @@ Done!
   <summary>How to setup</summary>
 
 Apply the following changes to your `linux/my_application.cc` file:
-```xml
+```patch
 diff --git a/example/linux/my_application.cc b/example/linux/my_application.cc
 index 0ba8f43..f07f765 100644
 --- a/example/linux/my_application.cc
