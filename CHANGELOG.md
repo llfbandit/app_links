@@ -1,3 +1,9 @@
+## 3.5.0-beta.1
+* feat: Add linux support.
+* fix(macOS): Flutter 3.16 broke macOS behaviour.
+* fix(iOS): Allow to call AppLinks plugin from outside for custom AppDelegate or SceneDelegate.
+* chore: READM update.
+
 ## 3.4.5
 * fix(Android): Code improvements and correctly skip event firing when comming from history.
 
