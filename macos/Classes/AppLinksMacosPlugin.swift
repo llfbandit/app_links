@@ -1,7 +1,7 @@
 import Cocoa
 import FlutterMacOS
 
-public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
+public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler, FlutterAppLifecycleDelegate {
   private var eventSink: FlutterEventSink?
   private var initialLink: String?
   private var latestLink: String?
@@ -14,12 +14,11 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler 
 
     let eventChannel = FlutterEventChannel(name: "com.llfbandit.app_links/events", binaryMessenger: registrar.messenger)
     eventChannel.setStreamHandler(instance)
+    
+    registrar.addApplicationDelegate(instance)
   }
-
-  @objc
-  override init() {
-    super.init();
-
+  
+  public func handleWillFinishLaunching(_ notification: Notification) {
     NSAppleEventManager.shared().setEventHandler(
       self,
       andSelector: #selector(handleEvent(_:with:)),
@@ -27,6 +26,7 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler 
       andEventID: AEEventID(kAEGetURL)
     )
   }
+
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
@@ -67,8 +67,6 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler 
   }
 
   private func handleLink(link: String) {
-    debugPrint("macOS handleLink: \(link)")
-
     latestLink = link
 
     if (initialLink == nil) {
