@@ -17,10 +17,79 @@ All those configurations below are accessible in the example project.
 - App Links: [Documentation](https://developer.android.com/training/app-links/verify-android-applinks)
 - Deep Links: [Documentation](https://developer.android.com/training/app-links/deep-linking)
 
+**Notes:**
+
+- By default, flutter Activity is set with `android:launchMode="singleTop"`.
+This is perfectly fine and expected, but this launches another instance of your app, specifically for the requested view.  
+If you don't want this behaviour, you can set `android:launchMode="singleInstance"` in your `AndroidManifest.xml` and avoid another flutter warmup.
+
 ### iOS
 
 - Universal Links: [Documentation](https://developer.apple.com/documentation/safariservices/supporting_associated_domains)
 - Custom URL schemes: [Documentation](https://developer.apple.com/documentation/xcode/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app)
+
+**Warning:**
+
+If you have a custom AppDelegate with overriden methods either:
+- application(_:willFinishLaunchingWithOptions:)
+- or application(_:didFinishLaunchingWithOptions:)
+
+Both methods must call super and return true to enable app link workflow.
+If you can't respect those two constraints:
+
+<details>
+  <summary>
+   Here's how to setup</summary>
+
+```swift
+import app_links
+
+@UIApplicationMain
+@objc class AppDelegate: FlutterAppDelegate {
+  override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
+    ...
+
+    // Retrieve the link from the parameters
+    if let url = AppLinks.shared.getLink(launchOptions: launchOptions) {
+      // We have a link, propagate it to your Flutter app
+      AppLinks.shared.handleLink(url: url)
+    }
+
+    return false
+  }
+}
+```
+
+</details>
+
+<br/>  
+If you have a scene-based app.
+
+<details>
+  <summary>Here's how to setup</summary>
+
+```swift
+import app_links
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+      for context in URLContexts {
+        AppLinks.shared.handleLink(url: context.url)
+      }
+    }
+    
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+      if let url = userActivity.webpageURL {
+        AppLinks.shared.handleLink(url: url)
+      }
+    }
+}
+```
+
+</details>
 
 ### Windows
 
@@ -191,12 +260,6 @@ _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
 // Maybe later. Get the latest link.
 final uri = await _appLinks.getLatestAppLink();
 ```
-
-Android notes:
-
-- By default, flutter Activity is set with `android:launchMode="singleTop"`.
-This is perfectly fine and expected, but this launches another instance of your app, specifically for the requested view.  
-If you don't want this behaviour, you can set `android:launchMode="singleInstance"` in your `AndroidManifest.xml` and avoid another flutter warmup.
 
 ## Tests
 The following commands will help you to test links.
