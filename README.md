@@ -96,7 +96,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 <details>
   <summary>How to setup</summary>
 
-Don't be afraid, this is just copy/paste commands to follow.  
+Don't be afraid, this is just copy/paste commands to follow.
 But yes, it we will be a bit painful...
 
 Declare this method in <PROJECT_DIR>\windows\runner\win32_window.h as private method.
@@ -117,7 +117,7 @@ Add this method in <PROJECT_DIR>\windows\runner\win32_window.cpp
 bool Win32Window::SendAppLinkToInstance(const std::wstring& title) {
   // Find our exact window
   HWND hwnd = ::FindWindow(kWindowClassName, title.c_str());
-  
+
   if (hwnd) {
     // Dispatch new link to current window
     SendAppLink(hwnd);
@@ -166,10 +166,10 @@ Destroy();
 
 Great!
 
-Now you can register your own scheme.  
+Now you can register your own scheme.
 On Windows, URL protocols are setup in the Windows registry.
 
-This package won't do it for you (and will never sorry).  
+This package won't do it for you (and will never sorry).
 
 You may achieve it with using the win32_registry package with the following code to register the URL protocol:
 
@@ -201,7 +201,7 @@ Future<void> register(String scheme) async {
 </details>
 
 
-### Mac OS
+### macOS
 <details>
   <summary>How to setup</summary>
 
@@ -226,8 +226,65 @@ Done!
 </details>
 
 
+### Linux
+<details>
+  <summary>How to setup</summary>
+
+Apply the following changes to your `linux/my_application.cc` file:
+```patch
+diff --git a/example/linux/my_application.cc b/example/linux/my_application.cc
+index 0ba8f43..f07f765 100644
+--- a/example/linux/my_application.cc
++++ b/example/linux/my_application.cc
+@@ -17,6 +17,13 @@ G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
+ // Implements GApplication::activate.
+ static void my_application_activate(GApplication* application) {
+   MyApplication* self = MY_APPLICATION(application);
++
++  GList* windows = gtk_application_get_windows(GTK_APPLICATION(application));
++  if (windows) {
++    gtk_window_present(GTK_WINDOW(windows->data));
++    return;
++  }
++
+   GtkWindow* window =
+       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
+
+@@ -78,7 +85,7 @@ static gboolean my_application_local_command_line(GApplication* application, gch
+   g_application_activate(application);
+   *exit_status = 0;
+
+-  return TRUE;
++  return FALSE;
+ }
+
+ // Implements GObject::dispose.
+@@ -99,6 +106,6 @@ static void my_application_init(MyApplication* self) {}
+ MyApplication* my_application_new() {
+   return MY_APPLICATION(g_object_new(my_application_get_type(),
+                                      "application-id", APPLICATION_ID,
+-                                     "flags", G_APPLICATION_NON_UNIQUE,
++                                     "flags", G_APPLICATION_HANDLES_COMMAND_LINE | G_APPLICATION_HANDLES_OPEN,
+                                      nullptr));
+```
+
+Notes:
+- Please ensure your `APPLICATION_ID` is the same as your desktop file name if you're using Flathub.
+- Please ensure you have added this section in your `snapcraft.yaml` file if you're using SnapStore:
+```yaml
+slots:
+  dbus-appflowy:
+    interface: dbus
+    bus: session
+    name: `APPLICATION_ID`
+```
+- You can refer to these two repositories for more details: [FlatHub setup](https://github.com/flathub/io.appflowy.AppFlowy) and [Snapcraft setup](https://github.com/LucasXu0/appflowy-snap/blob/main/snap/snapcraft.yaml).
+
+Done!
+</details>
+
 ---
-  
+
 ### AppLinks usage
 Simpliest usage with a single stream
 ```dart
