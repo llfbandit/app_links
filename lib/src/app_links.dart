@@ -1,17 +1,14 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:app_links/src/app_links_linux.dart';
 import 'package:app_links/src/app_links_platform_interface.dart';
-import 'package:flutter/foundation.dart';
 
 class AppLinks extends AppLinksPlatform {
   /// Android App Links, Deep Links,
   /// iOS Universal Links and Custom URL schemes handler.
-  AppLinks() {
-    if (!kIsWeb && Platform.isLinux) {
-      AppLinksPlatform.instance = AppLinkPluginLinux();
-    }
-  }
+  static final AppLinks _instance = AppLinks._();
+
+  factory AppLinks() => _instance;
+
+  AppLinks._();
 
   @override
   Future<Uri?> getInitialAppLink() {

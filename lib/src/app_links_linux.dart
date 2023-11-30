@@ -3,8 +3,12 @@ import 'dart:async';
 import 'package:app_links/src/app_links_platform_interface.dart';
 import 'package:gtk/gtk.dart';
 
-class AppLinkPluginLinux extends AppLinksPlatform {
-  AppLinkPluginLinux() {
+class AppLinksPluginLinux extends AppLinksPlatform {
+  static void registerWith() {
+    AppLinksPlatform.instance = AppLinksPluginLinux();
+  }
+
+  AppLinksPluginLinux() {
     _notifier = GtkApplicationNotifier();
     _notifier.addCommandLineListener((args) {
       if (args.isEmpty) {

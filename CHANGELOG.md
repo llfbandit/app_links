@@ -1,3 +1,6 @@
+## 3.5.0-beta.2
+* fix(Linux): Plugin registration.
+
 ## 3.5.0-beta.1
 * feat: Add linux support.
 * fix(macOS): Flutter 3.16 broke macOS behaviour.
