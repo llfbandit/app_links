@@ -6,8 +6,7 @@ import 'dart:io';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'web_url_protocol.dart'
-    if (dart.library.io) 'package:url_protocol/url_protocol.dart';
+import 'url_protocol/api.dart';
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Please make sure to follow the setup instructions below
@@ -41,7 +40,7 @@ class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -144,7 +143,7 @@ class _MyAppState extends State<MyApp> {
   Widget customScreen(String bookId) {
     return Scaffold(
       appBar: AppBar(title: const Text('Second Screen')),
-      body: Center(child: Text('Opened with parameter: ' + bookId)),
+      body: Center(child: Text('Opened with parameter: $bookId')),
     );
   }
 
