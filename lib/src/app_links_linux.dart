@@ -8,24 +8,14 @@ class AppLinksPluginLinux extends AppLinksPlatform {
     AppLinksPlatform.instance = AppLinksPluginLinux();
   }
 
-  AppLinksPluginLinux() {
-    _notifier = GtkApplicationNotifier();
-    _notifier.addCommandLineListener((args) {
-      if (args.isEmpty) {
-        return;
-      }
-      final uri = args.first;
-      _uris.add(uri);
-      _controller.add(uri);
-    });
-  }
-
-  final StreamController<String> _controller = StreamController<String>();
-  final List<String> _uris = [];
-  late final GtkApplicationNotifier _notifier;
+  final _controller = StreamController<String>();
+  final _uris = <String>[];
+  GtkApplicationNotifier? _notifier;
 
   @override
   Future<Uri?> getInitialAppLink() async {
+    _initNotifier();
+
     return getInitialAppLinkString().then(
       (value) => value != null ? Uri.parse(value) : null,
     );
@@ -38,6 +28,8 @@ class AppLinksPluginLinux extends AppLinksPlatform {
 
   @override
   Future<Uri?> getLatestAppLink() async {
+    _initNotifier();
+
     return getLatestAppLinkString().then(
       (value) => value != null ? Uri.parse(value) : null,
     );
@@ -45,18 +37,45 @@ class AppLinksPluginLinux extends AppLinksPlatform {
 
   @override
   Future<String?> getLatestAppLinkString() async {
+    _initNotifier();
     return _uris.isNotEmpty ? _uris.last : null;
   }
 
   @override
-  Stream<String> get stringLinkStream => _controller.stream;
+  Stream<String> get stringLinkStream {
+    _initNotifier();
+    return _controller.stream;
+  }
 
   @override
-  Stream<Uri> get uriLinkStream => _controller.stream.map(Uri.parse);
+  Stream<Uri> get uriLinkStream {
+    _initNotifier();
+    return _controller.stream.map(Uri.parse);
+  }
 
   @override
-  Stream<String> get allStringLinkStream => _controller.stream;
+  Stream<String> get allStringLinkStream {
+    _initNotifier();
+    return _controller.stream;
+  }
 
   @override
-  Stream<Uri> get allUriLinkStream => _controller.stream.map(Uri.parse);
+  Stream<Uri> get allUriLinkStream {
+    _initNotifier();
+    return _controller.stream.map(Uri.parse);
+  }
+
+  void _initNotifier() {
+    if (_notifier == null) {
+      _notifier = GtkApplicationNotifier();
+      _notifier?.addCommandLineListener((args) {
+        if (args.isEmpty) {
+          return;
+        }
+        final uri = args.first;
+        _uris.add(uri);
+        _controller.add(uri);
+      });
+    }
+  }
 }

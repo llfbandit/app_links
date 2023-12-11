@@ -1,3 +1,6 @@
+## 3.5.0-beta.3
+* fix(Linux): Plugin init.
+
 ## 3.5.0-beta.2
 * fix(Linux): Plugin registration.
 
