@@ -1,10 +1,4 @@
-## 3.5.0-beta.3
-* fix(Linux): Plugin init.
-
-## 3.5.0-beta.2
-* fix(Linux): Plugin registration.
-
-## 3.5.0-beta.1
+## 3.5.0
 * feat: Add linux support.
 * fix(macOS): Flutter 3.16 broke macOS behaviour.
 * fix(iOS): Allow to call AppLinks plugin from outside for custom AppDelegate or SceneDelegate.
