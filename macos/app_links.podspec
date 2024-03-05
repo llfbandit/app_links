@@ -19,4 +19,6 @@ Pod::Spec.new do |s|
   s.platform = :osx, '10.13'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.swift_version = '5.0'
+  # Privacy manifest
+  s.resource_bundles = {'app_links_macos_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
 end

@@ -1,3 +1,6 @@
+## 3.5.1
+* chore: Add privacy manifest to iOS and macOS platforms.
+
 ## 3.5.0
 * feat: Add linux support.
 * fix(macOS): Flutter 3.16 broke macOS behaviour.
