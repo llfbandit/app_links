@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'package:web/web.dart' as web;
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:app_links/src/app_links_platform_interface.dart';
@@ -8,7 +8,7 @@ class AppLinksPluginWeb extends AppLinksPlatform {
     AppLinksPlatform.instance = AppLinksPluginWeb();
   }
 
-  final _initialLink = window.location.href;
+  final _initialLink = web.window.location.href;
 
   @override
   Future<Uri?> getInitialAppLink() async {
