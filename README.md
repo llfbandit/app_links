@@ -96,27 +96,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 <details>
   <summary>How to setup</summary>
 
-Don't be afraid, this is just copy/paste commands to follow.
-But yes, it we will be a bit painful...
-
-Declare this method in <PROJECT_DIR>\windows\runner\win32_window.h as private method.
-```cpp
-  // Dispatches link if any.
-  // This method enables our app to be with a single instance too.
-  // This is mandatory if you want to catch further links in same app.
-  bool SendAppLinkToInstance(const std::wstring& title);
-```
-
-Add this inclusion in <PROJECT_DIR>\windows\runner\win32_window.cpp
+Add this inclusion in <PROJECT_DIR>\windows\runner\main.cpp
 ```cpp
 #include "app_links/app_links_plugin_c_api.h"
 ```
 
-Add this method in <PROJECT_DIR>\windows\runner\win32_window.cpp
+Add this method before `wWinMain`
 ```cpp
-bool Win32Window::SendAppLinkToInstance(const std::wstring& title) {
+bool SendAppLinkToInstance(const std::wstring& title) {
   // Find our exact window
-  HWND hwnd = ::FindWindow(kWindowClassName, title.c_str());
+  HWND hwnd = ::FindWindow(L"FLUTTER_RUNNER_WIN32_WINDOW", title.c_str());
 
   if (hwnd) {
     // Dispatch new link to current window
@@ -150,16 +139,15 @@ bool Win32Window::SendAppLinkToInstance(const std::wstring& title) {
 }
 ```
 
-Add the call to the previous method in `Create`
+Add the call to the previous method in `wWinMain`
 ```cpp
-bool Win32Window::Create(const std::wstring& title,
-                                const Point& origin,
-                                const Size& size) {
-if (SendAppLinkToInstance(title)) {
-    return false;
-}
-
-Destroy();
+int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
+                      _In_ wchar_t *command_line, _In_ int show_command) {
+  // Replace "example" with the generated title found as parameter of `window.Create` in this file.
+  // You may ignore the result if you need to create another window.
+  if (SendAppLinkToInstance(L"example")) {
+    return EXIT_SUCCESS;
+  }
 
 ...
 ```

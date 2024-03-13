@@ -24,7 +24,7 @@ dev_dependencies:
     sdk: flutter
   
   # linter rules (https://pub.dev/packages/flutter_lints)
-  flutter_lints: ^2.0.1
+  flutter_lints: ^3.0.1
 
 # The following section is specific to Flutter.
 flutter:
