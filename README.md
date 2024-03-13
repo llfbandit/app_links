@@ -23,6 +23,35 @@ All those configurations below are accessible in the example project.
 This is perfectly fine and expected, but this launches another instance of your app, specifically for the requested view.  
 If you don't want this behaviour, you can set `android:launchMode="singleInstance"` in your `AndroidManifest.xml` and avoid another flutter warmup.
 
+<details>
+  <summary>Here's how to setup</summary>
+
+  In AndroidManifest.xml
+
+```xml
+<!-- App Link sample -->
+<intent-filter android:autoVerify="true">
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+    <data android:scheme="http" android:host="www.example.com" android:pathPrefix="/foo" />
+    <data android:scheme="https" android:host="www.example.com" android:pathPrefix="/foo" />
+</intent-filter>
+
+<!-- Deep Link sample -->
+<intent-filter>
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+    <!-- Add optional android:host to distinguish your app
+          from others in case of conflicting scheme name -->
+    <data android:scheme="sample" android:host="open.my.app" />
+    <!-- <data android:scheme="sample" /> -->
+</intent-filter>
+```
+
+</details>
+
 ### iOS
 
 - Universal Links: [Documentation](https://developer.apple.com/documentation/safariservices/supporting_associated_domains)
@@ -35,11 +64,10 @@ If you have a custom AppDelegate with overriden methods either:
 - or application(_:didFinishLaunchingWithOptions:)
 
 Both methods must call super and return true to enable app link workflow.
-If you can't respect those two constraints:
+If you can't respect those two constraints or you need a specific process.
 
 <details>
-  <summary>
-   Here's how to setup</summary>
+  <summary>Here's how to setup in those cases</summary>
 
 ```swift
 import app_links
@@ -50,26 +78,23 @@ import app_links
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    ...
+    GeneratedPluginRegistrant.register(with: self)
 
-    // Retrieve the link from the parameters
+    // Retrieve the link from parameters
     if let url = AppLinks.shared.getLink(launchOptions: launchOptions) {
       // We have a link, propagate it to your Flutter app
       AppLinks.shared.handleLink(url: url)
+      return true // Returning true will stop the propagation to other packages
     }
 
-    return false
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
 ```
 
-</details>
-
 <br/>  
 If you have a scene-based app.
 
-<details>
-  <summary>Here's how to setup</summary>
 
 ```swift
 import app_links
@@ -90,6 +115,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 ```
 
 </details>
+
 
 ### Windows
 
@@ -274,6 +300,8 @@ Done!
 ---
 
 ### AppLinks usage
+Please, ensure to instanciate `AppLinks` early in your app to catch the very first link when the app is in cold state.
+
 Simpliest usage with a single stream
 ```dart
 final _appLinks = AppLinks();

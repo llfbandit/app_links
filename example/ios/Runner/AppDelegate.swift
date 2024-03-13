@@ -9,15 +9,14 @@ import app_links
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
-    // return super.application(application, didFinishLaunchingWithOptions: launchOptions)
 
-    // The code below is for demo purpose only
-    super.application(application, didFinishLaunchingWithOptions: launchOptions)
-
+    // Retrieve the link from parameters
     if let url = AppLinks.shared.getLink(launchOptions: launchOptions) {
+      // We have a link, propagate it to your Flutter app
       AppLinks.shared.handleLink(url: url)
+      return true // Returning true will stop the propagation to other packages
     }
 
-    return false
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
