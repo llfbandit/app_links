@@ -1,6 +1,7 @@
 package com.llfbandit.app_links;
 
 import static android.content.Intent.ACTION_SEND;
+import static android.content.Intent.ACTION_VIEW;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -47,29 +48,34 @@ public class AppLinksHelper {
 
   private static String getUrl(Intent intent) {
     String action = intent.getAction();
-    String dataString = intent.getDataString();
 
-    if (ACTION_SEND.equals(action)) {
-      Bundle extras = intent.getExtras();
+    if (ACTION_VIEW.equals(action)) {
+      String dataString = intent.getDataString();
 
-      if (extras != null) {
-        if (extras.containsKey(Intent.EXTRA_TEXT)) {
-          CharSequence charSeq = extras.getCharSequence(Intent.EXTRA_TEXT);
-          if (charSeq != null) {
-            dataString = charSeq.toString();
-          }
-        } else if (extras.containsKey(Intent.EXTRA_STREAM)) {
-          Uri uri = (Uri) extras.getParcelable(Intent.EXTRA_STREAM);
-          if (uri != null) {
-            dataString = uri.toString();
-          }
-        }
-      }
+      Log.d(TAG, "handleIntent: (Action) " + action);
+      Log.d(TAG, "handleIntent: (Data) " + dataString);
+
+      return dataString;
     }
 
-    Log.d(TAG, "handleIntent: (Action) " + action);
-    Log.d(TAG, "handleIntent: (Data) " + dataString);
+    return null;
 
-    return dataString;
+//    if (ACTION_SEND.equals(action)) {
+//      Bundle extras = intent.getExtras();
+//
+//      if (extras != null) {
+//        if (extras.containsKey(Intent.EXTRA_TEXT)) {
+//          CharSequence charSeq = extras.getCharSequence(Intent.EXTRA_TEXT);
+//          if (charSeq != null) {
+//            dataString = charSeq.toString();
+//          }
+//        } else if (extras.containsKey(Intent.EXTRA_STREAM)) {
+//          Uri uri = (Uri) extras.getParcelable(Intent.EXTRA_STREAM);
+//          if (uri != null) {
+//            dataString = uri.toString();
+//          }
+//        }
+//      }
+//    }
   }
 }
