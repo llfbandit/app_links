@@ -58,7 +58,7 @@ public class AppLinksHelper {
       return dataString;
     }
 
-    return null;
+    return intent.getDataString();
 
 //    if (ACTION_SEND.equals(action)) {
 //      Bundle extras = intent.getExtras();
