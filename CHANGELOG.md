@@ -1,6 +1,9 @@
+## 4.0.1
+* fix(Android): Reworked capture by explicitly discarding `ACTION_SEND*` and let other basic actions succeed (NFC for example).
+
 ## 4.0.0
 * __Breaking__ fix(Windows): Updated setup to be more resilient to Flutter changes. Can work with v3 but mandatory from Flutter 3.19 with new projects.
-* __Breaking__ chore(Android): Remove capture of SEND_ACTION to avoid conflicts with others packages.
+* __Breaking__ chore(Android): Remove capture of ACTION_SEND to avoid conflicts with others packages.
 * __Breaking__ chore(web): move from dart:html to package:web to allow WASM compilation.
 * chore: Updated setup for iOS to handle result while other packages are around.
 

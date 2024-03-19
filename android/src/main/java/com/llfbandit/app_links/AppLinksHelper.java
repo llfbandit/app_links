@@ -1,11 +1,10 @@
 package com.llfbandit.app_links;
 
 import static android.content.Intent.ACTION_SEND;
-import static android.content.Intent.ACTION_VIEW;
+import static android.content.Intent.ACTION_SENDTO;
+import static android.content.Intent.ACTION_SEND_MULTIPLE;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
 import android.os.Parcel;
 import android.util.Log;
 
@@ -49,16 +48,19 @@ public class AppLinksHelper {
   private static String getUrl(Intent intent) {
     String action = intent.getAction();
 
-    if (ACTION_VIEW.equals(action)) {
-      String dataString = intent.getDataString();
-
-      Log.d(TAG, "handleIntent: (Action) " + action);
-      Log.d(TAG, "handleIntent: (Data) " + dataString);
-
-      return dataString;
+    if (ACTION_SEND.equals(action) ||
+        ACTION_SEND_MULTIPLE.equals(action) ||
+        ACTION_SENDTO.equals(action)) {
+      return null;
     }
 
-    return null;
+    String dataString = intent.getDataString();
+
+    if (dataString != null) {
+      Log.d(TAG, "Handled intent: action: " + action + " / data: " + dataString);
+    }
+
+    return dataString;
 
 //    if (ACTION_SEND.equals(action)) {
 //      Bundle extras = intent.getExtras();
