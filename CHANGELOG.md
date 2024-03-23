@@ -1,3 +1,6 @@
+## 4.0.2
+* fix(iOS): Return true in NSUserActivityTypeBrowsingWeb to indicate that app links handled the activity
+
 ## 4.0.1
 * fix(Android): Reworked capture by explicitly discarding `ACTION_SEND*` and let other basic actions succeed (NFC for example).
 
