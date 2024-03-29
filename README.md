@@ -59,7 +59,7 @@ If you don't want this behaviour, you can set `android:launchMode="singleInstanc
 
 **Warning:**
 
-If you have a custom AppDelegate with overriden methods either:
+If you have a custom AppDelegate with overridden methods either:
 - application(_:willFinishLaunchingWithOptions:)
 - or application(_:didFinishLaunchingWithOptions:)
 
@@ -300,9 +300,9 @@ Done!
 ---
 
 ### AppLinks usage
-Please, ensure to instanciate `AppLinks` early in your app to catch the very first link when the app is in cold state.
+Please, ensure to instantiate `AppLinks` early in your app to catch the very first link when the app is in cold state.
 
-Simpliest usage with a single stream
+Simplest usage with a single stream
 ```dart
 final _appLinks = AppLinks();
 
