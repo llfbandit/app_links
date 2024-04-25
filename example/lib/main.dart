@@ -23,7 +23,7 @@ import 'url_protocol/api.dart';
 ///
 ///
 /// On windows & macOS:
-///   The simpliest way to test it is by
+///   The simplest way to test it is by
 ///   opening your browser and type: sample://foo/#/book/hello-world2
 ///////////////////////////////////////////////////////////////////////////////
 
