@@ -71,6 +71,7 @@ public final class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     case NSUserActivityTypeBrowsingWeb:
       if let url = userActivity.webpageURL {
         handleLink(url: url)
+        return true
       }
       return false
     default: return false
@@ -85,7 +86,7 @@ public final class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   ) -> Bool {
     
     handleLink(url: url)
-    return false
+    return true
   }
   
   public func onListen(

@@ -1,3 +1,8 @@
+## 5.0.0
+* __Breaking__ iOs: Application Delegate now returns `true` for both Universal Links and Custom URL schemes.
+If you have other packages which could conflict with it, report to the README.md for custom handling.
+This change is motived by the basic deep linking provided by Flutter and the fact that there is now a workaround for such cases.
+
 ## 4.0.1
 * fix(Android): Reworked capture by explicitly discarding `ACTION_SEND*` and let other basic actions succeed (NFC for example).
 
