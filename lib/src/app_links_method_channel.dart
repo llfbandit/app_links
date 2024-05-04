@@ -13,32 +13,32 @@ class AppLinksMethodChannel extends AppLinksPlatform {
   static const _event = EventChannel(_eventsChannel);
 
   /// [getInitialAppLink] method call name
-  static const String _getInitialAppLinkMethod = 'getInitialAppLink';
+  static const String _getInitialLinkMethod = 'getInitialAppLink';
 
   /// [getLatestAppLink] method call name
-  static const String _getLatestAppLinkMethod = 'getLatestAppLink';
+  static const String _getLatestLinkMethod = 'getLatestAppLink';
 
   @override
-  Future<Uri?> getInitialAppLink() async {
-    final result = await getInitialAppLinkString();
+  Future<Uri?> getInitialLink() async {
+    final result = await getInitialLinkString();
     return result != null ? Uri.tryParse(result) : null;
   }
 
   @override
-  Future<String?> getInitialAppLinkString() async {
-    final link = await _method.invokeMethod<String?>(_getInitialAppLinkMethod);
+  Future<String?> getInitialLinkString() async {
+    final link = await _method.invokeMethod<String?>(_getInitialLinkMethod);
     return link != null && link.isNotEmpty ? link : null;
   }
 
   @override
-  Future<Uri?> getLatestAppLink() async {
-    final result = await getLatestAppLinkString();
+  Future<Uri?> getLatestLink() async {
+    final result = await getLatestLinkString();
     return result != null ? Uri.tryParse(result) : null;
   }
 
   @override
-  Future<String?> getLatestAppLinkString() async {
-    final link = await _method.invokeMethod<String?>(_getLatestAppLinkMethod);
+  Future<String?> getLatestLinkString() async {
+    final link = await _method.invokeMethod<String?>(_getLatestLinkMethod);
     return link != null && link.isNotEmpty ? link : null;
   }
 
@@ -57,19 +57,5 @@ class AppLinksMethodChannel extends AppLinksPlatform {
         },
       ),
     );
-  }
-
-  @override
-  Stream<Uri> get allUriLinkStream async* {
-    final initial = await getInitialAppLink();
-    if (initial != null) yield initial;
-    yield* uriLinkStream;
-  }
-
-  @override
-  Stream<String> get allStringLinkStream async* {
-    final initial = await getInitialAppLinkString();
-    if (initial != null) yield initial;
-    yield* stringLinkStream;
   }
 }

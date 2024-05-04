@@ -65,14 +65,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> initDeepLinks() async {
     _appLinks = AppLinks();
 
-    // Check initial link if app was in cold state (terminated)
-    final appLink = await _appLinks.getInitialAppLink();
-    if (appLink != null) {
-      print('getInitialAppLink: $appLink');
-      openAppLink(appLink);
-    }
-
-    // Handle link when app is in warm state (front or background)
+    // Handle links
     _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
       print('onAppLink: $uri');
       openAppLink(uri);

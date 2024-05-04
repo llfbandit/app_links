@@ -46,6 +46,7 @@ public class AppLinksPlugin implements
 
   // Initial link
   private String initialLink;
+  private boolean initialLinkSent = false;
 
   // Latest link
   private String latestLink;
@@ -66,9 +67,6 @@ public class AppLinksPlugin implements
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     methodChannel.setMethodCallHandler(null);
     eventChannel.setStreamHandler(null);
-
-    initialLink = null;
-    latestLink = null;
   }
   ///
   /// END FlutterPlugin
@@ -131,6 +129,11 @@ public class AppLinksPlugin implements
   @Override
   public void onListen(Object o, EventChannel.EventSink eventSink) {
     this.eventSink = eventSink;
+
+    if (!initialLinkSent && initialLink != null) {
+      initialLinkSent = true;
+      eventSink.success(initialLink);
+    }
   }
 
   @Override
@@ -174,7 +177,10 @@ public class AppLinksPlugin implements
 
     latestLink = dataString;
 
-    if (eventSink != null) eventSink.success(dataString);
+    if (eventSink != null) {
+      initialLinkSent = true;
+      eventSink.success(dataString);
+    }
 
     return true;
   }

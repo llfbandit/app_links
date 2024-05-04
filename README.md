@@ -34,7 +34,6 @@ If you don't want this behaviour, you can set `android:launchMode="singleInstanc
     <action android:name="android.intent.action.VIEW" />
     <category android:name="android.intent.category.DEFAULT" />
     <category android:name="android.intent.category.BROWSABLE" />
-    <data android:scheme="http" android:host="www.example.com" android:pathPrefix="/foo" />
     <data android:scheme="https" android:host="www.example.com" android:pathPrefix="/foo" />
 </intent-filter>
 
@@ -60,8 +59,9 @@ If you don't want this behaviour, you can set `android:launchMode="singleInstanc
 **Warning:**
 
 If you have a custom AppDelegate with overridden methods either:
-- application(_:willFinishLaunchingWithOptions:)
-- or application(_:didFinishLaunchingWithOptions:)
+- `application(_:willFinishLaunchingWithOptions:)`
+- or `application(_:didFinishLaunchingWithOptions:)`
+- or another package also dealing with Universal Links or Custom URL schemes.
 
 Both methods must call super and return true to enable app link workflow.
 If you can't respect those two constraints or you need a specific process.
@@ -82,7 +82,7 @@ import app_links
 
     // Retrieve the link from parameters
     if let url = AppLinks.shared.getLink(launchOptions: launchOptions) {
-      // We have a link, propagate it to your Flutter app
+      // We have a link, propagate it to your Flutter app or not
       AppLinks.shared.handleLink(url: url)
       return true // Returning true will stop the propagation to other packages
     }
@@ -100,17 +100,17 @@ If you have a scene-based app.
 import app_links
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-      for context in URLContexts {
-        AppLinks.shared.handleLink(url: context.url)
-      }
+  func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+    for context in URLContexts {
+      AppLinks.shared.handleLink(url: context.url)
     }
-    
-    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-      if let url = userActivity.webpageURL {
-        AppLinks.shared.handleLink(url: url)
-      }
+  }
+  
+  func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+    if let url = userActivity.webpageURL {
+      AppLinks.shared.handleLink(url: url)
     }
+  }
 }
 ```
 
@@ -185,7 +185,8 @@ On Windows, URL protocols are setup in the Windows registry.
 
 This package won't do it for you (and will never sorry).
 
-You may achieve it with using the win32_registry package with the following code to register the URL protocol:
+You may achieve it with using the win32_registry package with the following code to register the URL protocol  
+or copy what's in the example project to get rid of another dependency.
 
 
 ```dart
@@ -302,36 +303,13 @@ Done!
 ### AppLinks usage
 Please, ensure to instantiate `AppLinks` early in your app to catch the very first link when the app is in cold state.
 
-Simplest usage with a single stream
 ```dart
-final _appLinks = AppLinks();
+final _appLinks = AppLinks(); // AppLinks is singleton
 
-// Subscribe to all events when app is started.
-// (Use allStringLinkStream to get it as [String])
-_appLinks.allUriLinkStream.listen((uri) {
+// Subscribe to all events (initial link and further)
+_appLinks.uriLinkStream.listen((uri) {
     // Do something (navigation, ...)
 });
-```
-
-Decomposed usage
-```dart
-final _appLinks = AppLinks();
-
-// Get the initial/first link.
-// This is useful when app was terminated (i.e. not started)
-final uri = await _appLinks.getInitialAppLink();
-// Do something (navigation, ...)
-
-// Subscribe to further events when app is started.
-// (Use stringLinkStream to get it as [String])
-_linkSubscription = _appLinks.uriLinkStream.listen((uri) {
-    // Do something (navigation, ...)
-});
-
-...
-
-// Maybe later. Get the latest link.
-final uri = await _appLinks.getLatestAppLink();
 ```
 
 ## Tests
@@ -346,7 +324,7 @@ adb shell am start -a android.intent.action.VIEW \
 
 For App Links, you can also test it from Android Studio: [Documentation](https://developer.android.com/studio/write/app-link-indexing#testindent).
 
-Android 13:
+Android 13 and beyond:
 - While in development, you may need to manually activate your links.
 - Go to your app info/settings: Open by default > Add link > (your links should be already filled).
 

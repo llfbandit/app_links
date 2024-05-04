@@ -1,3 +1,13 @@
+## 6.0.0
+* __Breaking__: Replaced `allStringLinkStream` by `stringLinkStream` and `allUriLinkStream` by `uriLinkStream`.
+* __Breaking__: Removed `allStringLinkStream`, `allUriLinkStream`.  
+The changes above should clarify the usage of the plugin. Both streams handle initial and further links.
+* __Breaking__: Renamed `getInitialApp*` and `getLatestApp*` methods to `getInitialLink*` and `getLatestLink*`.
+* chore(QoL): The plugin should not send again initial link when restarting, reloading the app or subscribing again to the stream.
+* fix(macOS): Handle link from cold state (i.e. terminated).
+* fix(linux): Refactor code to not store all URIs.
+* fix(linux): Stream is not filled anymore when there's no listener.
+
 ## 5.0.0
 * __Breaking__ iOs: Application Delegate now returns `true` for both Universal Links and Custom URL schemes.
 If you have other packages which could conflict with it, report to the README.md for custom handling.

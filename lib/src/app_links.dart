@@ -11,23 +11,23 @@ class AppLinks extends AppLinksPlatform {
   AppLinks._();
 
   @override
-  Future<Uri?> getInitialAppLink() {
-    return AppLinksPlatform.instance.getInitialAppLink();
+  Future<Uri?> getInitialLink() {
+    return AppLinksPlatform.instance.getInitialLink();
   }
 
   @override
-  Future<String?> getInitialAppLinkString() async {
-    return AppLinksPlatform.instance.getInitialAppLinkString();
+  Future<String?> getInitialLinkString() async {
+    return AppLinksPlatform.instance.getInitialLinkString();
   }
 
   @override
-  Future<Uri?> getLatestAppLink() async {
-    return AppLinksPlatform.instance.getLatestAppLink();
+  Future<Uri?> getLatestLink() async {
+    return AppLinksPlatform.instance.getLatestLink();
   }
 
   @override
-  Future<String?> getLatestAppLinkString() async {
-    return AppLinksPlatform.instance.getLatestAppLinkString();
+  Future<String?> getLatestLinkString() async {
+    return AppLinksPlatform.instance.getLatestLinkString();
   }
 
   @override
@@ -38,15 +38,5 @@ class AppLinks extends AppLinksPlatform {
   @override
   Stream<Uri> get uriLinkStream {
     return AppLinksPlatform.instance.uriLinkStream;
-  }
-
-  @override
-  Stream<String> get allStringLinkStream {
-    return AppLinksPlatform.instance.allStringLinkStream;
-  }
-
-  @override
-  Stream<Uri> get allUriLinkStream {
-    return AppLinksPlatform.instance.allUriLinkStream;
   }
 }

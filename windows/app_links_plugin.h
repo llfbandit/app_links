@@ -43,7 +43,9 @@ namespace applinks
         std::unique_ptr<flutter::StreamHandlerError<flutter::EncodableValue>> OnCancel(const flutter::EncodableValue *arguments);
 
         // Our app instance ID
-        int32_t window_proc_id_ = -1;        
+        int32_t window_proc_id_ = -1;
+        bool initialLinkSent_ = false;
+        std::optional<std::string> initialLink_;
         std::optional<std::string> latestLink_;
         std::unique_ptr<flutter::EventSink<flutter::EncodableValue>> eventSink_;
         flutter::PluginRegistrarWindows *registrar_;

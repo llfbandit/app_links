@@ -11,34 +11,20 @@ class AppLinksPluginWeb extends AppLinksPlatform {
   final _initialLink = web.window.location.href;
 
   @override
-  Future<Uri?> getInitialAppLink() async {
-    return Uri.parse(_initialLink);
-  }
+  Future<Uri?> getInitialLink() async => Uri.parse(_initialLink);
 
   @override
-  Future<String?> getInitialAppLinkString() async {
-    return _initialLink;
-  }
+  Future<String?> getInitialLinkString() async => _initialLink;
 
   @override
-  Future<Uri?> getLatestAppLink() async {
-    return Uri.parse(_initialLink);
-  }
+  Future<Uri?> getLatestLink() async => Uri.parse(_initialLink);
 
   @override
-  Future<String?> getLatestAppLinkString() async {
-    return _initialLink;
-  }
+  Future<String?> getLatestLinkString() async => _initialLink;
 
   @override
-  Stream<String> get stringLinkStream => Stream.empty();
+  Stream<Uri> get uriLinkStream => Stream.value(Uri.parse(_initialLink));
 
   @override
-  Stream<Uri> get uriLinkStream => Stream.empty();
-
-  @override
-  Stream<Uri> get allUriLinkStream => Stream.value(Uri.parse(_initialLink));
-
-  @override
-  Stream<String> get allStringLinkStream => Stream.value(_initialLink);
+  Stream<String> get stringLinkStream => Stream.value(_initialLink);
 }

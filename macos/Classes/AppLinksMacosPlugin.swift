@@ -5,6 +5,7 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler,
   private var eventSink: FlutterEventSink?
   private var initialLink: String?
   private var latestLink: String?
+  private var initialLinkSent = false
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let instance = AppLinksMacosPlugin()
@@ -47,6 +48,11 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler,
     eventSink events: @escaping FlutterEventSink) -> FlutterError? {
 
     self.eventSink = events
+      
+    if (!initialLinkSent && initialLink != nil) {
+      initialLinkSent = true
+      events(initialLink!)
+    }
     return nil
   }
 
@@ -74,6 +80,7 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler,
     }
     
     if let _eventSink = eventSink {
+      initialLinkSent = true
       _eventSink(latestLink)
     }    
   }

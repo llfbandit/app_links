@@ -11,6 +11,7 @@ public final class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   private var eventSink: FlutterEventSink?
   
   private var initialLink: String?
+  private var initialLinkSent = false
   private var latestLink: String?
   
   public static func register(with registrar: FlutterPluginRegistrar) {
@@ -95,6 +96,12 @@ public final class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   ) -> FlutterError? {
     
     self.eventSink = events
+    
+    if !initialLinkSent && initialLink != nil {
+      initialLinkSent = true
+      events(initialLink!)
+    }
+
     return nil
   }
   
@@ -116,6 +123,7 @@ public final class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       return
     }
     
+    initialLinkSent = true
     _eventSink(latestLink)
   }
 }

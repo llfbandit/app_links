@@ -38,56 +38,44 @@ abstract class AppLinksPlatform extends PlatformInterface {
   }
 
   /// Gets the initial / first link
+  ///
   /// returns [Uri] or [null]
-  Future<Uri?> getInitialAppLink() => throw UnimplementedError(
-        'getInitialAppLink() not implemented on the current platform.',
+  Future<Uri?> getInitialLink() => throw UnimplementedError(
+        'getInitialLink() not implemented on the current platform.',
       );
 
   /// Gets the initial / first link
+  ///
   /// returns [Uri] as String or [null]
-  Future<String?> getInitialAppLinkString() => throw UnimplementedError(
-        'getInitialAppLinkString not implemented on the current platform.',
+  Future<String?> getInitialLinkString() => throw UnimplementedError(
+        'getInitialLinkString not implemented on the current platform.',
       );
 
   /// Gets the latest link
+  ///
   /// returns [Uri] or [null]
-  Future<Uri?> getLatestAppLink() => throw UnimplementedError(
-        'getLatestAppLink not implemented on the current platform.',
+  Future<Uri?> getLatestLink() => throw UnimplementedError(
+        'getLatestLink not implemented on the current platform.',
       );
 
   /// Gets the latest link
+  ///
   /// returns [Uri] as String or [null]
-  Future<String?> getLatestAppLinkString() {
+  Future<String?> getLatestLinkString() {
     throw UnimplementedError(
-      'getLatestAppLinkString not implemented on the current platform.',
+      'getLatestLinkString not implemented on the current platform.',
     );
   }
 
-  /// Stream for receiving incoming URI events as [String].
+  /// Stream for receiving all incoming URI events as [String].
   ///
   /// The [Stream] emits opened URI as [String]s.
   Stream<String> get stringLinkStream => throw UnimplementedError(
       'stringUriStream not implemented on the current platform.');
 
-  /// Stream for receiving incoming URI events as [Uri].
+  /// Stream for receiving all incoming URI events as [Uri].
   ///
   /// The [Stream] emits opened URI as [Uri]s.
   Stream<Uri> get uriLinkStream => throw UnimplementedError(
       'uriStream not implemented on the current platform.');
-
-  /// Stream for receiving incoming URI events as [Uri].
-  ///
-  /// The [Stream] emits opened URI as [Uri]s.
-  ///
-  /// This method merges [getInitialAppLink] and [uriLinkStream].
-  Stream<Uri> get allUriLinkStream => throw UnimplementedError(
-      'allUriLinkStream not implemented on the current platform.');
-
-  /// Stream for receiving incoming URI events as [String].
-  ///
-  /// The [Stream] emits opened URI as [String]s.
-  ///
-  /// This method merges [getInitialAppLinkString] and [stringLinkStream].
-  Stream<String> get allStringLinkStream => throw UnimplementedError(
-      'allStringLinkStream not implemented on the current platform.');
 }

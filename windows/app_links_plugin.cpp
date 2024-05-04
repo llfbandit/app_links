@@ -109,8 +109,14 @@ namespace applinks
 
 				latestLink_ = link;
 
+				if (!initialLink_)
+				{
+					initialLink_ = link;
+				}
+
 				if (eventSink_)
 				{
+					initialLinkSent_ = true;
 					eventSink_->Success(latestLink_.value());
 				}
 			}
@@ -125,6 +131,14 @@ namespace applinks
 	{
 
 		eventSink_ = std::move(events);
+
+		auto link = GetLink();
+		if (!initialLinkSent_ && link) {
+			initialLinkSent_ = true;
+			initialLink_ = link;
+		  eventSink_->Success(initialLink_.value());
+		}
+
 		return nullptr;
 	}
 
