@@ -1,3 +1,6 @@
+## 6.0.1
+* fix(linux): Initialization process.
+
 ## 6.0.0
 * __Breaking__: Replaced `allStringLinkStream` by `stringLinkStream` and `allUriLinkStream` by `uriLinkStream`.
 * __Breaking__: Removed `allStringLinkStream`, `allUriLinkStream`.  
