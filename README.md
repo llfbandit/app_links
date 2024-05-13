@@ -28,6 +28,12 @@ If you don't want this behaviour, you can set `android:launchMode="singleInstanc
 
   In AndroidManifest.xml
 
+  Don't use go_router deep linking feature: https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml
+  by removing this:
+  ```xml
+  <!-- <meta-data android:name="flutter_deeplinking_enabled" android:value="true" /> -->
+  ```
+
 ```xml
 <!-- App Link sample -->
 <intent-filter android:autoVerify="true">
@@ -55,6 +61,8 @@ If you don't want this behaviour, you can set `android:launchMode="singleInstanc
 
 - Universal Links: [Documentation](https://developer.apple.com/documentation/safariservices/supporting_associated_domains)
 - Custom URL schemes: [Documentation](https://developer.apple.com/documentation/xcode/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app)
+
+Don't use go_router deep linking feature: https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#add-support-for-go_router
 
 **Warning:**
 

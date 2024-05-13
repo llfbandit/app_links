@@ -1,3 +1,8 @@
+## 6.0.2
+* __Breaking__ iOs: Revert behaviour change introduced in 5.0.0.  
+There's no point to use Flutter/go_router deep linking feature with this plugin.  
+For more info: https://docs.flutter.dev/ui/navigation/deep-linking.
+
 ## 6.0.1
 * fix(linux): Initialization process.
 
