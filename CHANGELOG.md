@@ -1,3 +1,7 @@
+## 6.1.0
+* feat(macOS): Handle universal links. See README.md for setup.
+* chore: Cleanup README.md.
+
 ## 6.0.2
 * __Breaking__ iOs: Revert behaviour change introduced in 5.0.0.  
 There's no point to use Flutter/go_router deep linking feature with this plugin.  
