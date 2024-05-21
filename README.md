@@ -12,11 +12,11 @@ Before using the plugin, you'll need to setup each platform you target.
 
 All those configurations below are also accessible in the example project.
 
-* [Android](/doc/README_android.md)
-* [iOS](/doc/README_ios.md)
-* [Linux](/doc/README_linux.md)
-* [macOS](/doc/README_macos.md)
-* [Windows](/doc/README_windows.md)
+* [Android](https://github.com/llfbandit/app_links/blob/master/doc/README_android.md)
+* [iOS](https://github.com/llfbandit/app_links/blob/master/doc/README_ios.md)
+* [Linux](https://github.com/llfbandit/app_links/blob/master/doc/README_linux.md)
+* [macOS](https://github.com/llfbandit/app_links/blob/master/doc/README_macos.md)
+* [Windows](https://github.com/llfbandit/app_links/blob/master/doc/README_windows.md)
 * There's nothing to setup for web platform. Only the initial link is provided.
 
 ---

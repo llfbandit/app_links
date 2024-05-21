@@ -1,3 +1,6 @@
+## 6.1.1
+* fix: README.md doc links.
+
 ## 6.1.0
 * feat(macOS): Handle universal links. See README.md for setup.
 * chore: Cleanup README.md.
