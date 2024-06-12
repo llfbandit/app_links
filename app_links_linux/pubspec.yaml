@@ -1,0 +1,18 @@
+name: app_links_linux
+description: Linux platform implementation of app_links plugin.
+version: 1.0.0
+
+environment:
+  sdk: ^3.2.0
+  flutter: ^3.16.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  app_links_platform_interface: ^1.2.0
+  
+  gtk: ^2.1.0
+
+dev_dependencies:
+  flutter_lints: ^4.0.0

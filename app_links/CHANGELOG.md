@@ -1,3 +1,8 @@
+## 6.1.2
+* fix: WASM compilation by re-introducing partial federated structure.
+* fix: Platforms with dependencies are now isolated in a dedicated package.
+* chore: Makes example project compatible with WASM compilation.
+
 ## 6.1.1
 * fix: README.md doc links.
 

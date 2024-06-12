@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:app_links/src/app_links_platform_interface.dart';
+import 'package:app_links_platform_interface/app_links_platform_interface.dart';
 import 'package:gtk/gtk.dart';
 
 class AppLinksPluginLinux extends AppLinksPlatform {

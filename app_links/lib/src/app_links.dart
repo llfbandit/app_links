@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'package:app_links/src/app_links_platform_interface.dart';
+import 'package:app_links_platform_interface/app_links_platform_interface.dart';
 
+/// App links handler.
+///
+/// This class is a singleton and should be accessed using `AppLinks()`.
 class AppLinks extends AppLinksPlatform {
-  /// Android App Links, Deep Links,
-  /// iOS Universal Links and Custom URL schemes handler.
   static final AppLinks _instance = AppLinks._();
 
   factory AppLinks() => _instance;
@@ -16,17 +17,17 @@ class AppLinks extends AppLinksPlatform {
   }
 
   @override
-  Future<String?> getInitialLinkString() async {
+  Future<String?> getInitialLinkString() {
     return AppLinksPlatform.instance.getInitialLinkString();
   }
 
   @override
-  Future<Uri?> getLatestLink() async {
+  Future<Uri?> getLatestLink() {
     return AppLinksPlatform.instance.getLatestLink();
   }
 
   @override
-  Future<String?> getLatestLinkString() async {
+  Future<String?> getLatestLinkString() {
     return AppLinksPlatform.instance.getLatestLinkString();
   }
 

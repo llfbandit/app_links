@@ -1,5 +1,5 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:app_links/src/app_links_method_channel.dart';
+import 'app_links_method_channel.dart';
 
 /// Callback when your app is woke up by an incoming link
 /// [uri] and [stringUri] are same value.

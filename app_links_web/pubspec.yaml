@@ -1,0 +1,20 @@
+name: app_links_web
+description: Web platform implementation of app_links plugin.
+version: 1.0.1
+
+environment:
+  sdk: ^3.2.0
+  flutter: ^3.16.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  
+  app_links_platform_interface: ^1.2.0
+
+  web: ">=0.3.0 <0.6.0"
+
+dev_dependencies:
+  flutter_lints: ^4.0.0

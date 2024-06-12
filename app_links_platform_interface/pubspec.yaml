@@ -1,0 +1,17 @@
+name: app_links_platform_interface
+description: A common platform interface for the app_links plugin.
+version: 1.2.0
+
+environment:
+  sdk: ^3.2.0
+  flutter: ^3.16.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # https://pub.dev/packages/plugin_platform_interface
+  plugin_platform_interface: ^2.1.7
+
+dev_dependencies:
+  flutter_lints: ^4.0.0

@@ -1,0 +1,43 @@
+name: app_links
+description: Android App Links, Deep Links, iOs Universal Links and Custom URL schemes handler for Flutter (desktop included).
+version: 6.1.2
+homepage: https://github.com/llfbandit/app_links
+
+environment:
+  sdk: ^3.2.0
+  flutter: ^3.16.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  app_links_linux: ^1.0.0
+  app_links_platform_interface: ^1.2.0
+  app_links_web: ^1.0.1
+
+dev_dependencies:
+  flutter_lints: ^4.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.llfbandit.app_links
+        pluginClass: AppLinksPlugin
+      ios:
+        pluginClass: AppLinksPlugin
+      linux:
+        default_package: app_links_linux
+      macos:
+        pluginClass: AppLinksMacosPlugin
+      web:
+        default_package: app_links_web
+      windows:
+        pluginClass: AppLinksPluginCApi
+
+topics:
+  - deeplinks
+  - app-links
+  - universal-links
+  - custom-url-schemes
+  - deeplinking

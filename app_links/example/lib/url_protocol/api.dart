@@ -1,7 +1,6 @@
-import 'package:flutter/foundation.dart';
-
 import 'protocol.dart';
-import 'windows_protocol.dart';
+import 'windows_protocol.dart'
+    if (dart.library.js_interop) 'web_url_protocol.dart';
 
 /// Registers a protocol by [scheme] to allow for links in the form `<scheme>://...`
 /// to be processed by this application. By default, opening a link will open
@@ -21,9 +20,16 @@ import 'windows_protocol.dart';
 /// those elements must contain the literal value `%s` to denote the URL to open.
 /// Quoting arguments is not necessary, as this will be handled for you.
 /// Escaping the `%s` as an unprocessed literal is currently unsupported.
-void registerProtocolHandler(String scheme,
-    {String? executable, List<String>? arguments}) {
-  _handler?.register(scheme, executable: executable, arguments: arguments);
+void registerProtocolHandler(
+  String scheme, {
+  String? executable,
+  List<String>? arguments,
+}) {
+  WindowsProtocolHandler().register(
+    scheme,
+    executable: executable,
+    arguments: arguments,
+  );
 }
 
 /// Unregisters the protocol handler with the underlying platform. The provided
@@ -33,14 +39,5 @@ void registerProtocolHandler(String scheme,
 /// had registered it. Unregistering a scheme that was not registered by this
 /// application is undefined and depends on platform-specific restrictions.
 void unregisterProtocolHandler(String scheme) {
-  _handler?.unregister(scheme);
-}
-
-ProtocolHandler? get _handler {
-  switch (defaultTargetPlatform) {
-    case TargetPlatform.windows:
-      return WindowsProtocolHandler();
-    default:
-      return null;
-  }
+  WindowsProtocolHandler().unregister(scheme);
 }

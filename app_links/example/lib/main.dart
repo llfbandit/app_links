@@ -1,7 +1,4 @@
-// ignore_for_file: avoid_print
-
 import 'dart:async';
-import 'dart:io';
 
 import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart';
@@ -31,7 +28,7 @@ const kWindowsScheme = 'sample';
 
 void main() {
   // Register our protocol only on Windows platform
-  _registerWindowsProtocol();
+  registerProtocolHandler(kWindowsScheme);
 
   runApp(const MyApp());
 }
@@ -67,7 +64,7 @@ class _MyAppState extends State<MyApp> {
 
     // Handle links
     _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
-      print('onAppLink: $uri');
+      debugPrint('onAppLink: $uri');
       openAppLink(uri);
     });
   }
@@ -141,23 +138,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget buildWindowsUnregisterBtn() {
-    if (!kIsWeb) {
-      if (Platform.isWindows) {
-        return TextButton(
-            onPressed: () => unregisterProtocolHandler(kWindowsScheme),
-            child: const Text('Remove Windows protocol registration'));
-      }
+    if (defaultTargetPlatform == TargetPlatform.windows) {
+      return TextButton(
+          onPressed: () => unregisterProtocolHandler(kWindowsScheme),
+          child: const Text('Remove Windows protocol registration'));
     }
 
     return const SizedBox.shrink();
-  }
-}
-
-void _registerWindowsProtocol() {
-  // Register our protocol only on Windows platform
-  if (!kIsWeb) {
-    if (Platform.isWindows) {
-      registerProtocolHandler(kWindowsScheme);
-    }
   }
 }
