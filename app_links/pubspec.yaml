@@ -5,7 +5,7 @@ homepage: https://github.com/llfbandit/app_links
 
 environment:
   sdk: ^3.2.0
-  flutter: ^3.16.0
+  flutter: ">=3.16.0"
 
 dependencies:
   flutter:
