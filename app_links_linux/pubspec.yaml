@@ -1,6 +1,6 @@
 name: app_links_linux
 description: Linux platform implementation of app_links plugin.
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/llfbandit/app_links/tree/master/app_links_linux
 
 environment:
@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   
-  app_links_platform_interface: ^1.2.0
+  app_links_platform_interface: ^2.0.0
   # https://pub.dev/packages/gtk
   gtk: ^2.1.0
 

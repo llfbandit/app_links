@@ -1,3 +1,6 @@
+## 2.0.0
+* chore: Same as 1.2.0. 1.2.0 was retracted because of breaking changes.
+
 ## 1.2.0
 * chore: Re-introduce federated structure for platforms with dependencies.
 

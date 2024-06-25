@@ -1,3 +1,6 @@
+## 1.0.3
+* chore: Update dependency app_links_platform_interface to 2.0.0+ because of breaking changes.
+
 ## 1.0.2
 * fix: Package setup.
 
