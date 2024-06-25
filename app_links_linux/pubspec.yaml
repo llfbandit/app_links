@@ -1,6 +1,6 @@
 name: app_links_linux
 description: Linux platform implementation of app_links plugin.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/llfbandit/app_links/tree/master/app_links_linux
 
 environment:
@@ -17,3 +17,10 @@ dependencies:
 
 dev_dependencies:
   flutter_lints: ^4.0.0
+
+flutter:
+  plugin:
+    platforms:
+      linux:
+        dartPluginClass: AppLinksPluginLinux
+        fileName: 'app_links_linux.dart'

@@ -1,6 +1,6 @@
 name: app_links_web
 description: Web platform implementation of app_links plugin.
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/llfbandit/app_links/tree/master/app_links_web
 
 environment:
@@ -19,3 +19,10 @@ dependencies:
 
 dev_dependencies:
   flutter_lints: ^4.0.0
+
+flutter:
+  plugin:
+    platforms:
+      web:
+        pluginClass: AppLinksPluginWeb
+        fileName: 'app_links_web.dart'

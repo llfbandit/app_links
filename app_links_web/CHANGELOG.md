@@ -1,3 +1,6 @@
+## 1.0.2
+* fix: Package setup.
+
 ## 1.0.1
 * fix: WASM compilation by re-introducing partial federated structure.
 
