@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   
   app_links_platform_interface: ^1.2.0
-  
+  # https://pub.dev/packages/gtk
   gtk: ^2.1.0
 
 dev_dependencies:

@@ -8,29 +8,25 @@ class AppLinksPluginLinux extends AppLinksPlatform {
     AppLinksPlatform.instance = AppLinksPluginLinux();
   }
 
-  StreamController<String>? _controller;
-  GtkApplicationNotifier? _notifier;
+  late final StreamController<String> _controller;
+  late final GtkApplicationNotifier _notifier;
   String? _initialLink;
   bool _initialLinkSent = false;
   String? _latestLink;
 
-  void _init() {
-    _controller ??= StreamController.broadcast()..onListen = _onListen;
+  AppLinksPluginLinux() {
+    _controller = StreamController.broadcast()..onListen = _onListen;
 
-    if (_notifier == null) {
-      _notifier = GtkApplicationNotifier();
-      _notifier?.addCommandLineListener((args) {
-        if (args.isNotEmpty) {
-          _send(args.first);
-        }
-      });
-    }
+    _notifier = GtkApplicationNotifier();
+    _notifier.addCommandLineListener((args) {
+      if (args.isNotEmpty) {
+        _send(args.first);
+      }
+    });
   }
 
   @override
   Future<Uri?> getInitialLink() async {
-    _init();
-
     if (_initialLink case final link?) {
       return Uri.parse(link);
     }
@@ -38,16 +34,10 @@ class AppLinksPluginLinux extends AppLinksPlatform {
   }
 
   @override
-  Future<String?> getInitialLinkString() async {
-    _init();
-
-    return _initialLink;
-  }
+  Future<String?> getInitialLinkString() async => _initialLink;
 
   @override
   Future<Uri?> getLatestLink() async {
-    _init();
-
     if (_latestLink case final link?) {
       return Uri.parse(link);
     }
@@ -55,27 +45,18 @@ class AppLinksPluginLinux extends AppLinksPlatform {
   }
 
   @override
-  Future<String?> getLatestLinkString() async {
-    _init();
-    return _latestLink;
-  }
+  Future<String?> getLatestLinkString() async => _latestLink;
 
   @override
-  Stream<String> get stringLinkStream {
-    _init();
-    return _controller!.stream;
-  }
+  Stream<String> get stringLinkStream => _controller.stream;
 
   @override
-  Stream<Uri> get uriLinkStream {
-    _init();
-    return _controller!.stream.map(Uri.parse);
-  }
+  Stream<Uri> get uriLinkStream => _controller.stream.map(Uri.parse);
 
   void _onListen() {
     if (!_initialLinkSent && _initialLink != null) {
       _initialLinkSent = true;
-      _controller!.add(_initialLink!);
+      _controller.add(_initialLink!);
     }
   }
 
@@ -84,9 +65,9 @@ class AppLinksPluginLinux extends AppLinksPlatform {
       _latestLink = uri;
       _initialLink ??= uri;
 
-      if (_controller!.hasListener) {
+      if (_controller.hasListener) {
         _initialLinkSent = true;
-        _controller!.add(uri);
+        _controller.add(uri);
       }
     }
   }
