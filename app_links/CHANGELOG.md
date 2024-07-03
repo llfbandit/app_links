@@ -1,3 +1,6 @@
+## 6.1.4
+* fix: Channel method names.
+
 ## 6.1.3
 * chore: Update dependency app_links_platform_interface to 2.0.0+ because of breaking changes.
 

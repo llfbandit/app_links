@@ -1,3 +1,6 @@
+## 2.0.1
+* fix: Channel method names.
+
 ## 2.0.0
 * chore: Same as 1.2.0. 1.2.0 was retracted because of breaking changes.
 
@@ -21,4 +24,3 @@
 
 ## 0.1.0
 * Initial release.
-

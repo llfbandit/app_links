@@ -27,9 +27,9 @@ public final class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
-    case "getInitialAppLink":
+    case "getInitialLink":
       result(initialLink)
-    case "getLatestAppLink":
+    case "getLatestLink":
       result(latestLink)
     default:
       result(FlutterMethodNotImplemented)

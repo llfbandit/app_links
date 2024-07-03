@@ -61,10 +61,10 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler,
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
-      case "getInitialAppLink":
+      case "getInitialLink":
         result(initialLink)
         break
-      case "getLatestAppLink":
+      case "getLatestLink":
         result(latestLink)
         break
       default:

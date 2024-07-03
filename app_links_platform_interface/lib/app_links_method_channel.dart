@@ -12,11 +12,11 @@ class AppLinksMethodChannel extends AppLinksPlatform {
   static const _method = MethodChannel(_messagesChannel);
   static const _event = EventChannel(_eventsChannel);
 
-  /// [getInitialAppLink] method call name
-  static const String _getInitialLinkMethod = 'getInitialAppLink';
+  /// [getInitialLink] method call name
+  static const String _getInitialLinkMethod = 'getInitialLink';
 
-  /// [getLatestAppLink] method call name
-  static const String _getLatestLinkMethod = 'getLatestAppLink';
+  /// [getLatestLink] method call name
+  static const String _getLatestLinkMethod = 'getLatestLink';
 
   @override
   Future<Uri?> getInitialLink() async {

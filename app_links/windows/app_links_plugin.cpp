@@ -77,12 +77,12 @@ namespace applinks
 		const flutter::MethodCall<flutter::EncodableValue> &method_call,
 		std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
 	{
-		if (method_call.method_name().compare("getInitialAppLink") == 0)
+		if (method_call.method_name().compare("getInitialLink") == 0)
 		{
 			auto link = GetLink();
 			result->Success(flutter::EncodableValue(link.value_or("")));
 		}
-		else if (method_call.method_name().compare("getLatestAppLink") == 0)
+		else if (method_call.method_name().compare("getLatestLink") == 0)
 		{
 			result->Success(flutter::EncodableValue(latestLink_.value_or("")));
 		}

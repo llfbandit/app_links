@@ -77,9 +77,9 @@ public class AppLinksPlugin implements
   ///
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-    if (call.method.equals("getLatestAppLink")) {
+    if (call.method.equals("getLatestLink")) {
       result.success(latestLink);
-    } else if (call.method.equals("getInitialAppLink")) {
+    } else if (call.method.equals("getInitialLink")) {
       result.success(initialLink);
     } else {
       result.notImplemented();
