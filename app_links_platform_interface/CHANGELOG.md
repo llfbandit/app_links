@@ -1,3 +1,6 @@
+## 2.0.2
+* fix: Platform & channel init.
+
 ## 2.0.1
 * fix: Channel method names.
 

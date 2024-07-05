@@ -4,19 +4,9 @@ import 'package:flutter/services.dart';
 import 'app_links_platform_interface.dart';
 
 class AppLinksMethodChannel extends AppLinksPlatform {
-  /// Channel names
-  static const String _messagesChannel = 'com.llfbandit.app_links/messages';
-  static const String _eventsChannel = 'com.llfbandit.app_links/events';
-
   /// Channel handlers
-  static const _method = MethodChannel(_messagesChannel);
-  static const _event = EventChannel(_eventsChannel);
-
-  /// [getInitialLink] method call name
-  static const String _getInitialLinkMethod = 'getInitialLink';
-
-  /// [getLatestLink] method call name
-  static const String _getLatestLinkMethod = 'getLatestLink';
+  final _method = const MethodChannel('com.llfbandit.app_links/messages');
+  final _event = const EventChannel('com.llfbandit.app_links/events');
 
   @override
   Future<Uri?> getInitialLink() async {
@@ -26,7 +16,7 @@ class AppLinksMethodChannel extends AppLinksPlatform {
 
   @override
   Future<String?> getInitialLinkString() async {
-    final link = await _method.invokeMethod<String?>(_getInitialLinkMethod);
+    final link = await _method.invokeMethod<String?>('getInitialLink');
     return link != null && link.isNotEmpty ? link : null;
   }
 
@@ -38,7 +28,7 @@ class AppLinksMethodChannel extends AppLinksPlatform {
 
   @override
   Future<String?> getLatestLinkString() async {
-    final link = await _method.invokeMethod<String?>(_getLatestLinkMethod);
+    final link = await _method.invokeMethod<String?>('getLatestLink');
     return link != null && link.isNotEmpty ? link : null;
   }
 
