@@ -27,6 +27,8 @@ Please, ensure to instantiate `AppLinks` early in your app to catch the very fir
 ```dart
 final _appLinks = AppLinks(); // AppLinks is singleton
 
+// Optional Listen only app links
+await _appLinks.onlyAppLinks;
 // Subscribe to all events (initial link and further)
 _appLinks.uriLinkStream.listen((uri) {
     // Do something (navigation, ...)
