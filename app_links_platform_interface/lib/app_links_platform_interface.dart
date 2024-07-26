@@ -44,6 +44,13 @@ abstract class AppLinksPlatform extends PlatformInterface {
         'getInitialLink() not implemented on the current platform.',
       );
 
+  /// setup listen dynamic link / Universal link (support Android / iOS)
+  ///
+  /// returns void
+  Future<void> get onlyAppLinks => throw UnimplementedError(
+        'onlyAppLinks not implemented on the current platform.',
+      );
+
   /// Gets the initial / first link
   ///
   /// returns [Uri] as String or [null]

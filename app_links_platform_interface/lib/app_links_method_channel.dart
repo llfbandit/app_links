@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'app_links_platform_interface.dart';
@@ -47,5 +48,13 @@ class AppLinksMethodChannel extends AppLinksPlatform {
         },
       ),
     );
+  }
+
+  @override
+  Future<void> get onlyAppLinks async {
+    if (Platform.isAndroid || Platform.isIOS) {
+      await _method.invokeMethod('onlyAppLinks');
+      return;
+    }
   }
 }

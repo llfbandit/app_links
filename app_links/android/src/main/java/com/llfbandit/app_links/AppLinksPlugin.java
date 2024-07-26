@@ -46,6 +46,9 @@ public class AppLinksPlugin implements
 
   // Initial link
   private String initialLink;
+
+  // Flat onlyAppLinks
+  private boolean onlyAppLinks = false;
   private boolean initialLinkSent = false;
 
   // Latest link
@@ -77,13 +80,21 @@ public class AppLinksPlugin implements
   ///
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-    if (call.method.equals("getLatestLink")) {
-      result.success(latestLink);
-    } else if (call.method.equals("getInitialLink")) {
-      result.success(initialLink);
-    } else {
-      result.notImplemented();
-    }
+      switch (call.method) {
+          case "getLatestLink":
+              result.success(latestLink);
+              break;
+          case "getInitialLink":
+              result.success(initialLink);
+              break;
+          case "onlyAppLinks":
+              onlyAppLinks = true;
+              result.success(null);
+              break;
+          default:
+              result.notImplemented();
+              break;
+      }
   }
   ///
   /// END MethodCallHandler
@@ -168,7 +179,7 @@ public class AppLinksPlugin implements
       return false;
     }
 
-    String dataString = AppLinksHelper.getDeepLinkFromIntent(intent);
+    String dataString = AppLinksHelper.getDeepLinkFromIntent(intent, onlyAppLinks);
     if (dataString == null) return false;
 
     if (initialLink == null) {

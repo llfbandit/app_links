@@ -40,4 +40,7 @@ class AppLinks extends AppLinksPlatform {
   Stream<Uri> get uriLinkStream {
     return AppLinksPlatform.instance.uriLinkStream;
   }
+
+  @override
+  Future<void> get onlyAppLinks => AppLinksPlatform.instance.onlyAppLinks;
 }
