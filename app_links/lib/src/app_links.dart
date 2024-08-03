@@ -9,6 +9,10 @@ class AppLinks extends AppLinksPlatform {
 
   factory AppLinks() => _instance;
 
+  // Override the uriLinkStream and stringLinkStream to return broadcast streams
+  final _uriLinkStreamController = StreamController<Uri>.broadcast();
+  final _stringLinkStreamController = StreamController<String>.broadcast();
+
   AppLinks._();
 
   @override
@@ -33,11 +37,25 @@ class AppLinks extends AppLinksPlatform {
 
   @override
   Stream<String> get stringLinkStream {
-    return AppLinksPlatform.instance.stringLinkStream;
+    _ensureBroadcastStream(_stringLinkStreamController,
+        AppLinksPlatform.instance.stringLinkStream);
+    return _stringLinkStreamController.stream;
   }
 
   @override
   Stream<Uri> get uriLinkStream {
-    return AppLinksPlatform.instance.uriLinkStream;
+    _ensureBroadcastStream(
+        _uriLinkStreamController, AppLinksPlatform.instance.uriLinkStream);
+    return _uriLinkStreamController.stream;
+  }
+
+  // Helper method to ensure the stream is a broadcast stream
+  void _ensureBroadcastStream<T>(
+      StreamController<T> controller, Stream<T> stream) {
+    if (!controller.hasListener) {
+      stream.listen((event) {
+        controller.add(event);
+      });
+    }
   }
 }
