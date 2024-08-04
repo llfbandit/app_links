@@ -11,6 +11,9 @@ class AppLinks extends AppLinksPlatform {
 
   AppLinks._();
 
+  StreamController<String>? _stringStreamController;
+  StreamController<Uri>? _uriStreamController;
+
   @override
   Future<Uri?> getInitialLink() {
     return AppLinksPlatform.instance.getInitialLink();
@@ -33,11 +36,52 @@ class AppLinks extends AppLinksPlatform {
 
   @override
   Stream<String> get stringLinkStream {
-    return AppLinksPlatform.instance.stringLinkStream;
+    if (_stringStreamController == null) {
+      _stringStreamController = StreamController.broadcast();
+
+      _initController<String>(
+        _stringStreamController!,
+        AppLinksPlatform.instance.stringLinkStream,
+        onCancel: () => _stringStreamController = null,
+      );
+    }
+
+    return _stringStreamController!.stream;
   }
 
   @override
   Stream<Uri> get uriLinkStream {
-    return AppLinksPlatform.instance.uriLinkStream;
+    if (_uriStreamController == null) {
+      _uriStreamController = StreamController.broadcast();
+
+      _initController<Uri>(
+        _uriStreamController!,
+        AppLinksPlatform.instance.uriLinkStream,
+        onCancel: () => _uriStreamController = null,
+      );
+    }
+
+    return _uriStreamController!.stream;
+  }
+
+  void _initController<T>(
+    StreamController<T> controller,
+    Stream<T> stream, {
+    required void Function() onCancel,
+  }) {
+    final subscription = stream.listen(
+      controller.add,
+      onError: controller.addError,
+    );
+
+    // Broadcast controller doesn't support pause/resume
+    //
+    // Forward cancel event when there's no more listeners
+    // and dispose controller
+    controller.onCancel = () async {
+      await subscription.cancel();
+      await controller.close();
+      onCancel();
+    };
   }
 }
