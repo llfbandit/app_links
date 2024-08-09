@@ -84,4 +84,8 @@ class AppLinks extends AppLinksPlatform {
       onCancel();
     };
   }
+
+  @override
+  Future<void> onlyAppLinks(String appLinkUrl) =>
+      AppLinksPlatform.instance.onlyAppLinks(appLinkUrl);
 }

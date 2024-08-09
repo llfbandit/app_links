@@ -15,10 +15,10 @@ public class AppLinksHelper {
 
   private static final String TAG = "com.llfbandit.app_links";
 
-  public static String getDeepLinkFromIntent(Intent intent) {
+  public static String getDeepLinkFromIntent(Intent intent, boolean onlyAppLinks) {
     String shortLink = getShortDeepLink(intent);
 
-    if (shortLink != null) {
+    if (shortLink != null && !onlyAppLinks) {
       Log.d(TAG, "handleIntent: (Data) (short deep link)" + shortLink);
       return shortLink;
     }
