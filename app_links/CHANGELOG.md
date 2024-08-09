@@ -1,3 +1,6 @@
+## 6.2.0
+* feat: Allow multiple listeners.
+
 ## 6.1.4
 * fix: Channel method names.
 
