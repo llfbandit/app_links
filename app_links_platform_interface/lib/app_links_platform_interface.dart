@@ -47,7 +47,7 @@ abstract class AppLinksPlatform extends PlatformInterface {
   /// setup listen dynamic link / Universal link (support Android / iOS)
   ///
   /// returns void
-  Future<void> get onlyAppLinks => throw UnimplementedError(
+  Future<void> onlyAppLinks(String appLinkUrl) => throw UnimplementedError(
         'onlyAppLinks not implemented on the current platform.',
       );
 

@@ -12,7 +12,7 @@ public final class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   
   private var initialLink: String?
   private var initialLinkSent = false
-    private var onlyAppLinks = false
+    private var onlyAppLinks: String?
   private var latestLink: String?
   
   public static func register(with registrar: FlutterPluginRegistrar) {
@@ -33,7 +33,7 @@ public final class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     case "getLatestLink":
       result(latestLink)
     case "onlyAppLinks":
-        onlyAppLinks = true
+        onlyAppLinks = call.arguments as? String
         result(nil)
     default:
       result(FlutterMethodNotImplemented)
@@ -77,8 +77,12 @@ public final class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     
     switch userActivity.activityType {
     case NSUserActivityTypeBrowsingWeb:
-        if onlyAppLinks { return false }
-        else if let url = userActivity.webpageURL {
+        if let url = userActivity.webpageURL {
+          if onlyAppLinks != nil {
+            if !url.absoluteString.contains(onlyAppLinks!) {
+                return false
+            }
+          }
         handleLink(url: url)
       }
       return false

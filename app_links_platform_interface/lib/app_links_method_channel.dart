@@ -51,7 +51,7 @@ class AppLinksMethodChannel extends AppLinksPlatform {
   }
 
   @override
-  Future<void> get onlyAppLinks async {
+  Future<void> onlyAppLinks(String appLinkUrl) async {
     if (Platform.isAndroid || Platform.isIOS) {
       await _method.invokeMethod('onlyAppLinks');
       return;

@@ -42,5 +42,6 @@ class AppLinks extends AppLinksPlatform {
   }
 
   @override
-  Future<void> get onlyAppLinks => AppLinksPlatform.instance.onlyAppLinks;
+  Future<void> onlyAppLinks(String appLinkUrl) =>
+      AppLinksPlatform.instance.onlyAppLinks(appLinkUrl);
 }
