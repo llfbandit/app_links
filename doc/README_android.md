@@ -40,6 +40,10 @@ In AndroidManifest.xml
 </intent-filter>
 ```
 
+### ProGuard rules
+When using ProGuard, you may need those additional rules  
+https://github.com/microg/SafeParcel/blob/master/safe-parcel/proguard.txt
+
 # Testing
 
 ```sh
