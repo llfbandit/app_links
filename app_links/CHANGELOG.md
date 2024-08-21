@@ -1,3 +1,8 @@
+## 6.2.1
+* chore(Android): Upgrade to latest AGP 8 and compileSdk 34.
+* chore: Update dependencies to latest.
+* chore(Android): Update example setup.
+
 ## 6.2.0
 * feat: Allow multiple listeners.
 
