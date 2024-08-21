@@ -4,8 +4,8 @@ version: 1.0.4
 homepage: https://github.com/llfbandit/app_links/tree/master/app_links_web
 
 environment:
-  sdk: ^3.2.0
-  flutter: ">=3.16.0"
+  sdk: ^3.3.0
+  flutter: ">=3.19.0"
 
 dependencies:
   flutter:
