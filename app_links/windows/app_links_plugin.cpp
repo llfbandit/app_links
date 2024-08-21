@@ -1,5 +1,7 @@
 #include "app_links_plugin.h"
 
+#include <regex>
+
 using namespace flutter;
 
 namespace applinks
@@ -43,7 +45,8 @@ namespace applinks
 	{
 		int argc;
 		wchar_t** argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
-		if (argv == nullptr || argc < 2) {
+		if (argv == nullptr || argc != 2) {
+			::LocalFree(argv);
 			return std::nullopt;
 		}
 
@@ -54,7 +57,15 @@ namespace applinks
 		int size_needed = WideCharToMultiByte(CP_UTF8, 0, &arg[0], (int)arg.size(), NULL, 0, NULL, NULL);
 		std::string link(size_needed, 0);
 		WideCharToMultiByte(CP_UTF8, 0, &arg[0], (int)arg.size(), &link[0], size_needed, NULL, NULL);
-		return link;
+
+		// Check if the link has a scheme
+		std::regex schemeRegex(R"(^\w+://)");
+		if (std::regex_search(link, schemeRegex))
+		{
+			return link;
+		}
+
+		return std::nullopt;
 	}
 
 	AppLinksPlugin::AppLinksPlugin(PluginRegistrarWindows *registrar)
