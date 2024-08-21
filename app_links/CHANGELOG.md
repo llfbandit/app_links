@@ -2,6 +2,8 @@
 * chore(Android): Upgrade to latest AGP 8 and compileSdk 34.
 * chore: Update dependencies to latest.
 * chore(Android): Update example setup.
+* chore(iOS): Set minimum OS version to 12.0.
+* chore: Set minimum Flutter version to 3.19.0.
 
 ## 6.2.0
 * feat: Allow multiple listeners.
