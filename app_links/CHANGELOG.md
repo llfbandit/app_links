@@ -1,4 +1,5 @@
 ## 6.2.1
+* fix(Android): Add ProGuard rules.
 * chore(Android): Upgrade to latest AGP 8 and compileSdk 34.
 * chore: Update dependencies to latest.
 * chore(Android): Update example setup.

@@ -41,8 +41,8 @@ In AndroidManifest.xml
 ```
 
 ### ProGuard rules
-When using ProGuard, you may need those additional rules  
-https://github.com/microg/SafeParcel/blob/master/safe-parcel/proguard.txt
+When using ProGuard, those additional rules are added  
+https://github.com/llfbandit/app_links/blob/master/app_links/android/proguard.txt
 
 # Testing
 
