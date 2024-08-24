@@ -3,12 +3,6 @@
 - App Links: [Documentation](https://developer.android.com/training/app-links/verify-android-applinks)
 - Deep Links: [Documentation](https://developer.android.com/training/app-links/deep-linking)
 
-**Notes:**
-
-- By default, flutter Activity is set with `android:launchMode="singleTop"`.
-This is perfectly fine and expected, but this launches another instance of your app, specifically for the requested view.  
-If you don't want this behaviour, you can set `android:launchMode="singleInstance"` in your `AndroidManifest.xml` and avoid another flutter warmup.
-
 ## SETUP
 
 In AndroidManifest.xml

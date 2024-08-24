@@ -2,9 +2,9 @@
 
 Android App Links, Deep Links, iOS Universal Links and Custom URL schemes handler (desktop included linux, macOS, Windows).
 
-This plugin allows you to:
-- catch HTTPS URLs to open your app instead of the browser (App Link / Universal Link).
-- catch custom schemes to open your app (Deep Link / Custom URL scheme).
+This plugin allows you to open your app from:
+- HTTPS URLs instead of the browser.
+- custom schemes.
 
 ## Getting Started
 
@@ -25,10 +25,18 @@ All those configurations below are also accessible in the example project.
 Please, ensure to instantiate `AppLinks` early in your app to catch the very first link when the app is in cold state.
 
 ```dart
-final _appLinks = AppLinks(); // AppLinks is singleton
+final appLinks = AppLinks(); // AppLinks is singleton
 
 // Subscribe to all events (initial link and further)
-_appLinks.uriLinkStream.listen((uri) {
+final sub = appLinks.uriLinkStream.listen((uri) {
     // Do something (navigation, ...)
 });
 ```
+
+### Feature matrix
+| Feature                   | Android     | iOS       | web     | Windows    | macOS  | linux
+|---------------------------|-------------|-----------|---------|------------|-------|-----------
+| web (https://)            | ✔️         |   ✔️      | ✔️*     |    ✔️     | ✔️    |    ?
+| custom scheme (foo://)    | ✔️         |   ✔️      |         |    ✔️     |  ✔️   |    ✔️
+
+\* : Only the very first call is provided. Web platform is mostly provided to get rid of specific setup.

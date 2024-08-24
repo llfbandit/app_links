@@ -1,5 +1,5 @@
 # macOS
-## SETUP
+## Custom scheme setup
 
 Add this XML chapter in your `macos/Runner/Info.plist` inside `<plist version="1.0"><dict>` chapter:
 ```xml
@@ -18,9 +18,8 @@ Add this XML chapter in your `macos/Runner/Info.plist` inside `<plist version="1
 </array>
 ```
 
-Done!
 
-Setup for universal links:
+## Universal links setup
 
 For now, Flutter plugin embedder does not provide a way to do this in the plugin directly.
 
