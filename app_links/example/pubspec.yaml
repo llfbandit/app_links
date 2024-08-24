@@ -19,8 +19,7 @@ dependencies:
   win32: ^5.1.0
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  msix: ^3.16.8
   
   # linter rules (https://pub.dev/packages/flutter_lints)
   flutter_lints: ^4.0.0
@@ -28,3 +27,10 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   uses-material-design: true
+
+# Windows only (packaged app)
+msix_config:
+  display_name: app_links_example
+  msix_version: 1.0.0.0
+  protocol_activation: https, sample # Add the protocol activation for the app
+  app_uri_handler_hosts: www.example.com, example.com # Add the app uri handler hosts

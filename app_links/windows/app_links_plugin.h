@@ -14,6 +14,10 @@
 
 #define APPLINK_MSG_ID (WM_USER + 2)
 
+// This ID has been retrieved from Windows App SDK
+// It allows to catch the arguments passed to the app
+#define IDM_GETARGSWAS   103
+
 namespace applinks
 {
     class AppLinksPlugin : public flutter::Plugin

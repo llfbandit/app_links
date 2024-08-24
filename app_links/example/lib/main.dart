@@ -22,13 +22,17 @@ import 'url_protocol/api.dart';
 /// On windows & macOS:
 ///   The simplest way to test it is by
 ///   opening your browser and type: sample://foo/#/book/hello-world2
+///
+/// On windows:
+/// Outside of a browser, in a email for example, you can use:
+/// https://example.com/#/book/hello-world2
 ///////////////////////////////////////////////////////////////////////////////
 
 const kWindowsScheme = 'sample';
 
 void main() {
   // Register our protocol only on Windows platform
-  registerProtocolHandler(kWindowsScheme);
+  // registerProtocolHandler(kWindowsScheme);
 
   runApp(const MyApp());
 }

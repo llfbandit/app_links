@@ -1,6 +1,7 @@
 #include "app_links_plugin.h"
 
 #include <regex>
+#include "include/app_links/app_links_plugin_c_api.h"
 
 using namespace flutter;
 
@@ -132,6 +133,20 @@ namespace applinks
 				}
 			}
 		}
+
+		if (message == WM_COMMAND)
+		{
+			int wmId = LOWORD(wparam);
+			switch (wmId)
+			{
+			case IDM_GETARGSWAS:
+				SendAppLink(hwnd);
+				break;
+			default:
+				return DefWindowProc(hwnd, message, wparam, lparam);
+			}
+		}
+
 
 		return std::nullopt;
 	}
