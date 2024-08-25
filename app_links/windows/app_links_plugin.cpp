@@ -60,7 +60,7 @@ namespace applinks
 		WideCharToMultiByte(CP_UTF8, 0, &arg[0], (int)arg.size(), &link[0], size_needed, NULL, NULL);
 
 		// Check if the link has a scheme
-		std::regex schemeRegex(R"(^\w+://)");
+		std::regex schemeRegex(R"(^\w+:)");
 		if (std::regex_search(link, schemeRegex))
 		{
 			return link;

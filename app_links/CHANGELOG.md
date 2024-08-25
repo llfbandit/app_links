@@ -1,3 +1,6 @@
+## 6.3.1
+* fix(Windows): Open scheme detection to wider range.
+
 ## 6.3.0
 * feat(Windows): Handle activation from packaged app.
   * This means you can either use https://, sample://, ... protocols with related hosts.
