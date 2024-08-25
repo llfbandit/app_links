@@ -59,8 +59,8 @@ namespace applinks
 		std::string link(size_needed, 0);
 		WideCharToMultiByte(CP_UTF8, 0, &arg[0], (int)arg.size(), &link[0], size_needed, NULL, NULL);
 
-		// Check if the link has a scheme
-		std::regex schemeRegex(R"(^\w+:)");
+		// Check if the argument has a valid scheme (https://datatracker.ietf.org/doc/html/rfc3986#section-3.1)
+		std::regex schemeRegex(R"(^([a-z][a-z0-9+.-]+):)", std::regex_constants::icase);
 		if (std::regex_search(link, schemeRegex))
 		{
 			return link;
