@@ -49,12 +49,28 @@ If you have a scene-based app.
 import app_links
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+  // Check for initial link
+  func scene(_ scene: UIScene,
+             willConnectTo session: UISceneSession,
+             options connectionOptions: UIScene.ConnectionOptions
+  ) {
+    // ...
+
+    self.scene(scene, openURLContexts: connectionOptions.urlContexts)
+
+    for userActivity in connectionOptions.userActivities {
+      self.scene(scene, continue: userActivity)
+    }
+  }
+
+  // Check for further Universal Links
   func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
     for context in URLContexts {
       AppLinks.shared.handleLink(url: context.url)
     }
   }
-  
+
+  // Check for further Custom URL schemes
   func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
     if let url = userActivity.webpageURL {
       AppLinks.shared.handleLink(url: url)
