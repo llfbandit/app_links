@@ -45,6 +45,8 @@ adb shell am start -a android.intent.action.VIEW \
   -d "sample://open.my.app/#/book/hello-world"
 ```
 
+When using ADB for testing, all special characters have to be escaped. [More info](https://stackoverflow.com/a/35645448/5498788).
+
 For App Links, you can also test it from Android Studio: [Documentation](https://developer.android.com/studio/write/app-link-indexing#testindent).
 
 Android 13 and beyond:
