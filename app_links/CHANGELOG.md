@@ -1,3 +1,6 @@
+## 6.3.2
+* fix(windows): Revert main.cpp modifications.
+
 ## 6.3.1
 * fix(Windows): Open scheme detection to wider range.
 
@@ -5,9 +8,9 @@
 * feat(Windows): Handle activation from packaged app.
   * This means you can either use https://, sample://, ... protocols with related hosts.
   * More info in [Windows setup docs](https://github.com/llfbandit/app_links/blob/master/doc/README_windows.md).
-* feat(Windows): No more `main.cpp` modification required!
-  * ⚠️ Please, remove it if you're coming from an update.
-* chore: Remove previous setup `main.cpp` from example.
+* ~~feat(Windows): No more `main.cpp` modification required!~~
+  * ~~⚠️ Please, remove it if you're coming from an update.~~
+* ~~chore: Remove previous setup `main.cpp` from example.~~
 * chore: docs update.
 
 ## 6.2.1
