@@ -1,22 +1,36 @@
 # iOS
 
+Apple documentation:
 - Universal Links: [Documentation](https://developer.apple.com/documentation/safariservices/supporting_associated_domains)
 - Custom URL schemes: [Documentation](https://developer.apple.com/documentation/xcode/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app)
 
-Don't use go_router deep linking feature: https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#add-support-for-go_router
+Disable default Flutter deep linking:
+- https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#add-support-for-go_router
 
-**Warning:**
+From Flutter 3.24, you must disable it explicitly.
+1. Navigate to ios/Runner/Info.plist file. 
+2. Add the following in `<dict>` chapter:
+```xml
+<key>FlutterDeepLinkingEnabled</key>
+<false/>
+```
+
+## Notice
 
 If you have a custom AppDelegate with overridden methods either:
 - `application(_:willFinishLaunchingWithOptions:)`
 - or `application(_:didFinishLaunchingWithOptions:)`
-- or another package also dealing with Universal Links or Custom URL schemes.
+- or another package also dealing with Universal Links or Custom URL schemes
 
-Both methods must call super and return true to enable app link workflow.
+this may break the workflow to catch links or provide unwanted behaviours.
 
-If you can't respect those two constraints, or you need a specific behaviour, proceed with the following setup.
+The default workflow requires that both methods call super and return true to enable app link workflow.
 
-## SETUP (only if if can't conform to warning above)
+If you can't respect those constraints, or you need a specific behaviour, proceed with the following setup.
+
+## SETUP (only if you can't conform to the notice above)
+
+### Standard app sample
 
 ```swift
 import app_links
@@ -41,9 +55,8 @@ import app_links
 }
 ```
 
-<br/>  
-If you have a scene-based app.
 
+### Scene-based app sample
 
 ```swift
 import app_links

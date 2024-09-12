@@ -1,18 +1,23 @@
 # Android
 
+Google documentation:
 - App Links: [Documentation](https://developer.android.com/training/app-links/verify-android-applinks)
 - Deep Links: [Documentation](https://developer.android.com/training/app-links/deep-linking)
 
 ## SETUP
 
-In AndroidManifest.xml
 
-  Don't use go_router deep linking feature: https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml
-  by removing this:
-  ```xml
-  <!-- <meta-data android:name="flutter_deeplinking_enabled" android:value="true" /> -->
-  ```
+Disable default Flutter deep linking:
+- https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml
 
+From Flutter 3.24, you must disable it explicitly.
+1. Navigate to android/app/src/main/AndroidManifest.xml file. 
+2. Add the following metadata tag and intent filter inside the <activity> tag with .MainActivity
+```xml
+<meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
+```
+
+Add your setup:
 ```xml
 <!-- App Link sample -->
 <intent-filter android:autoVerify="true">
