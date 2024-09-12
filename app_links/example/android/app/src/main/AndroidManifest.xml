@@ -13,6 +13,9 @@
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
 
+            <!-- Disable default Flutter deep linking -->
+            <meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
+
             <!-- App Link sample -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
