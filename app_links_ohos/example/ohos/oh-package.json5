@@ -1,0 +1,21 @@
+{
+  "modelVersion": "5.0.0",
+  "name": "app_links_ohos_example",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "@ohos/flutter_ohos": "file:./har/flutter.har"
+  },
+  "devDependencies": {
+    "@ohos/hypium": "1.0.6"
+  },
+  "overrides": {
+    "@ohos/flutter_ohos": "file:./har/flutter.har",
+    "app_links_ohos": "file:./har/app_links_ohos.har",
+    "integration_test": "file:./har/integration_test.har",
+    "@ohos/flutter_module": "file:./entry"
+  }
+}
