@@ -1,6 +1,6 @@
 name: app_links_ohos
 description: "HarmonyOS platform support"
-version: 0.0.1
+version: 1.0.0
 homepage:
 
 environment:

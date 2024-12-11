@@ -1,3 +1,3 @@
-## 0.0.1
+## 1.0.0
 
 * initial release. Add instructions to the README.
