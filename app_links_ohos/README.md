@@ -1,15 +1,21 @@
 # app_links_ohos
+This plugin supports using deep links on HarmonyOS.
 
-A new Flutter plugin project.
+This plugin is based on version [oh-3.22.3](https://gitee.com/harmonycommando_flutter/flutter/tree/oh-3.22.3/)
 
 ## Getting Started
+```yarml
+app_links_ohos: ^1.0.0
+```
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+## Test
+About testing Ohos Deep Link:
 
-For help getting started with Flutter development, view the
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+You can use the Harmony-provided aa tool for testing.
 
+Specific steps are as follows:
+[aa Tool Documentation](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V13/aa-tool-V13)
+
+ ```shell
+ hdc shell aa start -U myscheme://www.test.com:8080/path
+ ```
