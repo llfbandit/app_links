@@ -1,3 +1,6 @@
+## 6.3.3
+* fix(windows): Allow other plugins to handle window messages.
+
 ## 6.3.2
 * fix(windows): Revert main.cpp modifications.
 
