@@ -2,12 +2,12 @@ import Flutter
 import UIKit
 
 public class AppLinks {
-  static public let shared = SwiftAppLinksPlugin()
+  static public let shared = AppLinksIosPlugin()
 
   private init() {}
 }
 
-public final class SwiftAppLinksPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
+public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
   private var eventSink: FlutterEventSink?
   
   private var initialLink: String?

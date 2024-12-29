@@ -1,3 +1,7 @@
+## 6.4.0
+* chore(iOS): Support Swift Package Manager
+* chore(macOS): Support Swift Package Manager
+
 ## 6.3.3
 * fix(windows): Allow other plugins to handle window messages.
 
