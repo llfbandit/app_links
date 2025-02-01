@@ -182,7 +182,15 @@ public class AppLinksPlugin implements
       eventSink.success(dataString);
     }
 
+    Log.d(TAG, "restValuesToNull///handleIntent");
+    restValuesToNull();
+
     return true;
+  }
+
+  void restValuesToNull() {
+    initialLink = null;
+    latestLink = null;
   }
 
   ///
