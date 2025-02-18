@@ -51,3 +51,8 @@ slots:
 ```
 - You can refer to these two repositories for more details: [FlatHub setup](https://github.com/flathub/io.appflowy.AppFlowy) and [Snapcraft setup](https://github.com/LucasXu0/appflowy-snap/blob/main/snap/snapcraft.yaml).
 
+- If you created the .deb or .rpm installer with [Flutter Distributor](https://pub.dev/packages/flutter_distributor), please ensure that in the make_config.yaml you set
+```yaml
+supported_mime_type:
+  - x-scheme-handler/my_custom_scheme # necessary so that the flutter app can open custom urls of type my_custom_scheme:/...
+```
