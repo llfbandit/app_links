@@ -11,3 +11,6 @@ pubspec.lock
 
 # melos
 pubspec_overrides.yaml
+
+# Miscellaneous
+.DS_Store
