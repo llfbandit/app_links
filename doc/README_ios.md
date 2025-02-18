@@ -20,7 +20,7 @@ From Flutter 3.24, you must disable it explicitly.
 If you have a custom AppDelegate with overridden methods either:
 - `application(_:willFinishLaunchingWithOptions:)`
 - or `application(_:didFinishLaunchingWithOptions:)`
-- or another package also dealing with Universal Links or Custom URL schemes
+- or another package also dealing with Universal Links or Custom URL schemes (This can be difficult to detect, so try the example project if links are not forwarded).
 
 this may break the workflow to catch links or provide unwanted behaviours.
 
@@ -35,7 +35,7 @@ If you can't respect those constraints, or you need a specific behaviour, procee
 ```swift
 import app_links
 
-@UIApplicationMain
+@main
 @objc class AppDelegate: FlutterAppDelegate {
   override func application(
     _ application: UIApplication,
