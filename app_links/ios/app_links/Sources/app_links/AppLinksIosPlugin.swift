@@ -68,14 +68,11 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     restorationHandler: @escaping ([Any]) -> Void
   ) -> Bool {
     
-    switch userActivity.activityType {
-    case NSUserActivityTypeBrowsingWeb:
-      if let url = userActivity.webpageURL {
-        handleLink(url: url)
-      }
-      return false
-    default: return false
+    if let url = userActivity.webpageURL {
+      handleLink(url: url)
     }
+    
+    return false
   }
   
   // Custom URL schemes
