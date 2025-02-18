@@ -1,6 +1,8 @@
 ## 6.4.0
-* chore(iOS): Support Swift Package Manager
-* chore(macOS): Support Swift Package Manager
+* chore(iOS): Support Swift Package Manager.
+* chore(macOS): Support Swift Package Manager.
+* fix(iOS): Relax condition to forward Universal Links.
+* chore(Android): Bump android min SDK version to 19.
 
 ## 6.3.3
 * fix(windows): Allow other plugins to handle window messages.
