@@ -46,7 +46,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _navigatorKey = GlobalKey<NavigatorState>();
-  late AppLinks _appLinks;
   StreamSubscription<Uri>? _linkSubscription;
 
   @override
@@ -64,10 +63,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> initDeepLinks() async {
-    _appLinks = AppLinks();
-
     // Handle links
-    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+    _linkSubscription = AppLinks().uriLinkStream.listen((uri) {
       debugPrint('onAppLink: $uri');
       openAppLink(uri);
     });
