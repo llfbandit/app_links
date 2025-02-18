@@ -14,12 +14,15 @@ import 'url_protocol/api.dart';
 /// - example/ios/Runner/Runner.entitlements for Universal Link sample.
 /// - example/ios/Runner/Info.plist for Custom URL scheme sample.
 ///
-/// You can launch an intent on an Android Emulator like this:
+/// Android launch:
 ///    adb shell am start -a android.intent.action.VIEW \
 ///     -d "sample://open.my.app/#/book/hello-world"
 ///
+/// iOS launch:
+///    /usr/bin/xcrun simctl openurl booted "app://www.example.com/#/book/hello-world"
 ///
-/// On windows & macOS:
+///
+/// Windows & macOS launch:
 ///   The simplest way to test it is by
 ///   opening your browser and type: sample://foo/#/book/hello-world2
 ///
