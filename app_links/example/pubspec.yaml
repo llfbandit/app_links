@@ -23,7 +23,7 @@ dev_dependencies:
   msix: ^3.16.8
   
   # linter rules (https://pub.dev/packages/flutter_lints)
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 # The following section is specific to Flutter.
 flutter:
