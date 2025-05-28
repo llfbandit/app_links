@@ -24,6 +24,7 @@ local.properties
 
 # Flutter/Dart/Pub related
 **/doc/api/
+ios/Flutter/ephemeral/
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
