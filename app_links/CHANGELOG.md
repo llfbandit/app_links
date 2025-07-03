@@ -1,3 +1,9 @@
+## 6.4.1
+* chore(Android): Update Gradle settings.
+* chore(Android): Update Java 8 to 11.
+* chore(Android): Min SDK is now 21.
+* chore(Android): Update Example project settings.
+
 ## 6.4.0
 * chore(iOS): Support Swift Package Manager.
 * chore(macOS): Support Swift Package Manager.
