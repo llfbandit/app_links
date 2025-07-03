@@ -97,6 +97,10 @@ public class AppLinksPlugin implements
     this.binding = binding;
     binding.addOnNewIntentListener(this);
 
+    initialLink = null;
+    initialLinkSent = false;
+    latestLink = null;
+
     // Handle intent when app is launched from cold state.
     handleIntent(binding.getActivity().getIntent());
   }
