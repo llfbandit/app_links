@@ -1,4 +1,5 @@
 ## 6.4.1
+* chore(Android): Remove Firebase Dynamic Links feature (see [FAQ](https://firebase.google.com/support/dynamic-links-faq)).
 * chore(Android): Update Gradle settings.
 * chore(Android): Update Java 8 to 11.
 * chore(Android): Min SDK is now 21.

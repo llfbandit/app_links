@@ -39,10 +39,6 @@ Add your setup:
 </intent-filter>
 ```
 
-### ProGuard rules
-When using ProGuard, those additional rules are added  
-https://github.com/llfbandit/app_links/blob/master/app_links/android/proguard.txt
-
 # Testing
 
 ```sh

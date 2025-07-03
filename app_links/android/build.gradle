@@ -34,11 +34,9 @@ android {
 
     defaultConfig {
         minSdkVersion 21
-        consumerProguardFiles 'proguard.txt'
     }
 }
 
 dependencies {
     implementation 'androidx.annotation:annotation:1.9.1'
-    implementation 'org.microg:safe-parcel:1.7.1'
 }

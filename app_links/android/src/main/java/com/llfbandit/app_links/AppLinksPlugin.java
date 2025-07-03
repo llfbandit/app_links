@@ -168,7 +168,7 @@ public class AppLinksPlugin implements
       return false;
     }
 
-    String dataString = AppLinksHelper.getDeepLinkFromIntent(intent);
+    String dataString = AppLinksHelper.getUrl(intent);
     if (dataString == null) return false;
 
     if (initialLink == null) {
