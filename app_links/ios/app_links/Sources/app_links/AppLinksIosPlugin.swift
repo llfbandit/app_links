@@ -13,8 +13,19 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
   private var initialLink: String?
   private var initialLinkSent = false
   private var latestLink: String?
-  
+
   public static func register(with registrar: FlutterPluginRegistrar) {
+    #if DEBUG
+    // https://github.com/llfbandit/app_links/issues/211
+    // https://github.com/flutter/flutter/issues/149214
+    // Cancel registration because registrar is null while in swift it is referenced as non-nullable parameter.
+    let messenger = (registrar as? NSObject)?.value(forKey: "messenger")
+    if messenger == nil {
+      print("Flutter application in debug mode can only be launched from Flutter tooling, use profile or release modes instead.")
+      return
+    }
+    #endif
+
     let methodChannel = FlutterMethodChannel(name: "com.llfbandit.app_links/messages", binaryMessenger: registrar.messenger())
     let eventChannel = FlutterEventChannel(name: "com.llfbandit.app_links/events", binaryMessenger: registrar.messenger())
     

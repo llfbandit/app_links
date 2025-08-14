@@ -4,6 +4,7 @@
 * chore(Android): Update Java 8 to 11.
 * chore(Android): Min SDK is now 21.
 * chore(Android): Update Example project settings.
+* fix(iOS): Cancel plugin registration and print a message to workaround EXC_BAD_ACCESS crash when running debug mode and not attached to debugger anymore.
 
 ## 6.4.0
 * chore(iOS): Support Swift Package Manager.
