@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'app_links'
-  s.version          = '1.0.0'
+  s.version          = '6.4.1'
   s.summary          = 'App Links MacOS implementation for app_links package.'
   s.description      = <<-DESC
   App Links MacOS implementation for app_links package.

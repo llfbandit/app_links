@@ -14,7 +14,7 @@ dependencies:
     sdk: flutter
   
   # https://pub.dev/packages/plugin_platform_interface
-  plugin_platform_interface: ^2.1.7
+  plugin_platform_interface: ^2.1.8
 
 dev_dependencies:
   flutter_lints: ^5.0.0

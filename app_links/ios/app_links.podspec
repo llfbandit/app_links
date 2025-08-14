@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'app_links'
-  s.version          = '0.0.2'
+  s.version          = '6.4.1'
   s.summary          = 'iOS Universal Links and Custom URL schemes.'
   s.description      = <<-DESC
   iOS Universal Links and Custom URL schemes.

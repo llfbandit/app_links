@@ -15,9 +15,9 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
-  app_links_platform_interface: ^2.0.0
+  app_links_platform_interface: ^2.0.2
 
-  web: ">=0.3.0 <2.0.0"
+  web: ^1.0.0
 
 dev_dependencies:
   flutter_lints: ^5.0.0
