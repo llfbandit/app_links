@@ -4,8 +4,10 @@ version: 6.4.1
 homepage: https://github.com/llfbandit/app_links
 
 environment:
-  sdk: ^3.3.0
-  flutter: ">=3.19.0"
+  sdk: ^3.5.0
+  flutter: ">=3.24.0"
+
+resolution: workspace
 
 dependencies:
   flutter:
