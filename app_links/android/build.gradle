@@ -1,40 +1,27 @@
 group 'com.llfbandit.app_links'
 version '1.0'
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        // https://developer.android.com/studio/releases/gradle-plugin
-        classpath 'com.android.tools.build:gradle:8.6.1'
-    }
-}
-
-rootProject.allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
 apply plugin: 'com.android.library'
 
 android {
     namespace 'com.llfbandit.app_links'
 
-    compileSdk = flutter.compileSdkVersion
+    compileSdkVersion 35
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 35
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+}
 
-    defaultConfig {
-        minSdkVersion 21
-    }
+repositories {
+    google()
+    mavenCentral()
 }
 
 dependencies {
