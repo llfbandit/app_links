@@ -9,7 +9,7 @@ public class AppLinks {
 }
 
 /// Called to customize the returned value of event.
-typealias UrlHandledCallBack = (_ url: URL) -> Bool
+public typealias UrlHandledCallBack = (_ url: URL) -> Bool
 
 /// Event propagation to other plugins
 public enum UrlHandled {
