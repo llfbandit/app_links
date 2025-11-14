@@ -86,7 +86,7 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     }
 
     // Universal link
-    else if let activityDictionary = options[UIApplication.LaunchOptionsKey.userActivityDictionary] as? [AnyHashable: Any] {
+    if let activityDictionary = options[UIApplication.LaunchOptionsKey.userActivityDictionary] as? [AnyHashable: Any] {
       for key in activityDictionary.keys {
         if let userActivity = activityDictionary[key] as? NSUserActivity {
           if let url = userActivity.webpageURL {
