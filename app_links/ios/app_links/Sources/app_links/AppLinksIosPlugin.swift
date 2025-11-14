@@ -27,12 +27,12 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
   private var latestLink: String?
   
   /// Default returned value when handling an URL
-  var defaultUrlHandling: UrlHandled = .never
+  public var defaultUrlHandling: UrlHandled = .never
 
   /// Called to customize URL handling
   ///
   /// Takes precedence on `defaultUrlHandling`
-  var urlHandledCallBack: UrlHandledCallBack?
+  public var urlHandledCallBack: UrlHandledCallBack?
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     #if DEBUG
