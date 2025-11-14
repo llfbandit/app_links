@@ -13,9 +13,9 @@ public typealias UrlHandledCallBack = (_ url: URL) -> Bool
 
 /// Event propagation to other plugins
 public enum UrlHandled {
-  /// Always propagate to other plugins
+  /// Always forward event to other plugins
   case never
-  /// Propagate depending of URL availability
+  /// Event forward depending of URL availability
   case availability
 }
 
@@ -25,6 +25,11 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
   private var initialLink: String?
   private var initialLinkSent = false
   private var latestLink: String?
+
+  /// Enables / disables automatic link handling
+  ///
+  /// Useful for manual handling
+  public var enabled = true
   
   /// Default returned value when handling an URL
   public var defaultUrlHandling: UrlHandled = .never
@@ -104,6 +109,10 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     continue userActivity: NSUserActivity,
     restorationHandler: @escaping ([Any]) -> Void
   ) -> Bool {
+
+    if !enabled {
+      return false
+    }
     
     var handled = defaultUrlHandling == .never ? false : userActivity.webpageURL != nil
     
@@ -124,6 +133,10 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     open url: URL,
     options: [UIApplication.OpenURLOptionsKey : Any] = [:]
   ) -> Bool {
+
+    if !enabled {
+      return false
+    }
     
     handleLink(url: url)
     return defaultUrlHandling == .never
@@ -139,6 +152,10 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     willConnectTo session: UISceneSession,
     options connectionOptions: UIScene.ConnectionOptions?
   ) -> Bool {
+
+    if !enabled {
+      return false
+    }
     
     var handled = false
 
@@ -158,6 +175,11 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     _ scene: UIScene,
     openURLContexts URLContexts: Set<UIOpenURLContext>
   ) -> Bool {
+
+    if !enabled {
+      return false
+    }
+
     var handled = defaultUrlHandling == .never ? false : !URLContexts.isEmpty
 
     for context in URLContexts {
@@ -176,6 +198,10 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     _ scene: UIScene,
     continue userActivity: NSUserActivity
   ) -> Bool {
+
+    if !enabled {
+      return false
+    }
 
     var handled = defaultUrlHandling == .never ? false : userActivity.webpageURL != nil
     
