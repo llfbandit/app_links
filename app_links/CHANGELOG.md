@@ -1,3 +1,9 @@
+## 7.0.0
+* chore(iOS): __Breaking__ Flutter 3.38.1 is now the minimum version.
+* chore(iOS): __Breaking__ iOS 13 is now the minimum version.
+* feat(iOS): Adds support for global and local event propagation handling.
+* feat(iOS): Adds support for UISceneDelegate.
+
 ## 6.4.1
 * chore(Android): Remove Firebase Dynamic Links feature (see [FAQ](https://firebase.google.com/support/dynamic-links-faq)).
 * chore(Android): Update Gradle settings.

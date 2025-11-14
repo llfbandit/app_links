@@ -1,18 +1,38 @@
 import Flutter
 import UIKit
 
+/// AppLinks singleton shared object
 public class AppLinks {
   static public let shared = AppLinksIosPlugin()
 
   private init() {}
 }
 
-public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
+/// Called to customize the returned value of event.
+typealias UrlHandledCallBack = (_ url: URL) -> Bool
+
+/// Event propagation to other plugins
+public enum UrlHandled {
+  /// Always propagate to other plugins
+  case never
+  /// Propagate depending of URL availability
+  case availability
+}
+
+public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler, FlutterSceneLifeCycleDelegate {
   private var eventSink: FlutterEventSink?
   
   private var initialLink: String?
   private var initialLinkSent = false
   private var latestLink: String?
+  
+  /// Default returned value when handling an URL
+  var defaultUrlHandling: UrlHandled = .never
+
+  /// Called to customize URL handling
+  ///
+  /// Takes precedence on `defaultUrlHandling`
+  var urlHandledCallBack: UrlHandledCallBack?
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     #if DEBUG
@@ -34,6 +54,7 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     registrar.addMethodCallDelegate(instance, channel: methodChannel)
     eventChannel.setStreamHandler(instance)
     registrar.addApplicationDelegate(instance)
+    registrar.addSceneDelegate(instance)
   }
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -48,6 +69,7 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
   }
   
   // Allow to capture links when apps also override application callbacks
+  @available(*, deprecated, message: "You should migrate to UISceneDelegate")
   public func getLink(launchOptions: [AnyHashable : Any]?) -> URL? {
     guard let options = launchOptions else {
       return nil
@@ -72,6 +94,10 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     return nil
   }
   
+  /*----------------------------------------------------*/
+  // Application events
+  /*----------------------------------------------------*/
+  
   // Universal Links
   public func application(
     _ application: UIApplication,
@@ -79,11 +105,17 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     restorationHandler: @escaping ([Any]) -> Void
   ) -> Bool {
     
+    var handled = defaultUrlHandling == .never ? false : userActivity.webpageURL != nil
+    
     if let url = userActivity.webpageURL {
+      if let cb = urlHandledCallBack {
+        handled = handled || cb(url)
+      }
+
       handleLink(url: url)
     }
-    
-    return false
+
+    return handled
   }
   
   // Custom URL schemes
@@ -94,9 +126,70 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
   ) -> Bool {
     
     handleLink(url: url)
-    return false
+    return defaultUrlHandling == .never
   }
+
+  /*----------------------------------------------------*/
+  // Scene events
+  /*----------------------------------------------------*/
   
+  // Check for initial link
+  public func scene(
+    _ scene: UIScene,
+    willConnectTo session: UISceneSession,
+    options connectionOptions: UIScene.ConnectionOptions?
+  ) -> Bool {
+    
+    var handled = false
+
+    if let options = connectionOptions {
+      handled = self.scene(scene, openURLContexts: options.urlContexts)
+
+      for userActivity in options.userActivities {
+        handled = handled || self.scene(scene, continue: userActivity)
+      }
+    }
+
+    return handled
+  }
+
+  // Check for further Universal Links
+  public func scene(
+    _ scene: UIScene,
+    openURLContexts URLContexts: Set<UIOpenURLContext>
+  ) -> Bool {
+    var handled = defaultUrlHandling == .never ? false : !URLContexts.isEmpty
+
+    for context in URLContexts {
+      if let cb = urlHandledCallBack {
+        handled = handled || cb(context.url)
+      }
+      
+      handleLink(url: context.url)
+    }
+
+    return handled
+  }
+
+  // Check for further Custom URL schemes
+  public func scene(
+    _ scene: UIScene,
+    continue userActivity: NSUserActivity
+  ) -> Bool {
+
+    var handled = defaultUrlHandling == .never ? false : userActivity.webpageURL != nil
+    
+    if let url = userActivity.webpageURL {
+      if let cb = urlHandledCallBack {
+        handled = handled || cb(url)
+      }
+
+      handleLink(url: url)
+    }
+
+    return handled
+  }
+
   public func onListen(
     withArguments arguments: Any?,
     eventSink events: @escaping FlutterEventSink
@@ -116,7 +209,8 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     self.eventSink = nil
     return nil
   }
-  
+
+  /// Fires given URL to dart side
   public func handleLink(url: URL) -> Void {
     let link = url.absoluteString
     
