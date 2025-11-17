@@ -114,7 +114,11 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
       return false
     }
     
-    var handled = defaultUrlHandling == .never ? false : userActivity.webpageURL != nil
+    var handled = if defaultUrlHandling == .never || urlHandledCallBack != nil {
+      false
+    } else {
+      userActivity.webpageURL != nil
+    }
     
     if let url = userActivity.webpageURL {
       if let cb = urlHandledCallBack {
@@ -139,7 +143,7 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     }
     
     handleLink(url: url)
-    return defaultUrlHandling == .never
+    return defaultUrlHandling == .availability
   }
 
   /*----------------------------------------------------*/
@@ -180,7 +184,11 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
       return false
     }
 
-    var handled = defaultUrlHandling == .never ? false : !URLContexts.isEmpty
+    var handled = if defaultUrlHandling == .never || urlHandledCallBack != nil {
+      false
+    } else {
+      !URLContexts.isEmpty
+    }
 
     for context in URLContexts {
       if let cb = urlHandledCallBack {
@@ -203,7 +211,11 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
       return false
     }
 
-    var handled = defaultUrlHandling == .never ? false : userActivity.webpageURL != nil
+    var handled = if defaultUrlHandling == .never || urlHandledCallBack != nil {
+      false
+    } else {
+      userActivity.webpageURL != nil
+    }
     
     if let url = userActivity.webpageURL {
       if let cb = urlHandledCallBack {
