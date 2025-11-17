@@ -1,3 +1,16 @@
+## 7.0.0
+This version focuses on Flutter 3.38 release and especially iOS scene lifecycle breaking changes with few tools for easier customization.
+
+This version is still backward compatible with v6 setups.
+
+[Flutter UIScene migration doc](https://docs.flutter.dev/release/breaking-changes/uiscenedelegate#migration-guide-for-flutter-apps).
+
+* chore(iOS) __Breaking__: Flutter 3.38.1 is now the minimum version.
+* chore(iOS) __Breaking__: iOS 13 is now the minimum version.
+* feat(iOS): Adds support for global and local event propagation handling.
+* feat(iOS): Adds support for internal or external UISceneDelegate.
+* feat(iOS): Adds `enabled` flag to disable automatic link handling.
+
 ## 6.4.1
 * chore(Android): Remove Firebase Dynamic Links feature (see [FAQ](https://firebase.google.com/support/dynamic-links-faq)).
 * chore(Android): Update Gradle settings.
