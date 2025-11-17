@@ -1,7 +1,7 @@
 # iOS
 
 ## Requirements:
-- Flutter >= 3.35
+- Flutter >= 3.38.1
 
 Apple documentation:
 - Universal Links: [Documentation](https://developer.apple.com/documentation/safariservices/supporting_associated_domains)
@@ -38,7 +38,7 @@ If you want to customize the propagation you have the options below:
 - Set `urlHandledCallBack` to react on each URL provided.
 - Or manual handling.
 
-## Samples
+Samples:
 
 Semi-automatic handling (application or scene based)
 
@@ -58,7 +58,27 @@ class MyClass {
 }
 ```
 
-Manual handling with scene delegate
+Manual handling with custom scene delegate
+
+```swift
+@main
+@objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
+  override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
+    GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+
+    // Disable automatic link handling
+    AppLinks.shared.enabled = false
+  }
+}
+```
+
 
 ```swift
 import Flutter
@@ -71,9 +91,6 @@ class SceneDelegate: FlutterSceneDelegate {
                       willConnectTo session: UISceneSession,
                       options connectionOptions: UIScene.ConnectionOptions) {
     
-    // Disable automatic link handling
-    AppLinks.shared.enabled = false
-
     self.scene(scene, openURLContexts: connectionOptions.urlContexts)
 
     for userActivity in connectionOptions.userActivities {
