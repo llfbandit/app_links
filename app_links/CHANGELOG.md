@@ -10,6 +10,7 @@ This version is still backward compatible with v6 setups.
 * feat(iOS): Adds support for global and local event propagation handling.
 * feat(iOS): Adds support for internal or external UISceneDelegate.
 * feat(iOS): Adds `enabled` flag to disable automatic link handling.
+* chore(Android): Dependency updates to align with Flutter 3.38.1.
 
 ## 6.4.1
 * chore(Android): Remove Firebase Dynamic Links feature (see [FAQ](https://firebase.google.com/support/dynamic-links-faq)).
