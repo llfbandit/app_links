@@ -39,4 +39,22 @@ android {
 
 dependencies {
     implementation 'androidx.annotation:annotation:1.9.1'
+
+    // Add Flutter embedding dependency to fix compilation errors with AGP 8+
+    // This resolves "package io.flutter.embedding does not exist" errors
+    // References: https://github.com/flutter/flutter/issues/177417
+    def flutterSdkPath = null
+    def localPropertiesFile = new File(rootProject.projectDir.parentFile, 'local.properties')
+    if (localPropertiesFile.exists()) {
+        def properties = new Properties()
+        localPropertiesFile.withInputStream { stream -> properties.load(stream) }
+        flutterSdkPath = properties.getProperty('flutter.sdk')
+    }
+
+    if (flutterSdkPath != null) {
+        def flutterJar = new File(flutterSdkPath, 'bin/cache/artifacts/engine/android-arm-release/flutter.jar')
+        if (flutterJar.exists()) {
+            compileOnly files(flutterJar)
+        }
+    }
 }
