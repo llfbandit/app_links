@@ -76,14 +76,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
   }
 
-  // Check for further Universal Links
+  // Check for further Custom URL schemes
   func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
     for context in URLContexts {
       AppLinks.shared.handleLink(url: context.url)
     }
   }
 
-  // Check for further Custom URL schemes
+  // Check for further Universal Links
   func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
     if let url = userActivity.webpageURL {
       AppLinks.shared.handleLink(url: url)
