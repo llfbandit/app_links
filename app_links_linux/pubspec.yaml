@@ -1,7 +1,7 @@
 name: app_links_linux
 description: Linux platform implementation of app_links plugin.
 version: 1.0.3
-homepage: https://github.com/llfbandit/app_links/tree/master/app_links_linux
+homepage: https://github.com/llfbandit/app_links/tree/main/app_links_linux
 
 environment:
   sdk: ^3.10.0

@@ -17,6 +17,6 @@ From Flutter 3.24, you must disable it explicitly.
 
 ## Notice
 
-[Version 6.x.x](https://github.com/llfbandit/app_links/blob/master/doc/README_ios_6.md)
+[Version 6.x.x](https://github.com/llfbandit/app_links/blob/main/doc/README_ios_6.md)
 
-[Version 7.x.x](https://github.com/llfbandit/app_links/blob/master/doc/README_ios_7.md)
+[Version 7.x.x](https://github.com/llfbandit/app_links/blob/main/doc/README_ios_7.md)

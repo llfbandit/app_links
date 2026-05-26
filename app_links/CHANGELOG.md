@@ -42,7 +42,7 @@ This version is still backward compatible with v6 setups.
 ## 6.3.0
 * feat(Windows): Handle activation from packaged app.
   * This means you can either use https://, sample://, ... protocols with related hosts.
-  * More info in [Windows setup docs](https://github.com/llfbandit/app_links/blob/master/doc/README_windows.md).
+  * More info in [Windows setup docs](https://github.com/llfbandit/app_links/blob/main/doc/README_windows.md).
 * ~~feat(Windows): No more `main.cpp` modification required!~~
   * ~~⚠️ Please, remove it if you're coming from an update.~~
 * ~~chore: Remove previous setup `main.cpp` from example.~~
