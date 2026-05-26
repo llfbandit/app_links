@@ -9,6 +9,7 @@
     * chore: Completes Swift Package Manager integration.
 * Windows:
   * chore: Remove dead code.
+  * chore: Updates example project win32 dependency to 6.x.
 
 ## 7.0.0
 This version focuses on Flutter 3.38 release and especially iOS scene lifecycle breaking changes with few tools for easier customization.

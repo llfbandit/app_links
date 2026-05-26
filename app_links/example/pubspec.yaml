@@ -19,7 +19,7 @@ dependencies:
   app_links: ^7.0.0
 
   ffi: ^2.1.0
-  win32: ^5.1.0
+  win32: ^6.3.0
 
 dev_dependencies:
   msix: ^3.16.8

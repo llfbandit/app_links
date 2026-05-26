@@ -144,8 +144,9 @@ class _MyAppState extends State<MyApp> {
   Widget buildWindowsUnregisterBtn() {
     if (defaultTargetPlatform == TargetPlatform.windows) {
       return TextButton(
-          onPressed: () => unregisterProtocolHandler(kWindowsScheme),
-          child: const Text('Remove Windows protocol registration'));
+        onPressed: () => unregisterProtocolHandler(kWindowsScheme),
+        child: const Text('Remove Windows protocol registration'),
+      );
     }
 
     return const SizedBox.shrink();
