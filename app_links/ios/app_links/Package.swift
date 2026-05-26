@@ -13,11 +13,15 @@ let package = Package(
         // If the plugin name contains "_", replace with "-" for the library name.
         .library(name: "app-links", targets: ["app_links"])
     ],
-    dependencies: [],
+    dependencies: [
+        .package(name: "FlutterFramework", path: "../FlutterFramework")
+    ],
     targets: [
         .target(
             name: "app_links",
-            dependencies: [],
+            dependencies: [
+                .product(name: "FlutterFramework", package: "FlutterFramework")
+            ],
             resources: [
                 // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
                 .process("PrivacyInfo.xcprivacy")

@@ -4,8 +4,8 @@ version: 1.0.3
 homepage: https://github.com/llfbandit/app_links/tree/main/app_links_linux
 
 environment:
-  sdk: ^3.10.0
-  flutter: ">=3.38.1"
+  sdk: ^3.12.0
+  flutter: ">=3.44.0"
 
 resolution: workspace
 
