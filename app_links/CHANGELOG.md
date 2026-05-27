@@ -1,3 +1,6 @@
+## 7.1.1
+* fix(Android): Build issue.
+
 ## 7.1.0
 * chore: Updates minimum supported SDK version to Flutter 3.44/Dart 3.12.
 * Android:
