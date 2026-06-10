@@ -111,7 +111,7 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler,
     
     if let _eventSink = eventSink {
       initialLinkSent = true
-      _eventSink(latestLink)
+      _eventSink(link)
     }    
   }
 }

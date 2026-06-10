@@ -258,11 +258,11 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
       initialLink = link
     }
     
-    guard let _eventSink = eventSink, latestLink != nil else {
+    guard let _eventSink = eventSink else {
       return
     }
-    
+
     initialLinkSent = true
-    _eventSink(latestLink)
+    _eventSink(link)
   }
 }
