@@ -19,7 +19,7 @@ void SendAppLink(HWND hwnd) {
 
     COPYDATASTRUCT cds = { 0 };
     cds.dwData = APPLINK_MSG_ID;
-    cds.cbData = (DWORD)link.value().size() * sizeof(wchar_t);
+    cds.cbData = (DWORD)(link.value().size() + 1);
     cds.lpData = (PVOID)link.value().c_str();
 
     SendMessage(hwnd, WM_COPYDATA, (WPARAM)hwnd, (LPARAM)(LPVOID)&cds);
