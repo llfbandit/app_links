@@ -31,51 +31,46 @@ class AppLinks {
   }
 
   Stream<String> get stringLinkStream {
-    if (_stringStreamController == null) {
-      _stringStreamController = StreamController.broadcast();
-
-      _initController<String>(
-        _stringStreamController!,
-        AppLinksPlatform.instance.stringLinkStream,
-        onCancel: () => _stringStreamController = null,
-      );
-    }
-
+    _stringStreamController ??= _createController(
+      AppLinksPlatform.instance.stringLinkStream,
+      onSourceDone: () => _stringStreamController = null,
+    );
     return _stringStreamController!.stream;
   }
 
   Stream<Uri> get uriLinkStream {
-    if (_uriStreamController == null) {
-      _uriStreamController = StreamController.broadcast();
-
-      _initController<Uri>(
-        _uriStreamController!,
-        AppLinksPlatform.instance.uriLinkStream,
-        onCancel: () => _uriStreamController = null,
-      );
-    }
-
+    _uriStreamController ??= _createController(
+      AppLinksPlatform.instance.uriLinkStream,
+      onSourceDone: () => _uriStreamController = null,
+    );
     return _uriStreamController!.stream;
   }
 
-  void _initController<T>(
-    StreamController<T> controller,
-    Stream<T> stream, {
-    required void Function() onCancel,
+  StreamController<T> _createController<T>(
+    Stream<T> source, {
+    required void Function() onSourceDone,
   }) {
-    final subscription = stream.listen(
-      controller.add,
-      onError: controller.addError,
+    StreamSubscription<T>? subscription;
+    late final StreamController<T> controller;
+
+    controller = StreamController<T>.broadcast(
+      onListen: () {
+        subscription = source.listen(
+          controller.add,
+          onError: controller.addError,
+          onDone: () {
+            subscription = null;
+            controller.close();
+            onSourceDone();
+          },
+        );
+      },
+      onCancel: () async {
+        await subscription?.cancel();
+        subscription = null;
+      },
     );
 
-    // Broadcast controller doesn't support pause/resume
-    //
-    // Forward cancel event when there's no more listeners
-    // and dispose controller
-    controller.onCancel = () async {
-      await subscription.cancel();
-      await controller.close();
-      onCancel();
-    };
+    return controller;
   }
 }
