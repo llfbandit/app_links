@@ -72,6 +72,11 @@ namespace applinks
 	AppLinksPlugin::AppLinksPlugin(PluginRegistrarWindows *registrar)
 		: registrar_(registrar)
 	{
+		auto link = GetLink();
+		if (link) {
+			initialLink_ = link;
+			latestLink_ = link;
+		}
 
 		window_proc_id_ = registrar->RegisterTopLevelWindowProcDelegate(
 			[this](HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam)
@@ -91,8 +96,7 @@ namespace applinks
 	{
 		if (method_call.method_name().compare("getInitialLink") == 0)
 		{
-			auto link = GetLink();
-			result->Success(flutter::EncodableValue(link.value_or("")));
+			result->Success(flutter::EncodableValue(initialLink_.value_or("")));
 		}
 		else if (method_call.method_name().compare("getLatestLink") == 0)
 		{
@@ -144,11 +148,9 @@ namespace applinks
 
 		eventSink_ = std::move(events);
 
-		auto link = GetLink();
-		if (!initialLinkSent_ && link) {
+		if (!initialLinkSent_ && initialLink_) {
 			initialLinkSent_ = true;
-			initialLink_ = link;
-		  eventSink_->Success(initialLink_.value());
+			eventSink_->Success(initialLink_.value());
 		}
 
 		return nullptr;
