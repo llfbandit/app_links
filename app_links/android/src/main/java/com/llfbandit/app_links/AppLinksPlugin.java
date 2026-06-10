@@ -161,8 +161,6 @@ public class AppLinksPlugin implements
   private boolean handleIntent(Intent intent) {
     if (intent == null) return false;
 
-    Log.d(TAG, intent.toString());
-
     final int flag = Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY;
     if ((intent.getFlags() & flag) == flag) {
       return false;
