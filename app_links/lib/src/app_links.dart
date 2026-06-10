@@ -4,7 +4,7 @@ import 'package:app_links_platform_interface/app_links_platform_interface.dart';
 /// App links handler.
 ///
 /// This class is a singleton and should be accessed using `AppLinks()`.
-class AppLinks extends AppLinksPlatform {
+class AppLinks {
   static final AppLinks _instance = AppLinks._();
 
   factory AppLinks() => _instance;
@@ -14,27 +14,22 @@ class AppLinks extends AppLinksPlatform {
   StreamController<String>? _stringStreamController;
   StreamController<Uri>? _uriStreamController;
 
-  @override
   Future<Uri?> getInitialLink() {
     return AppLinksPlatform.instance.getInitialLink();
   }
 
-  @override
   Future<String?> getInitialLinkString() {
     return AppLinksPlatform.instance.getInitialLinkString();
   }
 
-  @override
   Future<Uri?> getLatestLink() {
     return AppLinksPlatform.instance.getLatestLink();
   }
 
-  @override
   Future<String?> getLatestLinkString() {
     return AppLinksPlatform.instance.getLatestLinkString();
   }
 
-  @override
   Stream<String> get stringLinkStream {
     if (_stringStreamController == null) {
       _stringStreamController = StreamController.broadcast();
@@ -49,7 +44,6 @@ class AppLinks extends AppLinksPlatform {
     return _stringStreamController!.stream;
   }
 
-  @override
   Stream<Uri> get uriLinkStream {
     if (_uriStreamController == null) {
       _uriStreamController = StreamController.broadcast();
