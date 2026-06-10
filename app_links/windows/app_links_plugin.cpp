@@ -121,7 +121,38 @@ namespace applinks
 
 			if (cds->dwData == APPLINK_MSG_ID)
 			{
-				std::string link((char *)(cds->lpData));
+				// Only accept links from another instance of this same executable.
+				DWORD senderPid = 0;
+				GetWindowThreadProcessId((HWND)wparam, &senderPid);
+
+				bool trusted = false;
+				HANDLE hSender = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, senderPid);
+				if (hSender)
+				{
+					wchar_t senderExe[MAX_PATH] = {};
+					wchar_t ourExe[MAX_PATH] = {};
+					DWORD len = MAX_PATH;
+					if (QueryFullProcessImageNameW(hSender, 0, senderExe, &len))
+					{
+						GetModuleFileNameW(nullptr, ourExe, MAX_PATH);
+						trusted = (_wcsicmp(senderExe, ourExe) == 0);
+					}
+					CloseHandle(hSender);
+				}
+
+				if (!trusted)
+				{
+					return std::nullopt;
+				}
+
+				// Construct bounded by cbData to prevent overread if sender omits null terminator.
+				std::string link(static_cast<char *>(cds->lpData), cds->cbData);
+				// Truncate at first embedded null in case sender includes one within cbData.
+				auto null_pos = link.find('\0');
+				if (null_pos != std::string::npos)
+				{
+					link.resize(null_pos);
+				}
 
 				latestLink_ = link;
 
