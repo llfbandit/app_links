@@ -43,7 +43,8 @@ class AppLinksMethodChannel extends AppLinksPlatform {
     return stringLinkStream.transform<Uri>(
       StreamTransformer<String, Uri>.fromHandlers(
         handleData: (String uri, EventSink<Uri> sink) {
-          sink.add(Uri.parse(uri));
+          final parsed = Uri.tryParse(uri);
+          if (parsed != null) sink.add(parsed);
         },
       ),
     );
