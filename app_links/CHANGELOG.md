@@ -1,3 +1,13 @@
+## 7.1.2
+* fix: AppLinks doesn't extend AppLinksPlatform anymore.
+* fix: Prevent app crash on malformed URI.
+* fix: controller.close() permanently kills controller.
+* fix(Android): Remove debug log.
+* chore(Darwin): Code improvement.
+* fix(Windows): latestlink always null on cold start.
+* fix(Windows): WM_COPYDATA unbounded read + any-process URI injection.
+* fix(Windows): correct cbData to use UTF-8 byte count.
+
 ## 7.1.1
 * fix(Android): Build issue.
 

@@ -1,3 +1,6 @@
+## 2.0.3
+* fix: Prevent app crash on malformed URI.
+
 ## 2.0.2
 * fix: Platform & channel init.
 
