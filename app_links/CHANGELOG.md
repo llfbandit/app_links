@@ -1,3 +1,8 @@
+## 7.2.0
+* feat(windows): export SendAppLinkToInstance from plugin to remove setup boilerplate.
+  * find the existing window automatically, removing the need to pass the window title.
+  * Go to [Windows setup docs](https://github.com/llfbandit/app_links/blob/main/doc/README_windows.md).
+
 ## 7.1.2
 * fix: AppLinks doesn't extend AppLinksPlatform anymore.
 * fix: Prevent app crash on malformed URI.

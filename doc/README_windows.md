@@ -1,55 +1,19 @@
 # Windows
 
-Add this inclusion in <PROJECT_DIR>\windows\runner\main.cpp
+Add these two lines in `<PROJECT_DIR>\windows\runner\main.cpp`:
+
+1. The include (at the top, with the other includes):
 ```cpp
 #include "app_links/app_links_plugin_c_api.h"
 ```
 
-Add this method before `wWinMain`
-```cpp
-bool SendAppLinkToInstance(const std::wstring& title) {
-  // Find our exact window
-  HWND hwnd = ::FindWindow(L"FLUTTER_RUNNER_WIN32_WINDOW", title.c_str());
-
-  if (hwnd) {
-    // Dispatch new link to current window
-    SendAppLink(hwnd);
-
-    // (Optional) Restore our window to front in same state
-    WINDOWPLACEMENT place = { sizeof(WINDOWPLACEMENT) };
-    GetWindowPlacement(hwnd, &place);
-
-    switch(place.showCmd) {
-      case SW_SHOWMAXIMIZED:
-          ShowWindow(hwnd, SW_SHOWMAXIMIZED);
-          break;
-      case SW_SHOWMINIMIZED:
-          ShowWindow(hwnd, SW_RESTORE);
-          break;
-      default:
-          ShowWindow(hwnd, SW_NORMAL);
-          break;
-    }
-
-    SetWindowPos(0, HWND_TOP, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE | SWP_NOMOVE);
-    SetForegroundWindow(hwnd);
-    // END (Optional) Restore
-
-    // Window has been found, don't create another one.
-    return true;
-  }
-
-  return false;
-}
-```
-
-Add the call to the previous method in `wWinMain`
+2. A call at the start of `wWinMain` to forward the link to an existing instance and exit:
 ```cpp
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
                       _In_ wchar_t *command_line, _In_ int show_command) {
-  // Replace "example" with the generated title found as parameter of `window.Create` in this file.
+  // Forward the link to an existing instance, if any, then exit.
   // You may ignore the result if you need to create another window.
-  if (SendAppLinkToInstance(L"example")) {
+  if (SendAppLinkToInstance()) {
     return EXIT_SUCCESS;
   }
 
