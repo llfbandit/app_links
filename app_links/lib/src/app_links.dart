@@ -14,22 +14,27 @@ class AppLinks {
   StreamController<String>? _stringStreamController;
   StreamController<Uri>? _uriStreamController;
 
+  /// {@macro app_links.getInitialLink}
   Future<Uri?> getInitialLink() {
     return AppLinksPlatform.instance.getInitialLink();
   }
 
+  /// {@macro app_links.getInitialLinkString}
   Future<String?> getInitialLinkString() {
     return AppLinksPlatform.instance.getInitialLinkString();
   }
 
+  /// {@macro app_links.getLatestLink}
   Future<Uri?> getLatestLink() {
     return AppLinksPlatform.instance.getLatestLink();
   }
 
+  /// {@macro app_links.getLatestLinkString}
   Future<String?> getLatestLinkString() {
     return AppLinksPlatform.instance.getLatestLinkString();
   }
 
+  /// {@macro app_links.stringLinkStream}
   Stream<String> get stringLinkStream {
     _stringStreamController ??= _createController(
       AppLinksPlatform.instance.stringLinkStream,
@@ -38,6 +43,7 @@ class AppLinks {
     return _stringStreamController!.stream;
   }
 
+  /// {@macro app_links.uriLinkStream}
   Stream<Uri> get uriLinkStream {
     _uriStreamController ??= _createController(
       AppLinksPlatform.instance.uriLinkStream,

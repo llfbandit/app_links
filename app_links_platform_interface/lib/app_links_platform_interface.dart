@@ -37,45 +37,59 @@ abstract class AppLinksPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  /// Gets the initial / first link
+  /// {@template app_links.getInitialLink}
+  /// Gets the initial/first link received.
   ///
   /// returns [Uri] or [null]
+  /// {@endtemplate}
   Future<Uri?> getInitialLink() => throw UnimplementedError(
-        'getInitialLink() not implemented on the current platform.',
-      );
+    'getInitialLink() not implemented on the current platform.',
+  );
 
-  /// Gets the initial / first link
+  /// {@template app_links.getInitialLinkString}
+  /// Gets the initial/first link received.
   ///
-  /// returns [Uri] as String or [null]
+  /// returns URI as String or [null]
+  /// {@endtemplate}
   Future<String?> getInitialLinkString() => throw UnimplementedError(
-        'getInitialLinkString not implemented on the current platform.',
-      );
+    'getInitialLinkString not implemented on the current platform.',
+  );
 
-  /// Gets the latest link
+  /// {@template app_links.getLatestLink}
+  /// Gets the latest link received.
   ///
   /// returns [Uri] or [null]
+  /// {@endtemplate}
   Future<Uri?> getLatestLink() => throw UnimplementedError(
-        'getLatestLink not implemented on the current platform.',
-      );
+    'getLatestLink not implemented on the current platform.',
+  );
 
-  /// Gets the latest link
+  /// {@template app_links.getLatestLinkString}
+  /// Gets the latest link received.
   ///
-  /// returns [Uri] as String or [null]
+  /// returns URI as String or [null]
+  /// {@endtemplate}
   Future<String?> getLatestLinkString() {
     throw UnimplementedError(
       'getLatestLinkString not implemented on the current platform.',
     );
   }
 
+  /// {@template app_links.stringLinkStream}
   /// Stream for receiving all incoming URI events as [String].
   ///
   /// The [Stream] emits opened URI as [String]s.
+  /// {@endtemplate}
   Stream<String> get stringLinkStream => throw UnimplementedError(
-      'stringUriStream not implemented on the current platform.');
+    'stringUriStream not implemented on the current platform.',
+  );
 
+  /// {@template app_links.uriLinkStream}
   /// Stream for receiving all incoming URI events as [Uri].
   ///
   /// The [Stream] emits opened URI as [Uri]s.
+  /// {@endtemplate}
   Stream<Uri> get uriLinkStream => throw UnimplementedError(
-      'uriStream not implemented on the current platform.');
+    'uriStream not implemented on the current platform.',
+  );
 }
