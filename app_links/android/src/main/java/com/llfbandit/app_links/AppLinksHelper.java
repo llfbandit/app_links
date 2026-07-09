@@ -5,10 +5,8 @@ import static android.content.Intent.ACTION_SENDTO;
 import static android.content.Intent.ACTION_SEND_MULTIPLE;
 
 import android.content.Intent;
-import android.util.Log;
 
 public class AppLinksHelper {
-  private static final String TAG = "com.llfbandit.app_links";
 
   public static String getUrl(Intent intent) {
     String action = intent.getAction();
@@ -20,10 +18,6 @@ public class AppLinksHelper {
     }
 
     String dataString = intent.getDataString();
-
-    if (dataString != null) {
-      Log.d(TAG, "Handled intent: action: " + action + " / data: " + dataString);
-    }
 
     return dataString;
 
