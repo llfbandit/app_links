@@ -1,3 +1,6 @@
+## 2.0.4
+* fix: Comments lost in front-facing API.
+
 ## 2.0.3
 * fix: Prevent app crash on malformed URI.
 

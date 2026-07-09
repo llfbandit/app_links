@@ -1,3 +1,7 @@
+## 7.2.1
+* fix(Android): Remove debug log.
+* fix: Comments lost in front-facing API.
+
 ## 7.2.0
 * feat(windows): export SendAppLinkToInstance from plugin to remove setup boilerplate.
   * find the existing window automatically, removing the need to pass the window title.
