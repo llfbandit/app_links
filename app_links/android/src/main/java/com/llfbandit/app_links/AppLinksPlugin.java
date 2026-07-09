@@ -1,7 +1,6 @@
 package com.llfbandit.app_links;
 
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -24,8 +23,6 @@ public class AppLinksPlugin implements
     EventChannel.StreamHandler,
     ActivityAware,
     NewIntentListener {
-
-  private static final String TAG = "com.llfbandit.app_links";
 
   private static final String MESSAGES_CHANNEL = "com.llfbandit.app_links/messages";
   private static final String EVENTS_CHANNEL = "com.llfbandit.app_links/events";
