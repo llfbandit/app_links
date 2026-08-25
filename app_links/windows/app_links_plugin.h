@@ -23,6 +23,8 @@ namespace applinks
 
         static std::optional<std::string> GetLink();
 
+        static bool HasValidScheme(const std::string &link);
+
         AppLinksPlugin(flutter::PluginRegistrarWindows *registrar);
         virtual ~AppLinksPlugin();
 

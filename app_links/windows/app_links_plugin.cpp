@@ -59,14 +59,19 @@ namespace applinks
 		std::string link(size_needed, 0);
 		WideCharToMultiByte(CP_UTF8, 0, &arg[0], (int)arg.size(), &link[0], size_needed, NULL, NULL);
 
-		// Check if the argument has a valid scheme (https://datatracker.ietf.org/doc/html/rfc3986#section-3.1)
-		std::regex schemeRegex(R"(^([a-z][a-z0-9+.-]+):)", std::regex_constants::icase);
-		if (std::regex_search(link, schemeRegex))
+		if (HasValidScheme(link))
 		{
 			return link;
 		}
 
 		return std::nullopt;
+	}
+
+	// static, Check if the link has a valid scheme (https://datatracker.ietf.org/doc/html/rfc3986#section-3.1)
+	bool AppLinksPlugin::HasValidScheme(const std::string &link)
+	{
+		static const std::regex schemeRegex(R"(^([a-z][a-z0-9+.-]+):)", std::regex_constants::icase);
+		return std::regex_search(link, schemeRegex);
 	}
 
 	AppLinksPlugin::AppLinksPlugin(PluginRegistrarWindows *registrar)
@@ -121,26 +126,7 @@ namespace applinks
 
 			if (cds->dwData == APPLINK_MSG_ID)
 			{
-				// Only accept links from another instance of this same executable.
-				DWORD senderPid = 0;
-				GetWindowThreadProcessId((HWND)wparam, &senderPid);
-
-				bool trusted = false;
-				HANDLE hSender = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, senderPid);
-				if (hSender)
-				{
-					wchar_t senderExe[MAX_PATH] = {};
-					wchar_t ourExe[MAX_PATH] = {};
-					DWORD len = MAX_PATH;
-					if (QueryFullProcessImageNameW(hSender, 0, senderExe, &len))
-					{
-						GetModuleFileNameW(nullptr, ourExe, MAX_PATH);
-						trusted = (_wcsicmp(senderExe, ourExe) == 0);
-					}
-					CloseHandle(hSender);
-				}
-
-				if (!trusted)
+				if (cds->lpData == nullptr || cds->cbData == 0)
 				{
 					return std::nullopt;
 				}
@@ -152,6 +138,12 @@ namespace applinks
 				if (null_pos != std::string::npos)
 				{
 					link.resize(null_pos);
+				}
+
+				// Apply the same validation as links received from the command line.
+				if (!HasValidScheme(link))
+				{
+					return std::nullopt;
 				}
 
 				latestLink_ = link;

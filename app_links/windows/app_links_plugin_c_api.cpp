@@ -22,7 +22,7 @@ void SendAppLink(HWND hwnd) {
     cds.cbData = (DWORD)(link.value().size() + 1);
     cds.lpData = (PVOID)link.value().c_str();
 
-    SendMessage(hwnd, WM_COPYDATA, (WPARAM)hwnd, (LPARAM)(LPVOID)&cds);
+    SendMessage(hwnd, WM_COPYDATA, 0, (LPARAM)(LPVOID)&cds);
 }
 
 bool SendAppLinkToInstance() {
