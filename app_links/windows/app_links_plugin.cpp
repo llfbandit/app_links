@@ -74,6 +74,17 @@ namespace applinks
 		return std::regex_search(link, schemeRegex);
 	}
 
+	// static, Check UTF-8 validity
+	bool AppLinksPlugin::IsValidUtf8(const std::string &link)
+	{
+		if (link.empty())
+		{
+			return true;
+		}
+
+		return MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, link.data(), (int)link.size(), nullptr, 0) != 0;
+	}
+
 	AppLinksPlugin::AppLinksPlugin(PluginRegistrarWindows *registrar)
 		: registrar_(registrar)
 	{
@@ -141,7 +152,8 @@ namespace applinks
 				}
 
 				// Apply the same validation as links received from the command line.
-				if (!HasValidScheme(link))
+				// Reject invalid UTF-8, Dart cannot decode it.
+				if (!HasValidScheme(link) || !IsValidUtf8(link))
 				{
 					return std::nullopt;
 				}
@@ -158,6 +170,9 @@ namespace applinks
 					initialLinkSent_ = true;
 					eventSink_->Success(latestLink_.value());
 				}
+
+				// Acknowledge delivery.
+				return TRUE;
 			}
 		}
 

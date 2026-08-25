@@ -11,10 +11,10 @@ void AppLinksPluginCApiRegisterWithRegistrar(FlutterDesktopPluginRegistrarRef re
 }
 
 // Method to dispatch new arguments to launched app
-void SendAppLink(HWND hwnd) {
+bool SendAppLink(HWND hwnd) {
     auto link = applinks::AppLinksPlugin::GetLink();
     if (!link.has_value()) {
-        return;
+        return true;
     }
 
     COPYDATASTRUCT cds = { 0 };
@@ -22,7 +22,13 @@ void SendAppLink(HWND hwnd) {
     cds.cbData = (DWORD)(link.value().size() + 1);
     cds.lpData = (PVOID)link.value().c_str();
 
-    SendMessage(hwnd, WM_COPYDATA, 0, (LPARAM)(LPVOID)&cds);
+    // Time out if the target hangs.
+    // Windows drops the message if the target runs elevated.
+    DWORD_PTR result = FALSE;
+    LRESULT sent = SendMessageTimeout(hwnd, WM_COPYDATA, 0, (LPARAM)(LPVOID)&cds,
+        SMTO_ABORTIFHUNG, APPLINK_SEND_TIMEOUT_MS, &result);
+
+    return sent != 0 && result == TRUE;
 }
 
 bool SendAppLinkToInstance() {
@@ -50,7 +56,8 @@ bool SendAppLinkToInstance() {
 
     if (!s.found) return false;
 
-    SendAppLink(s.found);
+    // Let the caller start a new instance.
+    if (!SendAppLink(s.found)) return false;
 
     WINDOWPLACEMENT place = {sizeof(WINDOWPLACEMENT)};
     GetWindowPlacement(s.found, &place);
@@ -59,7 +66,7 @@ bool SendAppLinkToInstance() {
         case SW_SHOWMINIMIZED: ShowWindow(s.found, SW_RESTORE); break;
         default:               ShowWindow(s.found, SW_NORMAL); break;
     }
-    SetWindowPos(nullptr, HWND_TOP, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE | SWP_NOMOVE);
+    SetWindowPos(s.found, HWND_TOP, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE | SWP_NOMOVE);
     SetForegroundWindow(s.found);
     return true;
 }

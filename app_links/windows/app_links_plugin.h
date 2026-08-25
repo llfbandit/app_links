@@ -13,6 +13,7 @@
 #include <sstream>
 
 #define APPLINK_MSG_ID (WM_USER + 2)
+#define APPLINK_SEND_TIMEOUT_MS 5000
 
 namespace applinks
 {
@@ -24,6 +25,8 @@ namespace applinks
         static std::optional<std::string> GetLink();
 
         static bool HasValidScheme(const std::string &link);
+
+        static bool IsValidUtf8(const std::string &link);
 
         AppLinksPlugin(flutter::PluginRegistrarWindows *registrar);
         virtual ~AppLinksPlugin();
