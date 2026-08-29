@@ -1,3 +1,6 @@
+## 1.0.4
+* fix: Return the launch link from getInitialLink on cold start.
+
 ## 1.0.3
 * fix: Delay again plugin init because of binary messenger not initialized.
 

@@ -8,11 +8,16 @@ class AppLinksPluginLinux extends AppLinksPlatform {
     AppLinksPlatform.instance = AppLinksPluginLinux();
   }
 
+  // Stop waiting if the app never sends its command line (missing setup).
+  static const _startupTimeout = Duration(seconds: 1);
+
   StreamController<String>? _controller;
   GtkApplicationNotifier? _notifier;
   String? _initialLink;
   bool _initialLinkSent = false;
   String? _latestLink;
+  final _startupReceived = Completer<void>();
+  Future<void>? _startup;
 
   // Initialize the plugin.
   // This can't be done in the constructor because
@@ -26,13 +31,23 @@ class AppLinksPluginLinux extends AppLinksPlatform {
         if (args.isNotEmpty) {
           _send(args.first);
         }
+        if (!_startupReceived.isCompleted) {
+          _startupReceived.complete();
+        }
       });
     }
   }
 
+  // Wait for the launch command line, it arrives after the first listen.
+  Future<void> _waitStartup() {
+    _init();
+    return _startup ??=
+        _startupReceived.future.timeout(_startupTimeout, onTimeout: () {});
+  }
+
   @override
   Future<Uri?> getInitialLink() async {
-    _init();
+    await _waitStartup();
 
     if (_initialLink case final link?) {
       return Uri.tryParse(link);
@@ -42,14 +57,14 @@ class AppLinksPluginLinux extends AppLinksPlatform {
 
   @override
   Future<String?> getInitialLinkString() async {
-    _init();
+    await _waitStartup();
 
     return _initialLink;
   }
 
   @override
   Future<Uri?> getLatestLink() async {
-    _init();
+    await _waitStartup();
 
     if (_latestLink case final link?) {
       return Uri.tryParse(link);
@@ -59,7 +74,7 @@ class AppLinksPluginLinux extends AppLinksPlatform {
 
   @override
   Future<String?> getLatestLinkString() async {
-    _init();
+    await _waitStartup();
     return _latestLink;
   }
 
