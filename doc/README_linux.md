@@ -1,58 +1,88 @@
 # Linux
-## SETUP
 
-Apply the following changes to your `linux/my_application.cc` file:
-```patch
-diff --git a/example/linux/my_application.cc b/example/linux/my_application.cc
-index 0ba8f43..f07f765 100644
---- a/example/linux/my_application.cc
-+++ b/example/linux/my_application.cc
-@@ -17,6 +17,13 @@ G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
- // Implements GApplication::activate.
- static void my_application_activate(GApplication* application) {
-   MyApplication* self = MY_APPLICATION(application);
-+
-+  GList* windows = gtk_application_get_windows(GTK_APPLICATION(application));
-+  if (windows) {
-+    gtk_window_present(GTK_WINDOW(windows->data));
-+    return;
-+  }
-+
-   GtkWindow* window =
-       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
+Linux supports custom schemes (`sample://`). There is no web-to-app (`https://`) equivalent.
 
-@@ -78,7 +85,7 @@ static gboolean my_application_local_command_line(GApplication* application, gch
-   g_application_activate(application);
-   *exit_status = 0;
+## Setup
 
--  return TRUE;
-+  return FALSE;
- }
+Make your app a single instance, so a link opened while it runs goes to the running instance.
 
- // Implements GObject::dispose.
-@@ -99,6 +106,6 @@ static void my_application_init(MyApplication* self) {}
- MyApplication* my_application_new() {
-   return MY_APPLICATION(g_object_new(my_application_get_type(),
-                                      "application-id", APPLICATION_ID,
--                                     "flags", G_APPLICATION_NON_UNIQUE,
-+                                     "flags", G_APPLICATION_HANDLES_COMMAND_LINE | G_APPLICATION_HANDLES_OPEN,
-                                      nullptr));
+Apply these 3 changes to `linux/runner/my_application.cc` (`linux/my_application.cc` in older projects).
+
+1. In `my_application_new`, replace the `G_APPLICATION_NON_UNIQUE` flag with:
+```cpp
+G_APPLICATION_HANDLES_COMMAND_LINE | G_APPLICATION_HANDLES_OPEN
 ```
 
-Notes:
-- Please ensure your `APPLICATION_ID` is the same as your desktop file name if you're using Flathub.
-- Please ensure you have added this section in your `snapcraft.yaml` file if you're using SnapStore:
+2. At the start of `my_application_activate`, show the existing window instead of opening a new one:
+```cpp
+static void my_application_activate(GApplication* application) {
+  MyApplication* self = MY_APPLICATION(application);
+
+  GList* windows = gtk_application_get_windows(GTK_APPLICATION(application));
+  if (windows) {
+    gtk_window_present(GTK_WINDOW(windows->data));
+    return;
+  }
+
+  ...
+```
+
+3. At the end of `my_application_local_command_line`, return `FALSE` instead of `TRUE`:
+```cpp
+  g_application_activate(application);
+  *exit_status = 0;
+
+  return FALSE;
+}
+```
+
+See the full file in the [example](../app_links/example/linux/my_application.cc).
+
+## Register the scheme
+
+Linux opens links through `.desktop` files. Add the scheme to your app's desktop file:
+```ini
+[Desktop Entry]
+Type=Application
+Name=My App
+Exec=/path/to/my_app %u
+MimeType=x-scheme-handler/sample;
+```
+
+To make your app the default handler while developing, copy the file to `~/.local/share/applications/my_app.desktop`, then run:
+```sh
+xdg-mime default my_app.desktop x-scheme-handler/sample
+# or: gio mime x-scheme-handler/sample my_app.desktop
+```
+
+### Packaging
+
+- **Flathub:** use your `APPLICATION_ID` as the desktop file name. See the [AppFlowy Flathub setup](https://github.com/flathub/io.appflowy.AppFlowy).
+- **Snap Store:** allow your app to own its D-Bus name in `snapcraft.yaml`. Replace `com.example.my_app` with your `APPLICATION_ID`. See the [AppFlowy Snapcraft setup](https://github.com/LucasXu0/appflowy-snap/blob/main/snap/snapcraft.yaml).
 ```yaml
 slots:
-  dbus-appflowy:
+  dbus-my-app:
     interface: dbus
     bus: session
-    name: `APPLICATION_ID`
+    name: com.example.my_app
 ```
-- You can refer to these two repositories for more details: [FlatHub setup](https://github.com/flathub/io.appflowy.AppFlowy) and [Snapcraft setup](https://github.com/LucasXu0/appflowy-snap/blob/main/snap/snapcraft.yaml).
-
-- If you created the .deb or .rpm installer with [Flutter Distributor](https://pub.dev/packages/flutter_distributor), please ensure that in the make_config.yaml you set
+- **.deb or .rpm with [Flutter Distributor](https://pub.dev/packages/flutter_distributor):** add the scheme in `make_config.yaml`:
 ```yaml
 supported_mime_type:
-  - x-scheme-handler/my_custom_scheme # necessary so that the flutter app can open custom urls of type my_custom_scheme:/...
+  - x-scheme-handler/sample
 ```
+
+## Testing
+
+Run the app with the link as argument:
+```sh
+./my_app sample://foo/#/book/hello-world
+```
+
+Or, once the scheme is registered:
+```sh
+xdg-open sample://foo/#/book/hello-world
+# or: gio open sample://foo/#/book/hello-world
+```
+
+Run either command again while the app runs: the link goes to the running instance.
