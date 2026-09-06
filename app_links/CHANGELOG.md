@@ -1,3 +1,6 @@
+## 7.2.2
+* fix(android): Stop resending the launch link when the activity is rebuilt.
+
 ## 7.2.1
 * fix(Android): Remove debug log.
 * fix: Comments lost in front-facing API.

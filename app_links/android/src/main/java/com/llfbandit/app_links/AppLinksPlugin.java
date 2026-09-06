@@ -1,8 +1,14 @@
 package com.llfbandit.app_links;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import java.util.UUID;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -22,10 +28,12 @@ public class AppLinksPlugin implements
     MethodCallHandler,
     EventChannel.StreamHandler,
     ActivityAware,
+    ActivityPluginBinding.OnSaveInstanceStateListener,
     NewIntentListener {
 
   private static final String MESSAGES_CHANNEL = "com.llfbandit.app_links/messages";
   private static final String EVENTS_CHANNEL = "com.llfbandit.app_links/events";
+  private static final String LAUNCH_HANDLED_KEY = "com.llfbandit.app_links/launchHandledBy";
 
   // The MethodChannel that will the communication between Flutter and native
   // Android
@@ -47,6 +55,12 @@ public class AppLinksPlugin implements
 
   // Latest link
   private String latestLink;
+
+  // Marks saved state. Changes with each process.
+  private final String instanceId = UUID.randomUUID().toString();
+  // Launch intent to handle after restore
+  private Intent pendingLaunchIntent;
+  private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
   /////////////////////////////////////////////////////////////////////////////
   /// FlutterPlugin
@@ -74,6 +88,8 @@ public class AppLinksPlugin implements
   ///
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
+    flushPendingLaunchIntent();
+
     if (call.method.equals("getLatestLink")) {
       result.success(latestLink);
     } else if (call.method.equals("getInitialLink")) {
@@ -93,21 +109,27 @@ public class AppLinksPlugin implements
   public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
     this.binding = binding;
     binding.addOnNewIntentListener(this);
+    binding.addOnSaveStateListener(this);
 
-    // Handle intent when app is launched from cold state.
-    handleIntent(binding.getActivity().getIntent());
+    // Handle the intent after restore. The post covers hosts that skip restore.
+    pendingLaunchIntent = binding.getActivity().getIntent();
+    mainHandler.post(this::flushPendingLaunchIntent);
   }
 
   @Override
   public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
     this.binding = binding;
     binding.addOnNewIntentListener(this);
+    binding.addOnSaveStateListener(this);
   }
 
   @Override
   public void onDetachedFromActivity() {
+    flushPendingLaunchIntent();
+
     if (binding != null) {
       binding.removeOnNewIntentListener(this);
+      binding.removeOnSaveStateListener(this);
     }
     binding = null;
   }
@@ -121,10 +143,32 @@ public class AppLinksPlugin implements
   /////////////////////////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////////////////////////
+  /// OnSaveInstanceStateListener
+  ///
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle bundle) {
+    bundle.putString(LAUNCH_HANDLED_KEY, instanceId);
+  }
+
+  @Override
+  public void onRestoreInstanceState(@Nullable Bundle bundle) {
+    // Skip the link this engine already sent.
+    if (bundle != null && instanceId.equals(bundle.getString(LAUNCH_HANDLED_KEY))) {
+      pendingLaunchIntent = null;
+    }
+
+    flushPendingLaunchIntent();
+  }
+  ///
+  /// END OnSaveInstanceStateListener
+  /////////////////////////////////////////////////////////////////////////////
+
+  /////////////////////////////////////////////////////////////////////////////
   /// EventChannel.StreamHandler
   ///
   @Override
   public void onListen(Object o, EventChannel.EventSink eventSink) {
+    flushPendingLaunchIntent();
     this.eventSink = eventSink;
 
     if (!initialLinkSent && initialLink != null) {
@@ -146,6 +190,7 @@ public class AppLinksPlugin implements
   ///
   @Override
   public boolean onNewIntent(@NonNull Intent intent) {
+    flushPendingLaunchIntent();
     return handleIntent(intent);
   }
   ///
@@ -155,6 +200,12 @@ public class AppLinksPlugin implements
   /////////////////////////////////////////////////////////////////////////////
   /// AppLinksPlugin
   ///
+  private void flushPendingLaunchIntent() {
+    Intent intent = pendingLaunchIntent;
+    pendingLaunchIntent = null;
+    handleIntent(intent);
+  }
+
   private boolean handleIntent(Intent intent) {
     if (intent == null) return false;
 
