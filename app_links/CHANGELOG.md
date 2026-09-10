@@ -1,5 +1,7 @@
 ## 7.2.2
 * fix(android): Stop resending the launch link when the activity is rebuilt.
+* fix(windows): Reliable link forwarding to the running instance.
+* fix(windows): Remove ineffective WM_COPYDATA sender check.
 
 ## 7.2.1
 * fix(Android): Remove debug log.
