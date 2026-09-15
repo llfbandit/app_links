@@ -1,3 +1,6 @@
+## 1.0.5
+* fix: Stop resending the launch link when the link stream is requested again.
+
 ## 1.0.4
 * chore: Update range of "web" package dependency.
 

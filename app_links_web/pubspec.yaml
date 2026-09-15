@@ -1,6 +1,6 @@
 name: app_links_web
 description: Web platform implementation of app_links plugin.
-version: 1.0.4
+version: 1.0.5
 homepage: https://github.com/llfbandit/app_links/tree/main/app_links_web
 
 environment:
