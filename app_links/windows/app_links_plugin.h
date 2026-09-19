@@ -11,6 +11,8 @@
 #include <map>
 #include <memory>
 #include <sstream>
+#include <string>
+#include <vector>
 
 #define APPLINK_MSG_ID (WM_USER + 2)
 #define APPLINK_SEND_TIMEOUT_MS 5000
@@ -49,9 +51,11 @@ namespace applinks
 
         // Our app instance ID
         int32_t window_proc_id_ = -1;
-        bool initialLinkSent_ = false;
         std::optional<std::string> initialLink_;
         std::optional<std::string> latestLink_;
+        // Holds links until Dart first listens.
+        std::vector<std::string> pendingLinks_;
+        bool listenedOnce_ = false;
         std::unique_ptr<flutter::EventSink<flutter::EncodableValue>> eventSink_;
         flutter::PluginRegistrarWindows *registrar_;
     };

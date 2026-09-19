@@ -92,6 +92,7 @@ namespace applinks
 		if (link) {
 			initialLink_ = link;
 			latestLink_ = link;
+			pendingLinks_.push_back(*link);
 		}
 
 		window_proc_id_ = registrar->RegisterTopLevelWindowProcDelegate(
@@ -167,8 +168,11 @@ namespace applinks
 
 				if (eventSink_)
 				{
-					initialLinkSent_ = true;
-					eventSink_->Success(latestLink_.value());
+					eventSink_->Success(link);
+				}
+				else if (!listenedOnce_)
+				{
+					pendingLinks_.push_back(link);
 				}
 
 				// Acknowledge delivery.
@@ -185,10 +189,13 @@ namespace applinks
 	{
 
 		eventSink_ = std::move(events);
+		listenedOnce_ = true;
 
-		if (!initialLinkSent_ && initialLink_) {
-			initialLinkSent_ = true;
-			eventSink_->Success(initialLink_.value());
+		std::vector<std::string> links;
+		links.swap(pendingLinks_);
+		for (const auto &link : links)
+		{
+			eventSink_->Success(link);
 		}
 
 		return nullptr;

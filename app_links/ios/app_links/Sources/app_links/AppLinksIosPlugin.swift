@@ -23,8 +23,9 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
   private var eventSink: FlutterEventSink?
   
   private var initialLink: String?
-  private var initialLinkSent = false
   private var latestLink: String?
+  // Holds links until Dart first listens.
+  private var pendingLinks: [String]? = []
 
   /// Enables / disables automatic link handling
   ///
@@ -235,9 +236,10 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     
     self.eventSink = events
     
-    if !initialLinkSent && initialLink != nil {
-      initialLinkSent = true
-      events(initialLink!)
+    let links = pendingLinks ?? []
+    pendingLinks = nil
+    for link in links {
+      events(link)
     }
 
     return nil
@@ -259,10 +261,10 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     }
     
     guard let _eventSink = eventSink else {
+      pendingLinks?.append(link)
       return
     }
 
-    initialLinkSent = true
     _eventSink(link)
   }
 }

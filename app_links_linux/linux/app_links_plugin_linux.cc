@@ -13,8 +13,9 @@ struct _AppLinksPluginLinux {
   FlEventChannel* event_channel;
   gboolean listening;
   gchar* initial_link;
-  gboolean initial_link_sent;
   gchar* latest_link;
+  // Holds links until Dart first listens.
+  GPtrArray* pending_links;
 
   GApplication* application;
   guint command_line_signal;
@@ -39,8 +40,9 @@ static void handle_link(AppLinksPluginLinux* self, const gchar* link) {
   }
 
   if (self->listening) {
-    self->initial_link_sent = TRUE;
     send_link(self, link);
+  } else if (self->pending_links != nullptr) {
+    g_ptr_array_add(self->pending_links, g_strdup(link));
   }
 }
 
@@ -128,9 +130,9 @@ static FlMethodErrorResponse* listen_cb(FlEventChannel* channel,
   AppLinksPluginLinux* self = APP_LINKS_PLUGIN_LINUX(user_data);
   self->listening = TRUE;
 
-  if (!self->initial_link_sent && self->initial_link != nullptr) {
-    self->initial_link_sent = TRUE;
-    send_link(self, self->initial_link);
+  g_autoptr(GPtrArray) links = g_steal_pointer(&self->pending_links);
+  for (guint i = 0; links != nullptr && i < links->len; i++) {
+    send_link(self, static_cast<const gchar*>(g_ptr_array_index(links, i)));
   }
 
   return nullptr;
@@ -159,6 +161,7 @@ static void app_links_plugin_linux_dispose(GObject* object) {
   g_clear_object(&self->event_channel);
   g_clear_pointer(&self->initial_link, g_free);
   g_clear_pointer(&self->latest_link, g_free);
+  g_clear_pointer(&self->pending_links, g_ptr_array_unref);
 
   G_OBJECT_CLASS(app_links_plugin_linux_parent_class)->dispose(object);
 }
@@ -167,7 +170,9 @@ static void app_links_plugin_linux_class_init(AppLinksPluginLinuxClass* klass) {
   G_OBJECT_CLASS(klass)->dispose = app_links_plugin_linux_dispose;
 }
 
-static void app_links_plugin_linux_init(AppLinksPluginLinux* self) {}
+static void app_links_plugin_linux_init(AppLinksPluginLinux* self) {
+  self->pending_links = g_ptr_array_new_with_free_func(g_free);
+}
 
 void app_links_plugin_linux_register_with_registrar(
     FlPluginRegistrar* registrar) {

@@ -11,7 +11,8 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler,
   private var eventSink: FlutterEventSink?
   private var initialLink: String?
   private var latestLink: String?
-  private var initialLinkSent = false
+  // Holds links until Dart first listens.
+  private var pendingLinks: [String]? = []
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let instance = AppLinks.shared
@@ -78,10 +79,11 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler,
     eventSink events: @escaping FlutterEventSink) -> FlutterError? {
 
     self.eventSink = events
-      
-    if (!initialLinkSent && initialLink != nil) {
-      initialLinkSent = true
-      events(initialLink!)
+
+    let links = pendingLinks ?? []
+    pendingLinks = nil
+    for link in links {
+      events(link)
     }
     return nil
   }
@@ -110,8 +112,9 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler,
     }
     
     if let _eventSink = eventSink {
-      initialLinkSent = true
       _eventSink(link)
-    }    
+    } else {
+      pendingLinks?.append(link)
+    }
   }
 }

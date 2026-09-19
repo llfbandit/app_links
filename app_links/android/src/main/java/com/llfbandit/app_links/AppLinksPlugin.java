@@ -8,6 +8,8 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -51,10 +53,12 @@ public class AppLinksPlugin implements
 
   // Initial link
   private String initialLink;
-  private boolean initialLinkSent = false;
 
   // Latest link
   private String latestLink;
+
+  // Holds links until Dart first listens.
+  private List<String> pendingLinks = new ArrayList<>();
 
   // Marks saved state. Changes with each process.
   private final String instanceId = UUID.randomUUID().toString();
@@ -171,9 +175,12 @@ public class AppLinksPlugin implements
     flushPendingLaunchIntent();
     this.eventSink = eventSink;
 
-    if (!initialLinkSent && initialLink != null) {
-      initialLinkSent = true;
-      eventSink.success(initialLink);
+    List<String> links = pendingLinks;
+    pendingLinks = null;
+    if (links != null) {
+      for (String link : links) {
+        eventSink.success(link);
+      }
     }
   }
 
@@ -224,8 +231,9 @@ public class AppLinksPlugin implements
     latestLink = dataString;
 
     if (eventSink != null) {
-      initialLinkSent = true;
       eventSink.success(dataString);
+    } else if (pendingLinks != null) {
+      pendingLinks.add(dataString);
     }
 
     return true;
