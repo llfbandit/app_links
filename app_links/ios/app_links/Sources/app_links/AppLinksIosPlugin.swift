@@ -111,25 +111,7 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     restorationHandler: @escaping ([Any]) -> Void
   ) -> Bool {
 
-    if !enabled {
-      return false
-    }
-    
-    var handled = if defaultUrlHandling == .never || urlHandledCallBack != nil {
-      false
-    } else {
-      userActivity.webpageURL != nil
-    }
-    
-    if let url = userActivity.webpageURL {
-      if let cb = urlHandledCallBack {
-        handled = handled || cb(url)
-      }
-
-      handleLink(url: url)
-    }
-
-    return handled
+    return handleUserActivity(userActivity)
   }
   
   // Custom URL schemes
@@ -185,18 +167,10 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
       return false
     }
 
-    var handled = if defaultUrlHandling == .never || urlHandledCallBack != nil {
-      false
-    } else {
-      !URLContexts.isEmpty
-    }
+    var handled = false
 
     for context in URLContexts {
-      if let cb = urlHandledCallBack {
-        handled = handled || cb(context.url)
-      }
-      
-      handleLink(url: context.url)
+      handled = handleUrl(context.url) || handled
     }
 
     return handled
@@ -208,24 +182,26 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     continue userActivity: NSUserActivity
   ) -> Bool {
 
-    if !enabled {
+    return handleUserActivity(userActivity)
+  }
+
+  /*----------------------------------------------------*/
+  // Link handling
+  /*----------------------------------------------------*/
+
+  // Handles the universal link of the activity.
+  private func handleUserActivity(_ userActivity: NSUserActivity) -> Bool {
+    guard enabled, let url = userActivity.webpageURL else {
       return false
     }
 
-    var handled = if defaultUrlHandling == .never || urlHandledCallBack != nil {
-      false
-    } else {
-      userActivity.webpageURL != nil
-    }
-    
-    if let url = userActivity.webpageURL {
-      if let cb = urlHandledCallBack {
-        handled = handled || cb(url)
-      }
+    return handleUrl(url)
+  }
 
-      handleLink(url: url)
-    }
-
+  // Sends the link and tells if other plugins should skip it.
+  private func handleUrl(_ url: URL) -> Bool {
+    let handled = urlHandledCallBack?(url) ?? (defaultUrlHandling == .availability)
+    handleLink(url: url)
     return handled
   }
 
