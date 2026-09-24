@@ -89,7 +89,8 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     // Universal link
     if let activityDictionary = options[UIApplication.LaunchOptionsKey.userActivityDictionary] as? [AnyHashable: Any] {
       for key in activityDictionary.keys {
-        if let userActivity = activityDictionary[key] as? NSUserActivity {
+        if let userActivity = activityDictionary[key] as? NSUserActivity,
+           userActivity.activityType == NSUserActivityTypeBrowsingWeb {
           if let url = userActivity.webpageURL {
             return url
           }
@@ -125,8 +126,7 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
       return false
     }
     
-    handleLink(url: url)
-    return defaultUrlHandling == .availability
+    return handleUrl(url)
   }
 
   /*----------------------------------------------------*/
@@ -150,7 +150,7 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
       handled = self.scene(scene, openURLContexts: options.urlContexts)
 
       for userActivity in options.userActivities {
-        handled = handled || self.scene(scene, continue: userActivity)
+        handled = self.scene(scene, continue: userActivity) || handled
       }
     }
 
@@ -191,7 +191,9 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
 
   // Handles the universal link of the activity.
   private func handleUserActivity(_ userActivity: NSUserActivity) -> Bool {
-    guard enabled, let url = userActivity.webpageURL else {
+    guard enabled,
+      userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+      let url = userActivity.webpageURL else {
       return false
     }
 

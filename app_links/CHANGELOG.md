@@ -1,7 +1,9 @@
 ## 7.2.2
+* fix: Send all links received before the first listen, not just the first one.
 * fix(android): Stop resending the launch link when the activity is rebuilt.
 * fix(windows): Reliable link forwarding to the running instance.
 * fix(windows): Remove ineffective WM_COPYDATA sender check.
+* fix(ios): Fix link handling edge cases.
 
 ## 7.2.1
 * fix(Android): Remove debug log.
