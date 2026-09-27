@@ -27,6 +27,12 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
   // Holds links until Dart first listens.
   private var pendingLinks: [String]? = []
 
+  // Flutter sends scene events once per engine. These skip the repeats.
+  private weak var lastConnectionOptions: UIScene.ConnectionOptions?
+  private weak var lastSceneEvent: AnyObject?
+  private var lastSceneEventHandled = false
+  private var applicationDelegateAdded = false
+
   /// Enables / disables automatic link handling
   ///
   /// Useful for manual handling
@@ -59,7 +65,11 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
 
     registrar.addMethodCallDelegate(instance, channel: methodChannel)
     eventChannel.setStreamHandler(instance)
-    registrar.addApplicationDelegate(instance)
+    // Add the app delegate once, Flutter shares it between engines.
+    if !instance.applicationDelegateAdded {
+      instance.applicationDelegateAdded = true
+      registrar.addApplicationDelegate(instance)
+    }
     registrar.addSceneDelegate(instance)
   }
   
@@ -140,18 +150,18 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     options connectionOptions: UIScene.ConnectionOptions?
   ) -> Bool {
 
-    if !enabled {
+    guard enabled,
+      let options = connectionOptions,
+      options !== lastConnectionOptions else {
       return false
     }
-    
-    var handled = false
 
-    if let options = connectionOptions {
-      handled = self.scene(scene, openURLContexts: options.urlContexts)
+    lastConnectionOptions = options
 
-      for userActivity in options.userActivities {
-        handled = self.scene(scene, continue: userActivity) || handled
-      }
+    var handled = handleUrlContexts(options.urlContexts)
+
+    for userActivity in options.userActivities {
+      handled = handleUserActivity(userActivity) || handled
     }
 
     return handled
@@ -163,6 +173,40 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     openURLContexts URLContexts: Set<UIOpenURLContext>
   ) -> Bool {
 
+    return handleSceneEventOnce(URLContexts.first) {
+      handleUrlContexts(URLContexts)
+    }
+  }
+
+  // Check for further Custom URL schemes
+  public func scene(
+    _ scene: UIScene,
+    continue userActivity: NSUserActivity
+  ) -> Bool {
+
+    return handleSceneEventOnce(userActivity) {
+      handleUserActivity(userActivity)
+    }
+  }
+
+  /*----------------------------------------------------*/
+  // Link handling
+  /*----------------------------------------------------*/
+
+  // Handles the event only for the first engine.
+  private func handleSceneEventOnce(_ event: AnyObject?, _ handle: () -> Bool) -> Bool {
+    if let event = event, event === lastSceneEvent {
+      return lastSceneEventHandled
+    }
+
+    let handled = handle()
+    lastSceneEvent = event
+    lastSceneEventHandled = handled
+    return handled
+  }
+
+  // Handles the custom scheme links.
+  private func handleUrlContexts(_ URLContexts: Set<UIOpenURLContext>) -> Bool {
     if !enabled {
       return false
     }
@@ -175,19 +219,6 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
 
     return handled
   }
-
-  // Check for further Custom URL schemes
-  public func scene(
-    _ scene: UIScene,
-    continue userActivity: NSUserActivity
-  ) -> Bool {
-
-    return handleUserActivity(userActivity)
-  }
-
-  /*----------------------------------------------------*/
-  // Link handling
-  /*----------------------------------------------------*/
 
   // Handles the universal link of the activity.
   private func handleUserActivity(_ userActivity: NSUserActivity) -> Bool {

@@ -4,6 +4,7 @@
 * fix(windows): Reliable link forwarding to the running instance.
 * fix(windows): Remove ineffective WM_COPYDATA sender check.
 * fix(ios): Fix link handling edge cases.
+* fix(ios): Stop sending links once per engine.
 
 ## 7.2.1
 * fix(Android): Remove debug log.
