@@ -167,7 +167,7 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     return handled
   }
 
-  // Check for further Universal Links
+  // Custom URL schemes
   public func scene(
     _ scene: UIScene,
     openURLContexts URLContexts: Set<UIOpenURLContext>
@@ -178,7 +178,7 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     }
   }
 
-  // Check for further Custom URL schemes
+  // Universal Links
   public func scene(
     _ scene: UIScene,
     continue userActivity: NSUserActivity
