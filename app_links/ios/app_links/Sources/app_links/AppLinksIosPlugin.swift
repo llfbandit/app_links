@@ -19,16 +19,17 @@ public enum UrlHandled {
   case availability
 }
 
-public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler, FlutterSceneLifeCycleDelegate {
-  private var eventSink: FlutterEventSink?
+public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterSceneLifeCycleDelegate {
+  // Holds one sink per listening engine.
+  private var listeners: [Listener] = []
   
   private var initialLink: String?
   private var latestLink: String?
-  // Holds links until Dart first listens.
-  private var pendingLinks: [String]? = []
+  // Holds app links received before Dart first listens. The first engine gets them.
+  private var launchLinks: [String] = []
+  private var listenedOnce = false
 
-  // Flutter sends scene events once per engine. These skip the repeats.
-  private weak var lastConnectionOptions: UIScene.ConnectionOptions?
+  // Flutter sends scene events once per engine of the scene. These skip the repeats.
   private weak var lastSceneEvent: AnyObject?
   private var lastSceneEventHandled = false
   private var applicationDelegateAdded = false
@@ -64,13 +65,15 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     let instance = AppLinks.shared
 
     registrar.addMethodCallDelegate(instance, channel: methodChannel)
-    eventChannel.setStreamHandler(instance)
+    // Each engine gets its own handler, so scene links reach only the engines of their scene.
+    let handler = LinkStreamHandler(plugin: instance)
+    eventChannel.setStreamHandler(handler)
     // Add the app delegate once, Flutter shares it between engines.
     if !instance.applicationDelegateAdded {
       instance.applicationDelegateAdded = true
       registrar.addApplicationDelegate(instance)
     }
-    registrar.addSceneDelegate(instance)
+    registrar.addSceneDelegate(handler)
   }
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -122,7 +125,11 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     restorationHandler: @escaping ([Any]) -> Void
   ) -> Bool {
 
-    return handleUserActivity(userActivity)
+    guard enabled, let url = universalLink(userActivity) else {
+      return false
+    }
+
+    return handleUrl(url, for: nil)
   }
   
   // Custom URL schemes
@@ -136,13 +143,16 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
       return false
     }
     
-    return handleUrl(url)
+    return handleUrl(url, for: nil)
   }
 
   /*----------------------------------------------------*/
   // Scene events
   /*----------------------------------------------------*/
-  
+
+  // Flutter sends scene events to the handler of each engine.
+  // These send to all engines, for apps that call them directly.
+
   // Check for initial link
   public func scene(
     _ scene: UIScene,
@@ -150,21 +160,7 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     options connectionOptions: UIScene.ConnectionOptions?
   ) -> Bool {
 
-    guard enabled,
-      let options = connectionOptions,
-      options !== lastConnectionOptions else {
-      return false
-    }
-
-    lastConnectionOptions = options
-
-    var handled = handleUrlContexts(options.urlContexts)
-
-    for userActivity in options.userActivities {
-      handled = handleUserActivity(userActivity) || handled
-    }
-
-    return handled
+    return handleConnection(connectionOptions, for: nil)
   }
 
   // Custom URL schemes
@@ -173,9 +169,7 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     openURLContexts URLContexts: Set<UIOpenURLContext>
   ) -> Bool {
 
-    return handleSceneEventOnce(URLContexts.first) {
-      handleUrlContexts(URLContexts)
-    }
+    return handleUrlContexts(URLContexts, for: nil)
   }
 
   // Universal Links
@@ -184,83 +178,110 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     continue userActivity: NSUserActivity
   ) -> Bool {
 
-    return handleSceneEventOnce(userActivity) {
-      handleUserActivity(userActivity)
-    }
+    return handleUserActivity(userActivity, for: nil)
   }
 
   /*----------------------------------------------------*/
   // Link handling
   /*----------------------------------------------------*/
 
-  // Handles the event only for the first engine.
-  private func handleSceneEventOnce(_ event: AnyObject?, _ handle: () -> Bool) -> Bool {
-    if let event = event, event === lastSceneEvent {
+  fileprivate func handleConnection(_ options: UIScene.ConnectionOptions?, for handler: LinkStreamHandler?) -> Bool {
+    guard let options = options else {
+      return false
+    }
+
+    let urls = options.urlContexts.map { $0.url }
+      + options.userActivities.compactMap { universalLink($0) }
+
+    return handleSceneUrls(urls, of: options, for: handler)
+  }
+
+  fileprivate func handleUrlContexts(_ URLContexts: Set<UIOpenURLContext>, for handler: LinkStreamHandler?) -> Bool {
+    return handleSceneUrls(URLContexts.map { $0.url }, of: URLContexts.first, for: handler)
+  }
+
+  fileprivate func handleUserActivity(_ userActivity: NSUserActivity, for handler: LinkStreamHandler?) -> Bool {
+    guard let url = universalLink(userActivity) else {
+      return false
+    }
+
+    return handleSceneUrls([url], of: userActivity, for: handler)
+  }
+
+  // Handles the event for the first engine. The other engines of the scene only get its links.
+  private func handleSceneUrls(_ urls: [URL], of event: AnyObject?, for handler: LinkStreamHandler?) -> Bool {
+    guard enabled, let event = event else {
+      return false
+    }
+
+    if event === lastSceneEvent {
+      if let handler = handler {
+        for url in urls {
+          send(url.absoluteString, to: handler)
+        }
+      }
       return lastSceneEventHandled
     }
 
-    let handled = handle()
+    var handled = false
+
+    for url in urls {
+      handled = handleUrl(url, for: handler) || handled
+    }
+
     lastSceneEvent = event
     lastSceneEventHandled = handled
     return handled
   }
 
-  // Handles the custom scheme links.
-  private func handleUrlContexts(_ URLContexts: Set<UIOpenURLContext>) -> Bool {
-    if !enabled {
-      return false
+  // Returns the universal link of the activity.
+  private func universalLink(_ userActivity: NSUserActivity) -> URL? {
+    guard userActivity.activityType == NSUserActivityTypeBrowsingWeb else {
+      return nil
     }
 
-    var handled = false
-
-    for context in URLContexts {
-      handled = handleUrl(context.url) || handled
-    }
-
-    return handled
-  }
-
-  // Handles the universal link of the activity.
-  private func handleUserActivity(_ userActivity: NSUserActivity) -> Bool {
-    guard enabled,
-      userActivity.activityType == NSUserActivityTypeBrowsingWeb,
-      let url = userActivity.webpageURL else {
-      return false
-    }
-
-    return handleUrl(url)
+    return userActivity.webpageURL
   }
 
   // Sends the link and tells if other plugins should skip it.
-  private func handleUrl(_ url: URL) -> Bool {
+  private func handleUrl(_ url: URL, for handler: LinkStreamHandler?) -> Bool {
     let handled = urlHandledCallBack?(url) ?? (defaultUrlHandling == .availability)
-    handleLink(url: url)
+    handleLink(url: url, for: handler)
     return handled
   }
 
-  public func onListen(
-    withArguments arguments: Any?,
-    eventSink events: @escaping FlutterEventSink
-  ) -> FlutterError? {
-    
-    self.eventSink = events
-    
-    let links = pendingLinks ?? []
-    pendingLinks = nil
-    for link in links {
-      events(link)
-    }
+  /*----------------------------------------------------*/
+  // Event streams
+  /*----------------------------------------------------*/
 
-    return nil
+  fileprivate func addListener(_ handler: LinkStreamHandler, sink: @escaping FlutterEventSink) {
+    removeListener(handler)
+    listeners.append(Listener(handler: handler, sink: sink))
+
+    listenedOnce = true
+
+    if !handler.listened {
+      handler.listened = true
+      for link in launchLinks + handler.pendingLinks {
+        sink(link)
+      }
+      launchLinks = []
+      handler.pendingLinks = []
+    }
   }
-  
-  public func onCancel(withArguments arguments: Any?) -> FlutterError? {
-    self.eventSink = nil
-    return nil
+
+  // Also drops the listeners of released engines.
+  fileprivate func removeListener(_ handler: LinkStreamHandler?) {
+    listeners.removeAll { $0.handler == nil || $0.handler === handler }
   }
 
   /// Fires given URL to dart side
   public func handleLink(url: URL) -> Void {
+    handleLink(url: url, for: nil)
+  }
+
+  // Sends the link to the given engine, or to all engines when nil.
+  private func handleLink(url: URL, for handler: LinkStreamHandler?) {
     let link = url.absoluteString
     
     latestLink = link
@@ -268,12 +289,87 @@ public final class AppLinksIosPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     if (initialLink == nil) {
       initialLink = link
     }
+
+    if let handler = handler {
+      send(link, to: handler)
+      return
+    }
     
-    guard let _eventSink = eventSink else {
-      pendingLinks?.append(link)
+    removeListener(nil)
+
+    if listeners.isEmpty {
+      if !listenedOnce {
+        launchLinks.append(link)
+      }
       return
     }
 
-    _eventSink(link)
+    for listener in listeners {
+      listener.sink(link)
+    }
+  }
+
+  // Sends the link to one engine. Keeps it until Dart first listens.
+  private func send(_ link: String, to handler: LinkStreamHandler) {
+    if let listener = listeners.first(where: { $0.handler === handler }) {
+      listener.sink(link)
+    } else if !handler.listened {
+      handler.pendingLinks.append(link)
+    }
+  }
+}
+
+private struct Listener {
+  weak var handler: LinkStreamHandler?
+  let sink: FlutterEventSink
+}
+
+// Listens to the event channel and the scene events of one engine.
+private final class LinkStreamHandler: NSObject, FlutterStreamHandler, FlutterSceneLifeCycleDelegate {
+  private let plugin: AppLinksIosPlugin
+  fileprivate var listened = false
+  // Holds links of this engine's scene received before Dart first listens.
+  fileprivate var pendingLinks: [String] = []
+
+  init(plugin: AppLinksIosPlugin) {
+    self.plugin = plugin
+  }
+
+  func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+    plugin.addListener(self, sink: events)
+    return nil
+  }
+
+  func onCancel(withArguments arguments: Any?) -> FlutterError? {
+    plugin.removeListener(self)
+    return nil
+  }
+
+  // Check for initial link
+  func scene(
+    _ scene: UIScene,
+    willConnectTo session: UISceneSession,
+    options connectionOptions: UIScene.ConnectionOptions?
+  ) -> Bool {
+
+    return plugin.handleConnection(connectionOptions, for: self)
+  }
+
+  // Custom URL schemes
+  func scene(
+    _ scene: UIScene,
+    openURLContexts URLContexts: Set<UIOpenURLContext>
+  ) -> Bool {
+
+    return plugin.handleUrlContexts(URLContexts, for: self)
+  }
+
+  // Universal Links
+  func scene(
+    _ scene: UIScene,
+    continue userActivity: NSUserActivity
+  ) -> Bool {
+
+    return plugin.handleUserActivity(userActivity, for: self)
   }
 }

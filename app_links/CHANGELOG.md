@@ -5,6 +5,7 @@
 * fix(windows): Remove ineffective WM_COPYDATA sender check.
 * fix(ios): Fix link handling edge cases.
 * fix(ios): Stop sending links once per engine.
+* fix(ios): Give each engine its own link stream.
 
 ## 7.2.1
 * fix(Android): Remove debug log.
