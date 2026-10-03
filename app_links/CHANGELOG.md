@@ -6,6 +6,7 @@
 * fix(ios): Fix link handling edge cases.
 * fix(ios): Stop sending links once per engine.
 * fix(ios): Give each engine its own link stream.
+* fix(macos): Share custom scheme URLs with other plugins and support engines created after launch.
 
 ## 7.2.1
 * fix(Android): Remove debug log.
