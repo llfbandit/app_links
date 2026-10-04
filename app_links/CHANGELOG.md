@@ -7,6 +7,7 @@
 * fix(ios): Stop sending links once per engine.
 * fix(ios): Give each engine its own link stream.
 * fix(macos): Share custom scheme URLs with other plugins and support engines created after launch.
+* fix(macos): Give each engine its own link stream.
 
 ## 7.2.1
 * fix(Android): Remove debug log.

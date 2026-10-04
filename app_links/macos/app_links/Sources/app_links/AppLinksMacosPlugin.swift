@@ -7,14 +7,17 @@ public class AppLinks {
   private init() {}
 }
 
-public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler, FlutterAppLifecycleDelegate {
-  private var eventSink: FlutterEventSink?
+public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterAppLifecycleDelegate {
+  // Holds one sink per listening engine.
+  private var listeners: [Listener] = []
+
   private var initialLink: String?
   private var latestLink: String?
-  // Holds links until Dart first listens.
-  private var pendingLinks: [String]? = []
-  // The instance is shared, so add it as app delegate only once.
-  private var appDelegateAdded = false
+  // Holds links received before Dart first listens. The first engine gets them.
+  private var launchLinks: [String] = []
+  private var listenedOnce = false
+  // Every engine passes on the same URLs. These skip the repeats.
+  private var openedUrls: [URL]?
   // Set while handleEvent forwards a URL to the app delegate.
   private var forwardingUrl = false
 
@@ -25,15 +28,16 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler,
     registrar.addMethodCallDelegate(instance, channel: methodChannel)
 
     let eventChannel = FlutterEventChannel(name: "com.llfbandit.app_links/events", binaryMessenger: registrar.messenger)
-    eventChannel.setStreamHandler(instance)
+    // Each engine gets its own handler, so every engine gets the links.
+    let handler = LinkStreamHandler(plugin: instance)
+    eventChannel.setStreamHandler(handler)
 
-    if !instance.appDelegateAdded {
-      instance.appDelegateAdded = true
-      registrar.addApplicationDelegate(instance)
-      // An engine created after launch misses handleWillFinishLaunching.
-      if NSRunningApplication.current.isFinishedLaunching {
-        instance.setUpUrlHandler()
-      }
+    // A released engine removes the app delegates it added, so each engine adds its own.
+    registrar.addApplicationDelegate(handler)
+
+    // An engine created after launch misses handleWillFinishLaunching.
+    if NSRunningApplication.current.isFinishedLaunching {
+      instance.setUpUrlHandler()
     }
   }
   
@@ -88,9 +92,12 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler,
 
   public func handleOpen(_ urls: [URL]) -> Bool {
     // handleEvent already sent the URL it forwards.
-    if forwardingUrl {
+    if forwardingUrl || urls == openedUrls {
       return false
     }
+
+    openedUrls = urls
+    DispatchQueue.main.async { self.openedUrls = nil }
 
     for url in urls where !url.isFileURL {
       handleLink(link: url.absoluteString)
@@ -127,23 +134,22 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler,
     }
   }
 
-  public func onListen(
-    withArguments arguments: Any?,
-    eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+  fileprivate func addListener(_ handler: LinkStreamHandler, sink: @escaping FlutterEventSink) {
+    removeListener(handler)
+    listeners.append(Listener(handler: handler, sink: sink))
 
-    self.eventSink = events
-
-    let links = pendingLinks ?? []
-    pendingLinks = nil
-    for link in links {
-      events(link)
+    if !listenedOnce {
+      listenedOnce = true
+      for link in launchLinks {
+        sink(link)
+      }
+      launchLinks = []
     }
-    return nil
   }
 
-  public func onCancel(withArguments arguments: Any?) -> FlutterError? {
-    self.eventSink = nil
-    return nil
+  // Also drops the listeners of released engines.
+  fileprivate func removeListener(_ handler: LinkStreamHandler?) {
+    listeners.removeAll { $0.handler == nil || $0.handler === handler }
   }
 
   public func handleLink(link: String) {
@@ -153,10 +159,49 @@ public class AppLinksMacosPlugin: NSObject, FlutterPlugin, FlutterStreamHandler,
       initialLink = link
     }
     
-    if let _eventSink = eventSink {
-      _eventSink(link)
-    } else {
-      pendingLinks?.append(link)
+    removeListener(nil)
+
+    if listeners.isEmpty {
+      if !listenedOnce {
+        launchLinks.append(link)
+      }
+      return
     }
+
+    for listener in listeners {
+      listener.sink(link)
+    }
+  }
+}
+
+private struct Listener {
+  weak var handler: LinkStreamHandler?
+  let sink: FlutterEventSink
+}
+
+// Listens to the event channel and the app events of one engine.
+private final class LinkStreamHandler: NSObject, FlutterStreamHandler, FlutterAppLifecycleDelegate {
+  private let plugin: AppLinksMacosPlugin
+
+  init(plugin: AppLinksMacosPlugin) {
+    self.plugin = plugin
+  }
+
+  func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+    plugin.addListener(self, sink: events)
+    return nil
+  }
+
+  func onCancel(withArguments arguments: Any?) -> FlutterError? {
+    plugin.removeListener(self)
+    return nil
+  }
+
+  func handleWillFinishLaunching(_ notification: Notification) {
+    plugin.handleWillFinishLaunching(notification)
+  }
+
+  func handleOpen(_ urls: [URL]) -> Bool {
+    return plugin.handleOpen(urls)
   }
 }
