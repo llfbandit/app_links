@@ -1,3 +1,6 @@
+## 1.0.5
+* fix: Fix build with older GLib versions.
+
 ## 1.0.4
 * fix: Return the launch link from getInitialLink on cold start.
 * fix: Stop taking over the gtk package command line channel.

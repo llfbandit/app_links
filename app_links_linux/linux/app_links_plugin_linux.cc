@@ -130,7 +130,8 @@ static FlMethodErrorResponse* listen_cb(FlEventChannel* channel,
   AppLinksPluginLinux* self = APP_LINKS_PLUGIN_LINUX(user_data);
   self->listening = TRUE;
 
-  g_autoptr(GPtrArray) links = g_steal_pointer(&self->pending_links);
+  g_autoptr(GPtrArray) links =
+      static_cast<GPtrArray*>(g_steal_pointer(&self->pending_links));
   for (guint i = 0; links != nullptr && i < links->len; i++) {
     send_link(self, static_cast<const gchar*>(g_ptr_array_index(links, i)));
   }
