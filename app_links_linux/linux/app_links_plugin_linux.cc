@@ -26,6 +26,11 @@ struct _AppLinksPluginLinux {
 
 G_DEFINE_TYPE(AppLinksPluginLinux, app_links_plugin_linux, g_object_get_type())
 
+static gboolean is_link(const gchar* arg) {
+  g_autofree gchar* scheme = g_uri_parse_scheme(arg);
+  return scheme != nullptr;
+}
+
 static void send_link(AppLinksPluginLinux* self, const gchar* link) {
   g_autoptr(FlValue) value = fl_value_new_string(link);
   fl_event_channel_send(self->event_channel, value, nullptr, nullptr);
@@ -93,7 +98,7 @@ static gboolean command_line_hook(GSignalInvocationHint* hint,
   gint argc = 0;
   g_auto(GStrv) argv =
       g_application_command_line_get_arguments(command_line, &argc);
-  if (argc > 1 && argv[1][0] != '\0') {
+  if (argc > 1 && is_link(argv[1])) {
     handle_link(self, argv[1]);
   }
 
